@@ -1,0 +1,31 @@
+
+<div id="image_header">
+
+  <%
+     folio_title = get_str_from_id(@folio_id, 'preflabel_tesim')
+     folio_title = folio_title.gsub(/Abp Reg \d+[a-z]* /, "")
+  %>
+
+  <%= folio_title %>
+
+</div>
+
+<div id="image_frame" style="text-align: center">
+  <div id="location1" style="background-color: black"></div>
+  <div id="image_footer">
+    <div style="float: right; margin-right: 15px">
+      <%= link_to image_tag("magnifying_glass.png", :alt => "Magnifying glass icon", :class => "icon", :style => "position: relative; top: 7px", :title => 'View full-size image'), "#", :onclick => "popup('/image_zoom_large', '" + @folio_id + "'); return false" %></div>
+    </div>
+</div>
+
+<div style="clear: both"></div>
+
+<script type="text/javascript">
+    var viewer = OpenSeadragon({
+        id: "location1",
+        prefixUrl: "assets/seadragonImages/",
+        autoResize: true,
+        tileSources: "http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=<%= get_folio_image(@folio_id) %>.dzi",
+        showNavigationControl: false
+    });
+</script>

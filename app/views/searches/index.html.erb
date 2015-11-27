@@ -1,0 +1,222 @@
+
+<div class="row">
+
+  <div id="search-navbar" class="navbar navbar-default navbar-static-top" role="navigation">
+
+    <div class="col-md-12">
+
+      <div class="container2" style="width: 1170px; padding-left: 0px; padding-right: 15px">
+
+        <%= form_tag searches_index_path, :method => 'get', :class => 'earch-query-form clearfix navbar-form' do |f| %>
+
+            <span style="font-size: 1.1em">Search the Registers:&nbsp;</span>
+
+            <div class="input-group search-input-group" style="display: inline-table; vertical-align: middle">
+
+              <%= text_field_tag 'search_term', @search_term, class: 'form-control', id: 'search_registers', placeholder: 'Enter text here...' %>
+
+              <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary search-btn" id="search">
+                  <span class="submit-search-text">Search</span>
+                  <span class="glyphicon glyphicon-search"></span>
+                </button>
+              </span>
+            </div>
+
+            <%= hidden_field_tag 'is_search_box', 'true' %>
+
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+
+  <div id="sidebar" class="col-md-2">
+
+    <div id="facets" class="facets sidenav">
+
+      <div class="top-panel-heading panel-heading">
+
+        <h4 class="facets-heading" style="font-size: 1.1em">
+          Limit your search
+        </h4>
+      </div>
+
+      <div id="facet-panel-collapse" class="collapse in panel-group">
+
+        <%# People %>
+        <div class="panel panel-default facet_limit blacklight-format ">
+
+          <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format" aria-expanded="false">
+            <h5 class="panel-title facet-field-heading">
+              <a data-no-turbolink="true" href="#">People</a>
+            </h5>
+          </div>
+
+          <div id="facet-format" class="panel-collapse facet-content collapse in" aria-expanded="false">
+            <div class="panel-body">
+              <ul class="facet-values list-unstyled">
+                <% @person_list_array.each do |t| %>
+                <li>
+                  <span class="facet-label"><a class="facet_select" href="" style="font-size: 1.1em"><%= t[1] %></a></span><span class="facet-count">1</span>
+                </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <%# Places %>
+        <div class="panel panel-default facet_limit blacklight-pub_date ">
+
+          <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-pub_date" aria-expanded="false">
+            <h5 class="panel-title facet-field-heading">
+              <a data-no-turbolink="true" href="#">Places</a>
+            </h5>
+          </div>
+
+          <div id="facet-pub_date" class="panel-collapse facet-content collapse in" aria-expanded="false">
+            <div class="panel-body">
+              <ul class="facet-values list-unstyled">
+                <% @place_list_array.each do |t| %>
+                <li>
+                  <span class="facet-label"><a class="facet_select" href=""><%= t[1] %></a></span><span class="facet-count">1</span>
+                </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <%# Subjects %>
+        <div class="panel panel-default facet_limit blacklight-subject_topic_facet ">
+
+          <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-subject_topic_facet" aria-expanded="false">
+            <h5 class="panel-title facet-field-heading">
+              <a data-no-turbolink="true" href="#">Subjects</a>
+            </h5>
+          </div>
+
+          <div id="facet-subject_topic_facet" class="panel-collapse facet-content collapse in" aria-expanded="false">
+            <div class="panel-body">
+              <ul class="facet-values list-unstyled">
+                <% @subject_list_array.each do |t| %>
+                  <li>
+                    <span class="facet-label"><a class="facet_select" href=""><%= t[1] %></a></span><span class="facet-count">1</span>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <%# Dates %>
+        <div class="panel panel-default facet_limit blacklight-example_query_facet_field ">
+
+          <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-example_query_facet_field">
+            <h5 class="panel-title facet-field-heading">
+
+              <a data-no-turbolink="true" href="#">Dates</a>
+            </h5>
+          </div>
+
+          <div id="facet-example_query_facet_field" class="panel-collapse facet-content collapse in">
+            <div class="panel-body">
+              <ul class="facet-values list-unstyled">
+                <li>
+
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-md-10">
+
+
+    <div style="padding-left: 40px; font-size: 1em">
+
+      <div style="margin-top: 60px">
+
+      <%
+        start_index = ((@page - 1) * 10) + 1
+        end_index = ((@page - 1) * 10) + @partial_list_array.size
+      %>
+
+      <% if @list_array.size == 0 %>
+          <strong>No entries match this search - please try another search</strong>
+      <% else %>
+
+         <ul class="pager" style="text-align: left">
+
+         <% if @page == 1 %>
+           <li><span style="color: grey">Previous</span></li>
+         <% else %>
+           <li><%= link_to 'Previous', searches_path(:search_term => @search_term, :page => @page, :previous => 'true') %></li>
+         <% end %>
+           &nbsp;<span style="font-size: 1.1em"><%= start_index %> - <%= end_index %> of <strong><%= @list_array.size %></strong></span>&nbsp;
+         <% if @list_array.size < 10 || (((@page - 1) * 10) + 10) > @list_array.size %>
+           <li><span style="color: grey">Next</span></li>
+         <% else %>
+           <li><%= link_to 'Next', searches_path(:search_term => @search_term, :page => @page, :next => 'true') %></li>
+         <% end %>
+
+         </ul>
+
+      <% end %>
+
+      </div>
+
+      <hr/>
+
+      <% if @partial_list_array.size > 0 %>
+
+          <% index = start_index %>
+
+          <% @partial_list_array.each_with_index do |t| %>
+
+              <div style="padding-bottom: 15px">
+
+                <%= index %>.&nbsp;&nbsp;<%= link_to t[1], searches_show_path(:entry_id => t[0], :folio_id => t[5]) %>
+
+                <% index = index + 1 %>
+
+                <div class="results_table">
+                  <table>
+                    <tr>
+                      <th>Type:</th>
+                      <td><%= t[2] %></td>
+                    </tr>
+                    <tr>
+                      <th>Entry:</th>
+                      <td><%= t[3] %></td>
+                    </tr>
+                    <tr>
+                      <th>Register:</th>
+                      <td><%= t[4] %></td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+          <% end %>
+
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+<div id="footer" class="row" style="height: 60px">
+  <div class="col-md-12">
+  </div>
+</div>
+
+

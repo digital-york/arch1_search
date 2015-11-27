@@ -1,0 +1,529 @@
+<div class="row" style="margin-top: 30px">
+
+  <div class="col-md-12">
+
+    <div id='left_frame'>
+      <%= render 'image_zoom_small' %>
+    </div>
+
+    <div id='right_frame'>
+
+      <!--<div><button type="button" class="btn btn-primary" style="text-align: right">Return to Search Page</button></div>-->
+
+      <div id='form'>
+
+        <div class='tab1'>
+
+          <table>
+
+            <%# Display tabs for entries %>
+            <tr class='noth'>
+              <th colspan='2' id='entry_menu'>
+                <ul>
+                  <li style='margin-left: 3px'></li>
+                  <% @entry_list.each_with_index do |entry, index| %>
+                      <%
+                         entry_id = entry[0]
+                         entry_no = entry[1]
+                      %>
+                      <% if entry_id == @db_entry.entry_id %>
+                          <li><span class='highlight'><%= entry_no.to_s %></span></li>
+                      <% else %>
+                          <li>
+                            <span class='nohighlight'><%= link_to entry_no.to_s, searches_show_path(:entry_id => entry_id, :folio_id => @folio_id) %></span>
+                          </li>
+                      <% end %>
+                  <% end %>
+                </ul>
+              </th>
+            </tr>
+
+            <tr>
+              <th colspan='2'>
+                <div style="height: 18px; text-align: right">
+                  <%#= button_to 'Edit', edit_entry_path(@db_entry.entry_id), :method => :get, :class => 'buttonTo' %>
+                </div>
+              </th>
+            </tr>
+
+            <%# Entry No %>
+            <tr>
+              <th style='width: 153px'>Entry No:</th>
+              <td style='width: 750px'><%= @db_entry.entry_no %></td>
+            </tr>
+
+            <%# Entry Type %>
+            <tr>
+              <th>Entry Type:</th>
+              <td>
+                <% @db_entry.db_entry_types.each do |entry_type| %>
+                    <div style="padding: 4px 0px">
+                      <% if entry_type != nil %>
+                          <%= terms.get_str_from_id(entry_type.name, 'preflabel_tesim') %>
+                      <% end %>
+                    </div>
+                <% end %>
+              </td>
+            </tr>
+
+            <%# Section Type %>
+            <tr>
+              <th>Section Type:</th>
+              <td>
+                <% @db_entry.db_section_types.each do |section_type| %>
+                    <div style="padding: 4px 0px">
+                      <% if section_type != nil %>
+                          <%= terms.get_str_from_id(section_type.name, 'preflabel_tesim') %>
+                      <% end %>
+                    </div>
+                <% end %>
+              </td>
+            </tr>
+
+            <%# Continues On %>
+            <% if @is_last_entry == true %>
+                <tr>
+                  <th>Continues on next folio:</th>
+                  <td>
+                    <% if @db_entry.continues_on != nil && @db_entry.continues_on != '' %>
+                        <%= image_tag 'tick.png', class: 'tick_icon' %>
+                        <%= link_to 'Discontinue', entry_path(@db_entry.entry_id, :discontinue => 'true'), :onclick => "return confirm('Are you sure you want to remove the link with the next folio?')" %>
+                    <% end %>
+                  </td>
+                </tr>
+            <% end %>
+
+            <%# Summary %>
+            <tr>
+              <th>Summary:</th>
+              <td>
+                <%= @db_entry.summary %>
+              </td>
+            </tr>
+
+            <%# Marginalia %>
+            <tr>
+              <th>Marginalia:</th>
+              <td>
+                <% @db_entry.db_marginalia.each do |marginalium| %>
+                    <div style="padding: 4px 0px">
+                      <%= marginalium.name %>
+                    </div>
+                <% end %>
+              </td>
+            </tr>
+
+            <%# Language %>
+            <tr>
+              <th>Language:</th>
+              <td>
+                <% @db_entry.db_languages.each do |language| %>
+                    <div style="padding: 4px 0px">
+                      <% if language != nil %>
+                          <%= terms.get_str_from_id(language.name, 'preflabel_tesim') %>
+                      <% end %>
+                    </div>
+                <% end %>
+              </td>
+            </tr>
+
+            <%# Subject %>
+            <tr>
+              <th>Subject:</th>
+              <td>
+                <% @db_entry.db_subjects.each do |subject| %>
+                    <% if subject != nil %>
+                        <div style="padding: 4px 0px">
+                          <%= get_str_from_id(subject.name, 'preflabel_tesim') %>
+                        </div>
+                    <% end %>
+                <% end %>
+              </td>
+            </tr>
+
+            <%# Note %>
+            <tr>
+              <th>Note:</th>
+              <td>
+                <% @db_entry.db_notes.each do |note| %>
+                    <% if note != nil %>
+                        <div style="padding: 4px 0px">
+                          <%= note.name %>
+                        </div>
+                    <% end %>
+                <% end %>
+              </td>
+            </tr>
+
+            <%# Editorial Note %>
+            <tr>
+              <th>Editorial Note:</th>
+              <td>
+                <% @db_entry.db_editorial_notes.each do |editorial_note| %>
+                    <% if editorial_note != nil %>
+                        <div style="padding: 4px 0px">
+                          <%= editorial_note.name %>
+                        </div>
+                    <% end %>
+                <% end %>
+              </td>
+            </tr>
+
+            <%# Referenced By %>
+            <tr>
+              <th>Referenced By:</th>
+              <td>
+                <% @db_entry.db_is_referenced_bys.each do |is_referenced_by| %>
+                    <% if is_referenced_by != nil %>
+                        <div style="padding: 4px 0px">
+                          <%= is_referenced_by.name %>
+                        </div>
+                    <% end %>
+                <% end %>
+              </td>
+            </tr>
+
+            <%# Entry Date %>
+            <tr>
+
+              <th>Entry Date:</th>
+
+              <td class="tab2">
+
+                <% @db_entry.db_entry_dates.each do |entry_date| %>
+
+                    <div class="field_group">
+
+                      <div class="field_single">
+
+                        <table class="tab3">
+
+                          <tr>
+                            <th>
+                              Date:
+                            </th>
+                            <td>
+                              <div style="min-height: 18px" class="field_group">
+
+                                <% entry_date.db_single_dates.each do |single_date| %>
+
+                                    <div class="field_single no_padding">
+
+                                      <table class="tab4" style="border-color: #DCDADA">
+
+                                        <tr>
+                                          <th style="width: 120px">Date (yyyy/mm/dd):</th>
+                                          <td><%= single_date.date %></td>
+                                        </tr>
+
+                                        <tr>
+                                          <th>Certainty:</th>
+                                          <td>
+                                            <% single_date.db_date_certainties.each do |date_certainty| %>
+                                                <div style="padding: 4px 0px">
+                                                  <%= date_certainty.name %>
+                                                </div>
+                                            <% end %>
+                                          </td>
+                                        </tr>
+                                        <tr>
+
+                                          <th>Type:</th>
+                                          <td><%= single_date.date_type %></td>
+                                        </tr>
+                                      </table>
+                                      <div style="clear: both"></div>
+                                    </div>
+                                <% end %>
+
+                              </div>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <th>Date Role:</th>
+                            <td>
+                              <% if entry_date.date_role != nil %>
+                                  <%= terms.get_str_from_id(entry_date.date_role, 'preflabel_tesim') %>
+                              <% end %>
+                            </td>
+                          </tr>
+
+                          <tr>
+                            <th>Note:</th>
+                            <td>
+                              <%= entry_date.date_note %>
+                            </td>
+                          </tr>
+
+                        </table>
+                      </div>
+                    </div>
+                <% end %>
+              </td>
+            </tr>
+
+            <%# Related Place %>
+            <tr>
+
+              <th>Place:</th>
+
+              <td class="tab2">
+
+                <% @db_entry.db_related_places.each do |related_place| %>
+
+                    <div class="field_group">
+
+                      <div class="field_single">
+
+                        <table class="tab3">
+
+                          <%# Place As Written %>
+                          <tr>
+                            <th>*As Written:</th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_place.db_place_as_writtens.each do |place_as_written| %>
+                                    <div class="field_single">
+                                      <%= place_as_written.name %>
+                                    </div>
+                                <% end %>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <%# Place Name Authority (Same As) %>
+                          <tr>
+                            <th style="width: 110px">Place Name Authority:</th>
+                            <td>
+                              <% if related_place.place_same_as != nil %>
+                                  <%= terms.get_place_same_as(related_place.place_same_as) %>
+                              <% end %>
+                            </td>
+                          </tr>
+
+                          <%# Place Role %>
+                          <tr>
+                            <th>Place Role:</th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_place.db_place_roles.each do |place_role| %>
+                                    <div class="field_single" style="padding: 4px 0px">
+                                      <% if place_role != nil %>
+                                          <%= terms.get_str_from_id(place_role.name, 'preflabel_tesim') %>
+                                      <% end %>
+                                    </div>
+                                <% end %>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <%# Place Type %>
+                          <tr>
+                            <th>Place Type:</th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_place.db_place_types.each do |place_type| %>
+                                    <div class="field_single" style="padding: 4px 0px">
+                                      <% if place_type != nil %>
+                                          <%= terms.get_str_from_id(place_type.name, 'preflabel_tesim') %>
+                                      <% end %>
+                                    </div>
+                                <% end %>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <%# Place Note %>
+                          <tr>
+                            <th>Note:</th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_place.db_place_notes.each do |place_note| %>
+                                    <div class="field_single" style="padding: 4px 0px">
+                                      <%= place_note.name %>
+                                    </div>
+                                <% end %>
+                              </div>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                <% end %>
+              </td>
+            </tr>
+
+            <%# Related Person %>
+            <tr>
+
+              <th>Person:</th>
+
+              <td class="tab2">
+
+                <% @db_entry.db_related_agents.each do |related_person| %>
+
+                    <div class="field_group">
+
+                      <div class="field_single">
+
+                        <table class="tab3">
+
+                          <%# Person As Written %>
+                          <tr>
+                            <th>
+                              *As Written:
+                            </th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_person.db_person_as_writtens.each do |person_as_written| %>
+                                    <div class="field_single" style="padding: 4px 0px">
+                                      <%= person_as_written.name %>
+                                    </div>
+                                <% end %>
+
+                              </div>
+                            </td>
+                          </tr>
+
+                          <%# Person Name Authority (Same As) %>
+                          <tr>
+                            <th style="width: 110px">Person Name Authority:</th>
+                            <td>
+                              <% if related_person.person_same_as != nil %>
+                                  <%= terms.get_person_same_as(related_person.person_same_as) %>
+                              <% end %>
+                            </td>
+                          </tr>
+
+                          <%# Person Group %>
+                          <tr>
+                            <th>Person / Group:</th>
+                            <td>
+                              <%= related_person.person_group %>
+                            </td>
+                          </tr>
+
+                          <%# Person Gender %>
+                          <tr>
+                            <th>Gender:</th>
+                            <td>
+                              <%= related_person.person_gender %>
+                            </td>
+                          </tr>
+
+                          <%# Person Role %>
+                          <tr>
+                            <th>
+                              Person Role:
+                            </th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_person.db_person_roles.each do |person_role| %>
+                                    <div class="field_single" style="padding: 4px 0px">
+                                      <%= terms.get_str_from_id(person_role.name, 'preflabel_tesim') %>
+                                    </div>
+                                <% end %>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <%# Person Descriptor %>
+                          <tr>
+                            <th>
+                              Descriptor:
+                            </th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_person.db_person_descriptors.each do |person_descriptor| %>
+                                    <div class="field_single" style="padding: 4px 0px">
+                                      <%= terms.get_str_from_id(person_descriptor.name, 'preflabel_tesim') %>
+                                    </div>
+                                <% end %>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <%# Person Descriptor As Written %>
+                          <tr>
+                            <th>
+                              Descriptor As Written:
+                            </th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_person.db_person_descriptor_as_writtens.each do |person_descriptor_as_written| %>
+                                    <div class="field_single" style="padding: 4px 0px">
+                                      <%= person_descriptor_as_written.name %>
+                                    </div>
+                                <% end %>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <%# Person Note %>
+                          <tr>
+                            <th>
+                              Note:
+                            </th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_person.db_person_notes.each do |person_note| %>
+                                    <div class="field_single" style="padding: 4px 0px">
+                                      <%= person_note.name %>
+                                    </div>
+                                <% end %>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <%# Person Related Place %>
+                          <tr>
+                            <th>
+                              Related Place:
+                            </th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_person.db_person_related_places.each do |related_place| %>
+                                    <div class="field_single" style="padding: 4px 0px">
+                                      <%= related_place.name %>
+                                    </div>
+                                <% end %>
+                              </div>
+                            </td>
+                          </tr>
+
+                          <%# Person Related Person %>
+                          <tr>
+                            <th>
+                              Related Person:
+                            </th>
+                            <td>
+                              <div style="padding: 4px 0px; min-height: 18px" class="field_group">
+                                <% related_person.db_person_related_people.each do |related_person| %>
+                                    <div class="field_single" style="padding: 4px 0px">
+                                      <%= related_person.name %>
+                                    </div>
+                                <% end %>
+                              </div>
+                            </td>
+                          </tr>
+
+                        </table>
+                      </div>
+                    </div>
+                <% end %>
+              </td>
+            </tr>
+
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div style='clear: both'></div>
+  </div>
+</div>
+
+<div class="row" style="height: 60px">
+  <div class="cold-md-12"></div>
+</div>

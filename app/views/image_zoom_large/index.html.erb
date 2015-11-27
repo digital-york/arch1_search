@@ -1,0 +1,14 @@
+
+<div>
+  <div id="location" style="background-color: black"></div>
+  <div style="float: right; margin-right: 7px; margin-top: 10px"><a href="#" id="dialog_link"><!--<img style="vertical-align: bottom" src="sepiaPlus.png" title="Help" alt="help icon"/>--></a></div>
+</div>
+
+<script type="text/javascript">
+    var viewer = OpenSeadragon({
+        id: "location",
+        prefixUrl: "assets/seadragonImages/",
+        autoResize: true,
+        tileSources: "http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=<%= get_folio_image(@folio_id) %>.dzi"
+    });
+</script>
