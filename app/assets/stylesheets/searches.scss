@@ -370,7 +370,7 @@ a:hover {
 .nohighlight {
   background-color: #C5C5C5;
   border-radius: 6px 6px 0 0;
-  padding: 6px 10px 5px 12px;
+  padding: 6px 10px 6px 12px;
 }
 
 .nohighlight a {
@@ -381,4 +381,12 @@ a:hover {
 .nohighlight a:hover {
   color: #9C6B17;
   text-decoration: none;
+}
+
+.panel-title {
+  font-size: 14px;
+}
+
+ul {
+  margin-bottom: 0px;
 }

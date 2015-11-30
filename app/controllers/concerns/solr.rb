@@ -2,7 +2,9 @@ module Solr
 
   def get_data(search_term, page)
 
+    # PERSON #
     @person_list_array = []
+    @person_set_array = []
 
     SolrQuery.new.solr_query("person_as_written_tesim:*", ' person_as_written_tesim, relatedAgentFor_ssim', 10000)['response']['docs'].map do |result|
 
@@ -16,11 +18,16 @@ module Solr
         element_list << 'Person'
         get_entry_and_folio_details(entry_id, element_list)
         @person_list_array << element_list
-        @person_list_array = @person_list_array.sort_by { |k| k[1] }
+        add_name_to_set(person_as_written, @person_set_array)
       end
     end
 
+    @person_list_array = @person_list_array.sort_by { |k| k[1] }
+    @person_set_array = @person_set_array.sort_by { |k| k[0] }
+
+    # PLACE #
     @place_list_array = []
+    @place_set_array = []
 
     SolrQuery.new.solr_query('place_as_written_tesim:*', 'place_as_written_tesim, relatedPlaceFor_ssim', 10000)['response']['docs'].map do |result|
 
@@ -34,11 +41,16 @@ module Solr
         element_list << 'Place'
         get_entry_and_folio_details(entry_id, element_list)
         @place_list_array << element_list
-        @place_list_array = @place_list_array.sort_by { |k| k[1] }
+        add_name_to_set(place_as_written, @place_set_array)
       end
     end
 
+    @place_list_array = @place_list_array.sort_by { |k| k[1] }
+    @place_set_array = @place_set_array.sort_by { |k| k[0] }
+
+    # SUBJECT #
     @subject_list_array = []
+    @subject_set_array = []
 
     # Get all the subject ids from the entries
     SolrQuery.new.solr_query("subject_tesim:*", 'id, subject_tesim', 10000)['response']['docs'].map do |result|
@@ -56,18 +68,43 @@ module Solr
             element_list = []
             entry_id = result['id']
             element_list << entry_id
-            element_list << result2['preflabel_tesim'].join
+            element_list << preflabel
             element_list << 'Subject'
             get_entry_and_folio_details(entry_id, element_list)
             @subject_list_array << element_list
-            @subject_list_array = @subject_list_array.sort_by { |k| k[1] }
+            add_name_to_set(preflabel, @subject_set_array)
           end
         end
       end
     end
 
+    @subject_list_array = @subject_list_array.sort_by { |k| k[1] }
+    @subject_set_array = @subject_set_array.sort_by { |k| k[0] }
+
     @list_array = @person_list_array + @place_list_array + @subject_list_array
     @partial_list_array = @list_array.slice((@page - 1) * 10, 10)
+
+  end
+
+  def add_name_to_set(name, set_array)
+
+    is_match = false
+
+    set_array.each_with_index do |array_element, index|
+      if array_element[0] == name
+        is_match = true
+        array_element[1] = array_element[1] + 1
+        break
+      end
+    end
+
+    if is_match == false
+      array_element = []
+      array_element << name
+      array_element << 1
+      set_array << array_element
+    end
+
   end
 
   def get_entry_and_folio_details(entry_id, element_list)

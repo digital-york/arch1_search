@@ -2,18 +2,17 @@ class SearchesController < ApplicationController
 
   def index
 
-    puts params
-
     @search_term = params[:search_term]
     @page = params[:page]
 
     if params[:next] == 'true'
       @page = @page.to_i + 1
     elsif params[:previous] == 'true'
-    puts 'previous!'
       @page = @page.to_i - 1
-    else
+    elsif @page == nil || @page == ''
       @page = 1
+    else
+      @page = @page.to_i
     end
 
     get_data(@search_term, @page)
@@ -31,6 +30,9 @@ class SearchesController < ApplicationController
     @folio_id = params[:folio_id]
 
     @entry_list = get_entry_list(@folio_id)
+
+    @search_term = params[:search_term]
+    @page = params[:page]
 
   end
 

@@ -1,3 +1,4 @@
+
 <div class="row" style="margin-top: 30px">
 
   <div class="col-md-12">
@@ -7,8 +8,6 @@
     </div>
 
     <div id='right_frame'>
-
-      <!--<div><button type="button" class="btn btn-primary" style="text-align: right">Return to Search Page</button></div>-->
 
       <div id='form'>
 
@@ -30,18 +29,20 @@
                           <li><span class='highlight'><%= entry_no.to_s %></span></li>
                       <% else %>
                           <li>
-                            <span class='nohighlight'><%= link_to entry_no.to_s, searches_show_path(:entry_id => entry_id, :folio_id => @folio_id) %></span>
+                            <span class='nohighlight'><%= link_to entry_no.to_s, searches_show_path(:entry_id => entry_id, :folio_id => @folio_id, :search_term => @search_term, :page => @page) %></span>
                           </li>
                       <% end %>
                   <% end %>
+
                 </ul>
               </th>
             </tr>
 
             <tr>
-              <th colspan='2'>
-                <div style="height: 18px; text-align: right">
-                  <%#= button_to 'Edit', edit_entry_path(@db_entry.entry_id), :method => :get, :class => 'buttonTo' %>
+              <th colspan='2' style="padding: 4px 3px">
+                <div style="float: right; margin-right: 0px">
+                    <a href="<%= searches_path(:search_term => @search_term, :page => @page) %>"><button type="button" class="btn btn-default btn-sm">Return to Search Page</button></a>
+                  </li>
                 </div>
               </th>
             </tr>
@@ -522,6 +523,7 @@
 
     <div style='clear: both'></div>
   </div>
+
 </div>
 
 <div class="row" style="height: 60px">
