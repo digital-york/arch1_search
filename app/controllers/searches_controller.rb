@@ -1,6 +1,7 @@
 class SearchesController < ApplicationController
 
   def index
+    puts 'INDEX'
 
     @search_term = params[:search_term]
     @page = params[:page]
