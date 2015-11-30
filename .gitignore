@@ -19,7 +19,7 @@
 .env
 
 # Ignore rubyMine IDE
-.idea
+.idea/
 
 # Ignore intellij .iml file
 *.iml
