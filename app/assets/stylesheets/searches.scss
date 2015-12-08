@@ -1,32 +1,46 @@
-
 /***** sidebar *****/
 #sidebar, #facets {
-  padding-bottom: 10px; }
+  padding-bottom: 10px;
+}
 
 #facet-panel-collapse {
   padding-left: 0;
   padding-right: 0;
   border-top: none;
   box-shadow: none;
-  max-height: none; }
+  max-height: none;
+}
 
 .facets-toggle {
-  border-color: #ddd; }
+  border-color: #ddd;
+}
+
 .facets-toggle .icon-bar {
-  background-color: #888; }
+  background-color: #888;
+}
 
 .facet-values {
   display: table;
-  width: 100%; }
+  width: 100%;
+}
+
 .facet-values li {
-  display: table-row; }
+  display: table-row;
+}
+
 .facet-values .remove {
-  text-indent: 12px; }
+  text-indent: 12px;
+}
+
 .facet-values .remove .glyphicon {
   top: 0.1em;
-  vertical-align: text-top; }
+  vertical-align: text-top;
+}
+
 .facet-values .remove:hover {
-  color: #d9534f; }
+  color: #d9534f;
+}
+
 .facet-values .facet-label {
   display: table-cell;
   padding-right: 1em;
@@ -39,20 +53,27 @@
   -webkit-hyphens: auto;
   -moz-hyphens: auto;
   -ms-hyphens: auto;
-  hyphens: auto; }
+  hyphens: auto;
+}
+
 .facet-values .facet-count {
   display: table-cell;
   vertical-align: top;
-  text-align: right; }
+  text-align: right;
+}
 
 .facet_extended_list .sort_options {
-  text-align: right; }
+  text-align: right;
+}
+
 .facet_extended_list .prev_next_links {
-  float: left; }
+  float: left;
+}
 
 /* deprecated in Blacklight 5.x */
 .collapse-toggle {
-  cursor: pointer; }
+  cursor: pointer;
+}
 
 .panel-heading.collapse-toggle .panel-title:after {
   /* symbol for "opening" panels */
@@ -65,12 +86,14 @@
   color: grey;
   /* adjust as needed */
   font-size: 0.8em;
-  line-height: normal; }
+  line-height: normal;
+}
 
 .panel-heading.collapse-toggle.collapsed .panel-title:after {
   /* symbol for "collapsed" panels */
   content: "\e080";
-  /* adjust as needed, taken from bootstrap.css */ }
+  /* adjust as needed, taken from bootstrap.css */
+}
 
 /* Sidenav */
 
@@ -94,13 +117,14 @@ p, ol, ul, td {
 
 body {
   /*font-family: Arial;*/
+  //background: url('/assets/main_image.jpg') scroll 0 10% #000000;
 }
 
-#banner {
-  background: url('/assets/arch1_banner.jpg') repeat-x scroll 0 10% #000000;
-  height:110px;
+//#banner {
+//  background: url('/assets/arch1_banner.jpg') repeat-x scroll 0 10% #000000;
+  //height: 110px;
   //background-color: #67467a;
-}
+//}
 
 .icon {
   position: relative;
@@ -110,8 +134,10 @@ body {
 a, a:visited, a:hover, a:focus {
   /*font-size: 1.2em;*/
   text-decoration: none;
-  color: #248dc1;
+  //color: #248dc1;
+  color: #3e1c52;
   background-color: transparent;
+  font-weight: bold;
 }
 
 a:hover {
@@ -124,13 +150,19 @@ a:hover {
 }
 
 .results_table table {
-  margin-left: 35px;
+  margin-left: 18px;
 }
 
 .results_table th {
   font-weight: normal;
-  font-style: italic;
-  width: 85px;
+  font-size: 0.9em;
+  //font-style: italic;
+  width: 150px;
+  padding-left: 4px;
+}
+
+.results_table td {
+  font-size: 0.9em;
 }
 
 * {
@@ -158,20 +190,21 @@ a:hover {
 
 #left_frame {
   float: left;
-  width: 280px;
+  //width: 280px;
   margin-left: 23px;
 }
 
 #right_frame {
   padding-left: 23px;
   float: left;
-  width: 870px;
+  //width: 870px;
 }
 
 #location1 {
-  height: 280px;
-  width: 260px;
-  padding: 10px;
+  float: left;
+  height: 400px;
+  width: 320px;
+  margin: 10px;
 }
 
 .tab1 table {
@@ -246,6 +279,7 @@ a:hover {
 #image_frame a {
   text-decoration: none;
 }
+
 #image_frame2 {
   float: left;
   background-color: #403C35;
@@ -260,6 +294,7 @@ a:hover {
   float: left;
   //height: 38px;
   background-color: grey;
+  //background-color: #403152;
   width: 100%;
   //padding-top: 5px;
   padding: 10px 0px;
@@ -308,12 +343,6 @@ a:hover {
   background-color: grey;
 }
 
-#location1 {
-  height: 280px;
-  width: 280px;
-  padding: 10px;
-}
-
 // Prevent blue line appearing in chrome around the canvas
 .openseadragon-canvas {
   outline: 0px;
@@ -323,8 +352,9 @@ a:hover {
   height: 26px;
   margin-top: 2px;
   padding-top: 7px;
-  width: 900px;
-  background-color: grey;
+  //width: 900px;
+  //background-color: grey;
+  background-color: #403152
 }
 
 #entry_menu ul {
@@ -354,6 +384,7 @@ a:hover {
 
 .highlight {
   color: #9c6b17;
+  //color: #403152;
   background-color: #E1E1E1;
   border-radius: 6px 6px 0 0;
   padding: 6px 10px 7px 12px;
@@ -363,7 +394,8 @@ a:hover {
 }
 
 .highlight a {
-  color: #9C6B17;
+  //color: #9C6B17;
+  //color: #FFCC00;
   text-decoration: none;
 }
 
@@ -374,12 +406,13 @@ a:hover {
 }
 
 .nohighlight a {
-  color: #888888;
+  color: #9b9b9b;
   text-decoration: none;
 }
 
 .nohighlight a:hover {
   color: #9C6B17;
+  //color: #FFCC00;
   text-decoration: none;
 }
 
@@ -389,4 +422,41 @@ a:hover {
 
 ul {
   margin-bottom: 0px;
+}
+
+.reverse {
+  padding: 0px 3px;
+  color: white;
+  background-color: grey;
+}
+
+#banner {
+  height: 50px;
+  background-color: #403152;
+  text-align: center;
+  font-size: 1.2em;
+}
+
+#banner a {
+  color: #FFCC00;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.archbishop_logo {
+  width: 120%;
+}
+
+.main_image {
+  background: url('/assets/main_image.jpg') scroll 0 10% #000000;
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 100%;
+  height: 0;
+  padding-top: 66.64%; /* (img-height / img-width * container-width) */
+}
+
+.footer_logo {
+  width: 200px;
+  margin: 0px 50px;
 }

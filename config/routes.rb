@@ -1,23 +1,17 @@
 Rails.application.routes.draw do
 
   get 'searches/index'
-
-  get 'searches/new'
-
+  #get 'searches/new'
   get 'searches/show'
+  #get 'searches/create'
+  #get 'searches/edit'
+  #get 'searches/update'
+  #get 'searches/destroy'
+  get 'home_page/index'
 
-  get 'searches/create'
-
-  get 'searches/edit'
-
-  get 'searches/update'
-
-  get 'searches/destroy'
-
-  resources :books
   resources :searches
 
-  root 'searches#index'
+  root 'home_page#index'
 
   get 'image_zoom_large' => 'image_zoom_large#index'
 

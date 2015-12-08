@@ -1,5 +1,108 @@
 module Solr
 
+  def get_data2(search_term, page)
+
+    @list_array = []
+    @partial_list_array = []
+
+    if search_term == nil then search_term = '' end
+
+    q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term}* or section_type_search:*#{search_term}* or summary_tesim:*#{search_term}* or marginalia_tesim:*#{search_term}* or subject_search:*#{search_term}* or language_search:*#{search_term}* or note_tesim:*#{search_term}* or editorial_note_tesim:*#{search_term}* or is_referenced_by_tesim:*#{search_term}*)"
+    id = "id, entry_type_search, section_type_search, summary_tesim, marginalia_tesim, language_search, subject_search, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
+
+    SolrQuery.new.solr_query(q, id, 10000)['response']['docs'].map do |result|
+
+      @match_term = search_term
+      if @match_term == '' then @match_term = '.*' end
+
+      @element_array = []
+      entry_id = result['id']
+      @element_array << entry_id
+      get_entry_and_folio_details(entry_id)
+      get_element(result['entry_type_search'])
+      get_element(result['section_type_search'])
+      get_element(result['summary_tesim'])
+      get_element(result['marginalia_tesim'])
+      get_element(result['language_search'])
+      get_element(result['subject_search'])
+      get_element(result['note_tesim'])
+      get_element(result['editorial_note_tesim'])
+      get_element(result['is_referenced_by_tesim'])
+
+
+
+      @list_array << @element_array
+    end
+
+#puts @list_array
+
+    #add_name_to_set(person_as_written, @person_set_array)
+
+    #@person_list_array = @person_list_array.sort_by { |k| k[1] }
+    #@person_set_array = @person_set_array.sort_by { |k| k[0] }
+
+    #@list_array = @person_list_array + @place_list_array + @subject_list_array
+    @partial_list_array = @list_array.slice((@page - 1) * 10, 10)
+
+    @section_type_facet_array = []
+    @person_as_written_facet_array = []
+    @place_as_written_facet_array = []
+    @subject_facet_array = []
+
+    response = SolrQuery.new.solr_query2
+
+    response['facet_counts']['facet_fields']['section_type_facet'].each_slice(2).with_index do |t, index|
+      @section_type_facet_array << t
+    end
+
+    response['facet_counts']['facet_fields']['person_as_written_facet'].each_slice(2).with_index do |t, index|
+      @person_as_written_facet_array << t
+    end
+
+    response['facet_counts']['facet_fields']['place_as_written_facet'].each_slice(2).with_index do |t, index|
+      @place_as_written_facet_array << t
+    end
+
+    response['facet_counts']['facet_fields']['subject_facet'].each_slice(2).with_index do |t, index|
+      @subject_facet_array << t
+    end
+
+  end
+
+  def get_entry_and_folio_details(entry_id)
+    SolrQuery.new.solr_query('id:' + entry_id, 'entry_no_tesim, folio_ssim', 1)['response']['docs'].map do |result|
+      entry_no = result['entry_no_tesim'].join
+      folio_id = result['folio_ssim'].join
+      preflabel = ''
+      SolrQuery.new.solr_query('id:' + folio_id, 'preflabel_tesim', 1)['response']['docs'].map do |result|
+        preflabel = result['preflabel_tesim'].join
+      end
+      preflabel = preflabel.sub 'Abp Reg', ''
+      register = preflabel.split(' ')[0].to_s
+      folio = preflabel.sub(register, '')
+      @element_array << 'Entry ' + entry_no + ', ' + folio + " (Register " + register + ")"
+      @element_array << folio_id
+    end
+
+    #return element_array
+  end
+
+  def get_element(input_array)
+
+    element = ''
+
+    if input_array != nil
+      input_array.each do |t|
+        if t.match(/#{@match_term}/i)
+          if element != '' then element = element + ', ' end
+          element = element + t
+        end
+      end
+    end
+
+    @element_array << element
+  end
+
   def get_data(search_term, page)
 
     # PERSON #
@@ -105,24 +208,6 @@ module Solr
       set_array << array_element
     end
 
-  end
-
-  def get_entry_and_folio_details(entry_id, element_list)
-
-    SolrQuery.new.solr_query('id:' + entry_id, 'entry_no_tesim, folio_ssim', 1)['response']['docs'].map do |result|
-      entry_no = result['entry_no_tesim'].join
-      folio_id = result['folio_ssim'].join
-      preflabel = ''
-      SolrQuery.new.solr_query('id:' + folio_id, 'preflabel_tesim', 1)['response']['docs'].map do |result|
-        preflabel = result['preflabel_tesim'].join
-      end
-      preflabel = preflabel.sub 'Abp Reg', ''
-      register = preflabel.split(' ')[0].to_s
-      folio = preflabel.sub(register, '')
-      element_list << 'Entry' + entry_no + ', ' + folio
-      element_list << register
-      element_list << folio_id
-    end
   end
 
   def get_solr_data(db_entry)

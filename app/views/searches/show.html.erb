@@ -1,17 +1,22 @@
 
-<div class="row" style="margin-top: 30px">
+<div class="row" style="margin-top: 50px">
 
-  <div class="col-md-12">
+  <div class="col-md-1"></div>
 
-    <div id='left_frame'>
+  <div class="col-md-3">
+
+    <div id='left_frame' style="text-align: center">
       <%= render 'image_zoom_small' %>
     </div>
+  </div>
+
+  <div class="col-md-7">
 
     <div id='right_frame'>
 
       <div id='form'>
 
-        <div class='tab1'>
+            <div class='tab1'>
 
           <table>
 
@@ -49,8 +54,8 @@
 
             <%# Entry No %>
             <tr>
-              <th style='width: 153px'>Entry No:</th>
-              <td style='width: 750px'><%= @db_entry.entry_no %></td>
+              <th style='width: 15%'>Entry No:</th>
+              <td style='width: 85%'><%= @db_entry.entry_no %></td>
             </tr>
 
             <%# Entry Type %>
@@ -60,7 +65,7 @@
                 <% @db_entry.db_entry_types.each do |entry_type| %>
                     <div style="padding: 4px 0px">
                       <% if entry_type != nil %>
-                          <%= terms.get_str_from_id(entry_type.name, 'preflabel_tesim') %>
+                          <%= get_str_from_id(entry_type.name, 'preflabel_tesim') %>
                       <% end %>
                     </div>
                 <% end %>
@@ -72,9 +77,10 @@
               <th>Section Type:</th>
               <td>
                 <% @db_entry.db_section_types.each do |section_type| %>
+                <% puts section_type.inspect %>
                     <div style="padding: 4px 0px">
                       <% if section_type != nil %>
-                          <%= terms.get_str_from_id(section_type.name, 'preflabel_tesim') %>
+                          <%= get_str_from_id(section_type.name, 'preflabel_tesim') %>
                       <% end %>
                     </div>
                 <% end %>
@@ -121,7 +127,7 @@
                 <% @db_entry.db_languages.each do |language| %>
                     <div style="padding: 4px 0px">
                       <% if language != nil %>
-                          <%= terms.get_str_from_id(language.name, 'preflabel_tesim') %>
+                          <%= get_str_from_id(language.name, 'preflabel_tesim') %>
                       <% end %>
                     </div>
                 <% end %>
@@ -245,7 +251,7 @@
                             <th>Date Role:</th>
                             <td>
                               <% if entry_date.date_role != nil %>
-                                  <%= terms.get_str_from_id(entry_date.date_role, 'preflabel_tesim') %>
+                                  <%= get_str_from_id(entry_date.date_role, 'preflabel_tesim') %>
                               <% end %>
                             </td>
                           </tr>
@@ -298,7 +304,7 @@
                             <th style="width: 110px">Place Name Authority:</th>
                             <td>
                               <% if related_place.place_same_as != nil %>
-                                  <%= terms.get_place_same_as(related_place.place_same_as) %>
+                                  <%= get_place_same_as(related_place.place_same_as) %>
                               <% end %>
                             </td>
                           </tr>
@@ -311,7 +317,7 @@
                                 <% related_place.db_place_roles.each do |place_role| %>
                                     <div class="field_single" style="padding: 4px 0px">
                                       <% if place_role != nil %>
-                                          <%= terms.get_str_from_id(place_role.name, 'preflabel_tesim') %>
+                                          <%= get_str_from_id(place_role.name, 'preflabel_tesim') %>
                                       <% end %>
                                     </div>
                                 <% end %>
@@ -327,7 +333,7 @@
                                 <% related_place.db_place_types.each do |place_type| %>
                                     <div class="field_single" style="padding: 4px 0px">
                                       <% if place_type != nil %>
-                                          <%= terms.get_str_from_id(place_type.name, 'preflabel_tesim') %>
+                                          <%= get_str_from_id(place_type.name, 'preflabel_tesim') %>
                                       <% end %>
                                     </div>
                                 <% end %>
@@ -392,7 +398,7 @@
                             <th style="width: 110px">Person Name Authority:</th>
                             <td>
                               <% if related_person.person_same_as != nil %>
-                                  <%= terms.get_person_same_as(related_person.person_same_as) %>
+                                  <%= get_person_same_as(related_person.person_same_as) %>
                               <% end %>
                             </td>
                           </tr>
@@ -422,7 +428,7 @@
                               <div style="padding: 4px 0px; min-height: 18px" class="field_group">
                                 <% related_person.db_person_roles.each do |person_role| %>
                                     <div class="field_single" style="padding: 4px 0px">
-                                      <%= terms.get_str_from_id(person_role.name, 'preflabel_tesim') %>
+                                      <%= get_str_from_id(person_role.name, 'preflabel_tesim') %>
                                     </div>
                                 <% end %>
                               </div>
@@ -438,7 +444,7 @@
                               <div style="padding: 4px 0px; min-height: 18px" class="field_group">
                                 <% related_person.db_person_descriptors.each do |person_descriptor| %>
                                     <div class="field_single" style="padding: 4px 0px">
-                                      <%= terms.get_str_from_id(person_descriptor.name, 'preflabel_tesim') %>
+                                      <%= get_str_from_id(person_descriptor.name, 'preflabel_tesim') %>
                                     </div>
                                 <% end %>
                               </div>

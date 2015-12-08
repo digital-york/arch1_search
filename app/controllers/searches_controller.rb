@@ -1,11 +1,11 @@
 class SearchesController < ApplicationController
 
   def index
-    puts 'INDEX'
 
     @search_term = params[:search_term]
     @page = params[:page]
 
+    # Set the appropriate page
     if params[:next] == 'true'
       @page = @page.to_i + 1
     elsif params[:previous] == 'true'
@@ -16,7 +16,9 @@ class SearchesController < ApplicationController
       @page = @page.to_i
     end
 
-    get_data(@search_term, @page)
+    # Get the data to display on the page (depending on the search term and page)
+    #get_data(@search_term, @page)
+    get_data2(@search_term, @page)
 
   end
 
@@ -28,8 +30,11 @@ class SearchesController < ApplicationController
     # Populate db_entry with data from Solr
     get_solr_data(@db_entry)
 
+puts @db_entry.inspect
+
     @folio_id = params[:folio_id]
 
+    # Used to get the Tabs for the view page
     @entry_list = get_entry_list(@folio_id)
 
     @search_term = params[:search_term]
@@ -53,6 +58,5 @@ class SearchesController < ApplicationController
   end
 
   def index2
-  puts "HERE2"
   end
 end

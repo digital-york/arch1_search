@@ -5,6 +5,7 @@ gem 'autoprefixer-rails'
 
 gem 'solrizer'
 gem 'rsolr'
+gem 'rsolr-ext'
 
 gem 'dotenv-rails', :groups => [:development, :test, :production]
 

@@ -1,21 +1,26 @@
 
-<div id="image_header">
-
-  <%
-     folio_title = get_str_from_id(@folio_id, 'preflabel_tesim')
-     folio_title = folio_title.gsub(/Abp Reg \d+[a-z]* /, "")
-  %>
-
-  <%= folio_title %>
-
-</div>
-
 <div id="image_frame" style="text-align: center">
+
+  <div id="image_header">
+    <%
+       folio_title = get_str_from_id(@folio_id, 'preflabel_tesim')
+       folio_title = folio_title.gsub(/Abp Reg \d+[a-z]* /, "")
+    %>
+    <%= folio_title %>
+  </div>
+
   <div id="location1" style="background-color: black"></div>
+
+  <div style="clear: both"></div>
+
   <div id="image_footer">
     <div style="float: right; margin-right: 15px">
-      <%= link_to image_tag("magnifying_glass.png", :alt => "Magnifying glass icon", :class => "icon", :style => "position: relative; top: 7px", :title => 'View full-size image'), "#", :onclick => "popup('/image_zoom_large', '" + @folio_id + "'); return false" %></div>
+      <%= link_to image_tag("magnifying_glass.png", :alt => "Magnifying glass icon", :class => "icon", :style => "position: relative; top: 7px", :title => 'View full-size image'), "#", :onclick => "popup('/image_zoom_large', '" + @folio_id + "'); return false" %>
     </div>
+  </div>
+
+  <div style="clear: both"></div>
+
 </div>
 
 <div style="clear: both"></div>

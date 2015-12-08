@@ -1,38 +1,8 @@
 
-<div class="row">
-
-  <div id="search-navbar" class="navbar navbar-default navbar-static-top" role="navigation">
-
-    <div class="col-md-12">
-
-      <div class="container2" style="width: 1170px; padding-left: 0px; padding-right: 15px">
-
-        <%= form_tag searches_index_path, :method => 'get', :class => 'earch-query-form clearfix navbar-form' do |f| %>
-
-            <span style="font-size: 1.1em">Search the Registers:&nbsp;</span>
-
-            <div class="input-group search-input-group" style="display: inline-table; vertical-align: middle">
-
-              <%= text_field_tag 'search_term', @search_term, class: 'form-control', id: 'search_registers', placeholder: 'Enter text here...' %>
-
-              <span class="input-group-btn">
-                <button type="submit" class="btn btn-primary search-btn" id="search">
-                  <span class="submit-search-text">Search</span>
-                  <span class="glyphicon glyphicon-search"></span>
-                </button>
-              </span>
-            </div>
-
-            <%= hidden_field_tag 'is_search_box', 'true' %>
-
-        <% end %>
-
-      </div>
-    </div>
-  </div>
-</div>
 
 <div class="row">
+
+  <div class="col-md-3"></div>
 
   <div id="sidebar" class="col-md-2">
 
@@ -40,14 +10,40 @@
 
       <div class="top-panel-heading panel-heading">
 
-        <h4 class="facets-heading" style="font-size: 1.1em">
+        <!--<h4 class="facets-heading" style="font-size: 1.1em">
           Limit your search
-        </h4>
+        </h4>-->
       </div>
 
       <div id="facet-panel-collapse" class="collapse in panel-group">
 
-        <%# People %>
+      <%# Section Type %>
+        <div class="panel panel-default facet_limit blacklight-format ">
+
+          <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format" aria-expanded="false">
+            <h5 class="panel-title facet-field-heading">
+              <a data-no-turbolink="true" href="#">Section Types</a>
+            </h5>
+          </div>
+
+          <div id="facet-format" class="panel-collapse facet-content collapse in" aria-expanded="false">
+            <div class="panel-body">
+              <ul class="facet-values list-unstyled">
+                <% @section_type_facet_array.each do |t| %>
+                    <%
+                       section_type_name = t[0]
+                       section_type_count = t[1]
+                    %>
+                    <li>
+                      <span class="facet-label"><a class="facet_select" href=""><%= section_type_name %></a></span><span class="facet-count"><%= section_type_count %></span>
+                    </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <%# Person %>
         <div class="panel panel-default facet_limit blacklight-format ">
 
           <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format" aria-expanded="false">
@@ -59,13 +55,13 @@
           <div id="facet-format" class="panel-collapse facet-content collapse in" aria-expanded="false">
             <div class="panel-body">
               <ul class="facet-values list-unstyled">
-                <% @person_set_array.each do |t| %>
+                <% @person_as_written_facet_array.each do |t| %>
                 <%
-                  person_name = t[0]
-                  person_count = t[1]
+                  person_as_written_name = t[0]
+                  person_as_written_count = t[1]
                 %>
                 <li>
-                  <span class="facet-label"><a class="facet_select" href=""><%= person_name %></a></span><span class="facet-count"><%= person_count %></span>
+                  <span class="facet-label"><a class="facet_select" href=""><%= person_as_written_name %></a></span><span class="facet-count"><%= person_as_written_count %></span>
                 </li>
                 <% end %>
               </ul>
@@ -85,7 +81,7 @@
           <div id="facet-pub_date" class="panel-collapse facet-content collapse in" aria-expanded="false">
             <div class="panel-body">
               <ul class="facet-values list-unstyled">
-                <% @place_set_array.each do |t| %>
+                <% @place_as_written_facet_array.each do |t| %>
                 <%
                   place_name = t[0]
                   place_count = t[1]
@@ -111,7 +107,7 @@
           <div id="facet-subject_topic_facet" class="panel-collapse facet-content collapse in" aria-expanded="false">
             <div class="panel-body">
               <ul class="facet-values list-unstyled">
-                <% @subject_set_array.each do |t| %>
+                <% @subject_facet_array.each do |t| %>
                 <%
                   subject_name = t[0]
                   subject_count = t[1]
@@ -151,11 +147,11 @@
 
   </div>
 
-  <div class="col-md-10">
+  <div class="col-md-7">
 
     <div style="padding-top: 8px; padding-left: 40px; font-size: 1em">
 
-      <div style="margin-top: 0px">
+      <div style="margin-top: 40px">
 
       <%
         start_index = ((@page - 1) * 10) + 1
@@ -190,39 +186,94 @@
 
       <% if @partial_list_array.size > 0 %>
 
-          <% index = start_index %>
-
-          <% @partial_list_array.each_with_index do |t| %>
+          <% @partial_list_array.each_with_index do |t, index| %>
 
              <%
                entry_id = t[0]
                title = t[1]
-               type = t[2] # Person, Place, Subject, etc
-               entry = t[3]
-               register = t[4]
-               folio_id = t[5]
+               folio_id = t[2]
+               entry_type = t[3]
+               section_type = t[4]
+               summary = t[5]
+               marginalia = t[6]
+               language = t[7]
+               subject = t[8]
+               note = t[9]
+               editorial_note = t[10]
+               is_referenced_by = t[11]
              %>
 
               <div style="padding-bottom: 15px">
 
-                <%= index %>.&nbsp;&nbsp;<%= link_to title, searches_show_path(:entry_id => entry_id, :folio_id => folio_id, :search_term => @search_term, :page => @page) %>
-
-                <% index = index + 1 %>
+                <%= index + 1 %>.&nbsp;&nbsp;<%= link_to title, searches_show_path(:entry_id => entry_id, :folio_id => folio_id, :search_term => @search_term, :page => @page) %>
 
                 <div class="results_table">
+
                   <table>
+
+                    <% if entry_type != '' %>
+                        <tr>
+                          <th>Entry Type:</th>
+                          <td>"<%= entry_type %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if section_type != '' %>
                     <tr>
-                      <th>Type:</th>
-                      <td><%= type %></td>
+                      <th>Section Type:</th>
+                      <td>"<%= section_type %>"</td>
                     </tr>
-                    <tr>
-                      <th>Entry:</th>
-                      <td><%= entry %></td>
-                    </tr>
-                    <tr>
-                      <th>Register:</th>
-                      <td><%= register %></td>
-                    </tr>
+                    <% end %>
+
+                    <% if summary != '' %>
+                        <tr>
+                          <th>Summary:</th>
+                          <td>"<%= summary %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if marginalia != '' %>
+                        <tr>
+                          <th>Marginalia:</th>
+                          <td>"<%= marginalia %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if language != '' %>
+                        <tr>
+                          <th>Language:</th>
+                          <td>"<%= language %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if subject != '' %>
+                        <tr>
+                          <th>Subject:</th>
+                          <td>"<%= subject %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if note != '' %>
+                        <tr>
+                          <th>Note:</th>
+                          <td>"<%= note %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if editorial_note != '' %>
+                        <tr>
+                          <th>Editorial Note:</th>
+                          <td>"<%= editorial_note %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if is_referenced_by != '' %>
+                        <tr>
+                          <th>Is Referenced By:</th>
+                          <td>"<%= is_referenced_by %>"</td>
+                        </tr>
+                    <% end %>
+
                   </table>
                 </div>
               </div>
@@ -232,6 +283,9 @@
 
     </div>
   </div>
+
+  <!--<div class="col-md-2"></div>-->
+
 </div>
 
 <div id="footer" class="row" style="height: 60px">
