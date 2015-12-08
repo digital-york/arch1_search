@@ -448,7 +448,7 @@ ul {
 }
 
 .main_image {
-  background: url('/assets/main_image.jpg') scroll 0 10% #000000;
+  background: url('/assets/main_image.jpg') scroll 0 90% #000000;
   background-size: contain;
   background-repeat: no-repeat;
   width: 100%;
@@ -459,4 +459,11 @@ ul {
 .footer_logo {
   width: 200px;
   margin: 0px 50px;
+}
+
+#main_search {
+  height: 300px;
+  background: url('/assets/main_image.jpg') no-repeat 0 10%;
+  background-size: cover;
+  background-position: center;
 }
