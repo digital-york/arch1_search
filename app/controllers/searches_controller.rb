@@ -30,8 +30,6 @@ class SearchesController < ApplicationController
     # Populate db_entry with data from Solr
     get_solr_data(@db_entry)
 
-puts @db_entry.inspect
-
     @folio_id = params[:folio_id]
 
     # Used to get the Tabs for the view page
