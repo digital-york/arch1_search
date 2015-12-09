@@ -199,11 +199,20 @@
                note = t[9]
                editorial_note = t[10]
                is_referenced_by = t[11]
+               place_as_written = t[12]
+               place_role = t[13]
+               place_type = t[14]
+               place_note = t[15]
+               person_as_written = t[16]
+               person_role = t[17]
+               person_descriptor = t[18]
+               person_descriptor_as_written = t[19]
+               person_note = t[20]
              %>
 
               <div style="padding-bottom: 15px">
 
-                <%= index + 1 %>.&nbsp;&nbsp;<%= link_to title, searches_show_path(:entry_id => entry_id, :folio_id => folio_id, :search_term => @search_term, :page => @page) %>
+                <span class="results_title"><%= index + 1 %>.&nbsp;&nbsp;<%= link_to title, searches_show_path(:entry_id => entry_id, :folio_id => folio_id, :search_term => @search_term, :page => @page) %></span>
 
                 <div class="results_table">
 
@@ -269,6 +278,69 @@
                         <tr>
                           <th>Is Referenced By:</th>
                           <td>"<%= is_referenced_by %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if place_as_written != '' %>
+                        <tr>
+                          <th>Place As Written:</th>
+                          <td>"<%= place_as_written %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if place_role != '' %>
+                        <tr>
+                          <th>Place Role:</th>
+                          <td>"<%= place_role %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if place_type != '' %>
+                        <tr>
+                          <th>Place Type:</th>
+                          <td>"<%= place_type %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if place_note != '' %>
+                        <tr>
+                          <th>Place Note:</th>
+                          <td>"<%= place_note %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if person_as_written != '' %>
+                        <tr>
+                          <th>Person As Written:</th>
+                          <td>"<%= person_as_written %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if person_role != '' %>
+                        <tr>
+                          <th>Person Role:</th>
+                          <td>"<%= person_role %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if person_descriptor != '' %>
+                        <tr>
+                          <th>Person Descriptor:</th>
+                          <td>"<%= person_descriptor %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if person_descriptor_as_written != '' %>
+                        <tr>
+                          <th>Person Descriptor As Written:</th>
+                          <td>"<%= person_descriptor_as_written %>"</td>
+                        </tr>
+                    <% end %>
+
+                    <% if person_note != '' %>
+                        <tr>
+                          <th>Person Note:</th>
+                          <td>"<%= person_note %>"</td>
                         </tr>
                     <% end %>
 

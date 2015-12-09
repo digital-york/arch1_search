@@ -8,9 +8,9 @@ module Solr
     if search_term == nil then search_term = '' end
 
     q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term}* or section_type_search:*#{search_term}* or summary_tesim:*#{search_term}* or marginalia_tesim:*#{search_term}* or subject_search:*#{search_term}* or language_search:*#{search_term}* or note_tesim:*#{search_term}* or editorial_note_tesim:*#{search_term}* or is_referenced_by_tesim:*#{search_term}*)"
-    id = "id, entry_type_search, section_type_search, summary_tesim, marginalia_tesim, language_search, subject_search, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
+    fl = "id, entry_type_search, section_type_search, summary_tesim, marginalia_tesim, language_search, subject_search, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
 
-    SolrQuery.new.solr_query(q, id, 10000)['response']['docs'].map do |result|
+    SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
 
       @match_term = search_term
       if @match_term == '' then @match_term = '.*' end
@@ -19,24 +19,25 @@ module Solr
       entry_id = result['id']
       @element_array << entry_id
       get_entry_and_folio_details(entry_id)
-      get_element(result['entry_type_search'])
-      get_element(result['section_type_search'])
-      get_element(result['summary_tesim'])
-      get_element(result['marginalia_tesim'])
-      get_element(result['language_search'])
-      get_element(result['subject_search'])
-      get_element(result['note_tesim'])
-      get_element(result['editorial_note_tesim'])
-      get_element(result['is_referenced_by_tesim'])
-
+      @element_array << get_element(result['entry_type_search'])
+      @element_array << get_element(result['section_type_search'])
+      @element_array << get_element(result['summary_tesim'])
+      @element_array << get_element(result['marginalia_tesim'])
+      @element_array << get_element(result['language_search'])
+      @element_array << get_element(result['subject_search'])
+      @element_array << get_element(result['note_tesim'])
+      @element_array << get_element(result['editorial_note_tesim'])
+      @element_array << get_element(result['is_referenced_by_tesim'])
+      get_places(entry_id, search_term)
+      get_people(entry_id, search_term)
       @list_array << @element_array
     end
 
-#puts @list_array
+    get_facets
+  end
 
-    #add_name_to_set(person_as_written, @person_set_array)
+  def get_facets
 
-    #@person_list_array = @person_list_array.sort_by { |k| k[1] }
     #@person_set_array = @person_set_array.sort_by { |k| k[0] }
 
     #@list_array = @person_list_array + @place_list_array + @subject_list_array
@@ -67,6 +68,69 @@ module Solr
 
   end
 
+  def get_places(entry_id, search_term)
+
+    q = "relatedPlaceFor_ssim:#{entry_id} AND (place_as_written_tesim:*#{search_term}* or place_role_search:*#{search_term}* or place_type_search:*#{search_term}* or place_note_tesim:*#{search_term}*)"
+    fl = 'id, place_as_written_tesim, place_role_search, place_type_search, place_note_tesim'
+
+    place_as_written_string = ''
+    place_role_string = ''
+    place_type_string = ''
+    place_note_string = ''
+
+    SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
+      place_as_written_string = place_as_written_string + get_place_or_person_string(result['place_as_written_tesim'], place_as_written_string)
+      place_role_string = place_role_string + get_place_or_person_string(result['place_role_search'], place_role_string)
+      place_type_string = place_type_string + get_place_or_person_string(result['place_type_search'], place_type_string)
+      place_note_string = place_note_string + get_place_or_person_string(result['place_note_tesim'], place_note_string)
+    end
+
+    @element_array << place_as_written_string
+    @element_array << place_role_string
+    @element_array << place_type_string
+    @element_array << place_note_string
+  end
+
+  def get_people(entry_id, search_term)
+
+    q = "relatedAgentFor_ssim:#{entry_id} AND (person_as_written_tesim:*#{search_term}* or person_role_search:*#{search_term}* or person_descriptor_search:*#{search_term}* or person_descriptor_as_written_tesim:*#{search_term}* or person_note_tesim:*#{search_term}*)"
+    fl = 'id, person_as_written_tesim, person_role_search, person_descriptor_search, person_descriptor_as_written_tesim, person_note_tesim'
+
+    person_as_written_string = ''
+    person_role_string = ''
+    person_descriptor_string = ''
+    person_descriptor_as_written_string = ''
+    person_note_string = ''
+
+    SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
+      person_as_written_string = person_as_written_string + get_place_or_person_string(result['person_as_written_tesim'], person_as_written_string)
+      person_role_string = person_role_string + get_place_or_person_string(result['person_role_search'], person_role_string)
+      person_descriptor_string = person_descriptor_string + get_place_or_person_string(result['person_descriptor_search'], person_descriptor_string)
+      person_descriptor_as_written_string = person_descriptor_as_written_string + get_place_or_person_string(result['person_descriptor_as_written_tesim'], person_descriptor_as_written_string)
+      person_note_string = person_note_string + get_place_or_person_string(result['person_note_tesim'], person_note_string)
+    end
+
+    @element_array << person_as_written_string
+    @element_array << person_role_string
+    @element_array << person_descriptor_string
+    @element_array << person_descriptor_as_written_string
+    @element_array << person_note_string
+  end
+
+  def get_place_or_person_string(input_array, element_string)
+
+    element_temp = get_element(input_array)
+
+    result_string = ''
+
+    if element_temp != ''
+      if element_string != '' then result_string = result_string + ', ' end
+      result_string = result_string + element_temp
+    end
+
+    return result_string
+  end
+
   def get_entry_and_folio_details(entry_id)
     SolrQuery.new.solr_query('id:' + entry_id, 'entry_no_tesim, folio_ssim', 1)['response']['docs'].map do |result|
       entry_no = result['entry_no_tesim'].join
@@ -81,8 +145,6 @@ module Solr
       @element_array << 'Entry ' + entry_no + ', ' + folio + " (Register " + register + ")"
       @element_array << folio_id
     end
-
-    #return element_array
   end
 
   def get_element(input_array)
@@ -98,7 +160,7 @@ module Solr
       end
     end
 
-    @element_array << element
+    return element
   end
 
   def get_data(search_term, page)
