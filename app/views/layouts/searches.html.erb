@@ -13,46 +13,46 @@
 
 <div class="container-fluid">
 
-<!--<div id="banner" class="row">
-<%#= image_tag 'arch1_small.jpg' %>
-</div>-->
-
   <div id="banner" class="row">
-    <div class="col-md-2"></div>
+    <div class="col-md-2">
+    </div>
     <div class="col-md-8" style="padding-top: 10px">
-      <%= link_to 'Search', home_page_index_path %>
-      <%= link_to 'Browse', searches_path %>
-      <%= link_to 'APIs', searches_path %>
-      <%= link_to 'About', searches_path %>
+      <%= link_to 'Home', home_page_index_path %>
+      <%= link_to 'Search', searches_path %>
+      <%= link_to 'Browse', home_page_index_path %>
+      <%= link_to 'APIs', home_page_index_path %>
+      <%= link_to 'About', home_page_index_path %>
     </div>
     <div class="col-md-2" style="text-align: right; padding-top: 10px">
       <%= link_to 'Contact', searches_path %>
     </div>
   </div>
 
-  <div class="row" id="main_search">
+  <%# If flag == true this is the home page and the background image height is greater %>
+  <div class="row" <% if @flag == true then %>id="main_search"<% else %>id="main_search2"<% end %>>
 
-    <div class="col-md-1" style="padding-left: 0px">
-      <%= image_tag 'archbishop_logo.jpg', :class => 'archbishop_logo' %>
+    <div class="col-md-2" style="padding-left: 0px">
+      <%= image_tag 'arch_logo.jpg', :class => 'archbishop_logo' %>
     </div>
 
-    <div class="col-md-3"></div>
+    <div class="col-md-2"></div>
 
     <div class="col-md-8">
 
-      <div id="search-navbar" class="" role="navigation">
-
-        <div class="container2" style="margin-top: 110px">
-
           <%= form_tag searches_index_path, :method => 'get', :class => 'earch-query-form clearfix navbar-form' do |f| %>
 
-              <div class="input-group search-input-group" style="display: inline-table">
+              <%
+                # If flag == true this is the home page and the search box is located lower on the page
+                search_margin_top = '25px'
+                if @flag == true then search_margin_top = '150px' end
+              %>
 
-                <%= text_field_tag 'search_term', @search_term, class: 'form-control', id: 'search_registers', placeholder: 'Enter text here...', :style => 'border-color: black; margin-left: 15px' %>
+              <div class="input-group search-input-group" style="display: inline-table; margin-top: <%= search_margin_top %>">
+
+                <%= text_field_tag 'search_term', @search_term, class: 'form-control', id: 'search_registers', placeholder: 'Search the registers...', :style => 'border-color: black; margin-left: 15px; border-radius: 4px' %>
 
                 <button type="submit" class="btn btn-primary" id="" style="background-color: #FFCC00; border-color: black; color: black; margin-left: 10px">
                   <span class="" style="padding-left: 10px; padding-right: 10px">Go</span>
-                  <!--<span class="glyphicon glyphicon-search"></span>-->
                 </button>
 
               </div>
@@ -61,21 +61,20 @@
 
           <% end %>
 
-        </div>
-
-      </div>
     </div>
   </div>
 
   <%= yield %>
 
+  <hr style="margin: 20px 0px"/>
+
   <div class="row" style="margin-top: 0px">
     <div id="footer" class="col-md-2">
     </div>
     <div id="footer" class="col-md-8" style="text-align: center">
-      <%= image_tag 'fitch_fund.gif', :class => 'footer_logo' %>
-      <%= image_tag 'mellon_logo.svg', :class => 'footer_logo' %>
-      <%= image_tag 'york_logo.gif', :class => 'footer_logo' %>
+      <a href="http://www.marcfitchfund.org.uk/" target="_blank"><%= image_tag 'fitch_fund.gif', :class => 'footer_logo', :style => 'width: 120px' %></a>
+      <a href="https://mellon.org/" target="_blank"><%= image_tag 'mellon_logo.svg', :class => 'footer_logo', :style => 'width: 160px' %></a>
+        <a href="http://http://www.york.ac.uk/" target="_blank"><%= image_tag 'york_logo.gif', :class => 'footer_logo', :style => 'width: 180px' %></a>
     </div>
     <div id="footer" class="col-md-2">
     </div>

@@ -444,7 +444,12 @@ ul {
 }
 
 .archbishop_logo {
-  width: 120%;
+  //width: 50%;
+    height: 100px;
+    //height: auto;
+    //max-width: 10%;
+    border-right: 1px solid #676767;
+    border-bottom: 1px solid #676767;
 }
 
 .main_image {
@@ -457,13 +462,40 @@ ul {
 }
 
 .footer_logo {
-  width: 200px;
+ // width: 200px;
   margin: 0px 50px;
 }
 
 #main_search {
-  height: 300px;
-  background: url('/assets/main_image.jpg') no-repeat 0 10%;
+  height: 350px;
+  background: url('/assets/arch_banner.jpg') no-repeat;
   background-size: cover;
-  background-position: center;
+  background-position: center top;
 }
+
+#main_search2 {
+  height: 110px;
+  background: url('/assets/arch_banner.jpg') no-repeat;
+  background-size: cover;
+  background-position: center bottom;
+}
+
+#browse_icons table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+#browse_icons td {
+  width: 20%;
+  padding-top: 10px;
+  text-align: center;
+}
+
+.fa {
+  color: #403152;
+}
+
+.fa:hover {
+  color: #685185;
+}
+

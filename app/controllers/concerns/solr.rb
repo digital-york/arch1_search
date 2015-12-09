@@ -29,8 +29,6 @@ module Solr
       get_element(result['editorial_note_tesim'])
       get_element(result['is_referenced_by_tesim'])
 
-
-
       @list_array << @element_array
     end
 
