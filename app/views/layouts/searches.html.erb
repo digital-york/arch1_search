@@ -14,8 +14,7 @@
 <div class="container-fluid">
 
   <div id="banner" class="row">
-    <div class="col-md-2">
-    </div>
+    <div class="col-md-2"></div>
     <div class="col-md-8" style="padding-top: 10px">
       <%= link_to 'Home', home_page_index_path %>
       <%= link_to 'Search', searches_path %>
@@ -24,7 +23,7 @@
       <%= link_to 'About', home_page_index_path %>
     </div>
     <div class="col-md-2" style="text-align: right; padding-top: 10px">
-      <%= link_to 'Contact', searches_path %>
+      <%= link_to 'Contact', home_page_index_path %>
     </div>
   </div>
 
@@ -32,10 +31,12 @@
   <div class="row" <% if @flag == true then %>id="main_search"<% else %>id="main_search2"<% end %>>
 
     <div class="col-md-2" style="padding-left: 0px">
-      <%= image_tag 'arch_logo.jpg', :class => 'archbishop_logo' %>
+      <% if @flag == true then %><%#= image_tag 'arch_logo2.jpg', :class => 'archbishop_logo' %><% end %>
     </div>
 
-    <div class="col-md-2"></div>
+    <div class="col-md-2" style="text-align: right">
+      <!--<%# if @flag != true then %><%#= image_tag 'arch_logo.jpg', :class => 'archbishop_logo' %><%# end %>-->
+    </div>
 
     <div class="col-md-8">
 
@@ -68,15 +69,15 @@
 
   <hr style="margin: 20px 0px"/>
 
-  <div class="row" style="margin-top: 0px">
-    <div id="footer" class="col-md-2">
+  <div class="row" style="margin-top: 0px; margin-bottom: 40px">
+    <div class="col-md-2">
     </div>
     <div id="footer" class="col-md-8" style="text-align: center">
       <a href="http://www.marcfitchfund.org.uk/" target="_blank"><%= image_tag 'fitch_fund.gif', :class => 'footer_logo', :style => 'width: 120px' %></a>
       <a href="https://mellon.org/" target="_blank"><%= image_tag 'mellon_logo.svg', :class => 'footer_logo', :style => 'width: 160px' %></a>
         <a href="http://http://www.york.ac.uk/" target="_blank"><%= image_tag 'york_logo.gif', :class => 'footer_logo', :style => 'width: 180px' %></a>
     </div>
-    <div id="footer" class="col-md-2">
+    <div class="col-md-2">
     </div>
   </div>
 

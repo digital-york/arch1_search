@@ -110,12 +110,13 @@
 }
 
 p, ol, ul, td {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'open_sansregular', sans-serif !important;
   font-size: 13px;
   line-height: 18px;
 }
 
 body {
+  font-family: 'open_sansregular', sans-serif !important;
   /*font-family: Arial;*/
   //background: url('/assets/main_image.jpg') scroll 0 10% #000000;
 }
@@ -158,7 +159,7 @@ a:hover {
   font-size: 0.9em;
   //font-style: italic;
   width: 150px;
-  padding-left: 4px;
+  padding-left: 6px;
 }
 
 .results_table td {
@@ -189,15 +190,16 @@ a:hover {
 }
 
 #left_frame {
-  float: left;
-  //width: 280px;
-  margin-left: 23px;
+  //margin-left: 23px;
+  text-align: center;
+  //margin-right: 30px;
+  display: inline-block;
 }
 
 #right_frame {
-  padding-left: 23px;
-  float: left;
-  //width: 870px;
+  padding-top: 34px;
+  padding-left: 40px;
+  display: inline-block;
 }
 
 #location1 {
@@ -208,6 +210,7 @@ a:hover {
 }
 
 .tab1 table {
+width: 100%;
   font-size: 0.8em;
   table-layout: fixed;
   margin: auto;
@@ -223,61 +226,66 @@ a:hover {
 }
 
 .tab1 table {
-  border-right: 1px solid #ACADB7;
-  border-bottom: 1px solid #ACADB7;
+  //border-right: 1px solid #ACADB7;
+  //border-bottom: 1px solid #ACADB7;
 }
 
 .tab1 td, .tab1 th {
-  border-top: 1px solid #ACADB7;
-  border-left: 1px solid #ACADB7;
-  font-size: 1.2em;
-  padding: 7px 8px;
+  //border-top: 1px solid #ACADB7;
+  //border-left: 1px solid #ACADB7;
+  //font-size: 1.2em;
+  padding: 1px 8px;
+  vertical-align: top;
 }
 
 .tab1 th {
-  font-weight: normal;
+  font-size: 1.3em;
+  font-style: italic;
   text-align: left;
-  background-color: #E1E1E1;
+  padding-left: 2px;
+  //background-color: #E1E1E1;
 }
 
 .tab1 td {
-  background-color: #F2F0F0;
+font-size: 1.3em;
+  //background-color: #F2F0F0;
 }
 
 // Just to make the height of the view page elements match that of the edit elements
 // Doesn't work so well for multi elements though
 .tab1 th {
-  height: 23px;
+  //height: 23px;
 }
 
 .tab2 table {
   //font-size: 1em;
-  border: 1px solid silver;
+  //border: 1px solid silver;
   width: 96%;
   float: left;
   margin: 3px 3px 7px 0px;
 }
 
 .tab2 td, .tab2 th {
-  border: none;
+  //border: none;
 }
 
 .tab2 td {
-  background-color: white;
+  #background-color: white;
 }
 
 .tab2 th {
-  background-color: #FFFFFF;
+  #background-color: #FFFFFF;
   width: 115px;
 }
 
 #image_frame {
-  float: left;
-  background-color: #403C35;
+  //float: left;
+  //background-color: #a29c8b;
+  display: inline-block;
 }
 
 #image_frame a {
-  text-decoration: none;
+  //text-decoration: none;
 }
 
 #image_frame2 {
@@ -290,15 +298,17 @@ a:hover {
 }
 
 #image_header {
-  font-size: 1em;
-  float: left;
+  margin-top: 5px;
+  font-size: 1.4em;
+  //float: left;
   //height: 38px;
-  background-color: grey;
+  //background-color: grey;
   //background-color: #403152;
-  width: 100%;
+  //width: 100%;
   //padding-top: 5px;
-  padding: 10px 0px;
-  color: #F7F4EE;
+  //padding: 10px 0px;
+  //color: #F7F4EE;
+  color: #000000;
   text-align: center;
 }
 
@@ -337,10 +347,11 @@ a:hover {
 }
 
 #image_footer {
-  float: left;
-  width: 100%;
-  height: 38px;
-  background-color: grey;
+  font-size: 1.2em;
+  //float: left;
+  //width: 100%;
+  //height: 38px;
+  //background-color: grey;
 }
 
 // Prevent blue line appearing in chrome around the canvas
@@ -354,7 +365,8 @@ a:hover {
   padding-top: 7px;
   //width: 900px;
   //background-color: grey;
-  background-color: #403152
+  //background-color: #403152
+  #border-bottom: 2px solid black
 }
 
 #entry_menu ul {
@@ -370,7 +382,7 @@ a:hover {
   list-style: outside none none;
   margin: 0;
   padding: 4px 0 5px;
-  margin-left: 3px;
+  margin-right: 4px;
 }
 
 #entry_menubar {
@@ -383,14 +395,18 @@ a:hover {
 }
 
 .highlight {
-  color: #9c6b17;
-  //color: #403152;
-  background-color: #E1E1E1;
+  //color: #9c6b17;
+  background-color: #403152;
+  //color: #FFCC00;
+  color: #f3f3f3;
+  //background-color: #E1E1E1;
+  #background-color: #C5C5C5;
   border-radius: 6px 6px 0 0;
-  padding: 6px 10px 7px 12px;
+  padding: 6px 10px 6px 12px;
   // This solves a problem in IE where the 'highlighted' tab is behind the row below thereby displaying a line which should be displayed
   // Not sure why but it seems to move the element in front
   opacity: 0.99;
+  font-weight: bold;
 }
 
 .highlight a {
@@ -402,16 +418,19 @@ a:hover {
 .nohighlight {
   background-color: #C5C5C5;
   border-radius: 6px 6px 0 0;
-  padding: 6px 10px 6px 12px;
+  padding: 6px 10px 5px 12px;
 }
 
 .nohighlight a {
   color: #9b9b9b;
   text-decoration: none;
+  font-weight: bold;
 }
 
 .nohighlight a:hover {
-  color: #9C6B17;
+  //color: #9C6B17;
+  //color: #403152;
+  color: #606060;
   //color: #FFCC00;
   text-decoration: none;
 }
@@ -445,7 +464,7 @@ ul {
 
 .archbishop_logo {
   //width: 50%;
-    height: 100px;
+    height: 200px;
     //height: auto;
     //max-width: 10%;
     border-right: 1px solid #676767;
@@ -468,14 +487,14 @@ ul {
 
 #main_search {
   height: 350px;
-  background: url('/assets/arch_banner.jpg') no-repeat;
+  background: url('/assets/arch_banner3.jpg') no-repeat;
   background-size: cover;
   background-position: center top;
 }
 
 #main_search2 {
   height: 110px;
-  background: url('/assets/arch_banner.jpg') no-repeat;
+  background: url('/assets/arch_banner5.jpg') no-repeat;
   background-size: cover;
   background-position: center bottom;
 }
@@ -500,6 +519,29 @@ ul {
 }
 
 .results_title {
-  font-size: 1.1em;
+  font-size: 1.2em;
 }
 
+.tab1 .pad_th_person_place {
+  padding: 2px 0px 2px 40px;
+}
+
+.pad_multi_element {
+  padding: 2px 0px;
+}
+
+.image_title {
+  //background-color: #f0f0f0;
+  //background-color: #403152;
+  //color: #f3f3f3;
+  //margin: 0px 10px;
+  //border-radius: 5px;
+  //padding: 5px 0px;
+  color: #403152;
+}
+
+.mag_icon {
+  font-size: 1.5em;
+  position: relative;
+  top: 4px;
+}
