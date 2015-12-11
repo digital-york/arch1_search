@@ -1,47 +1,48 @@
 module Solr
 
-  def get_data2(search_term, page)
+  # Set the partial_array which displays the search data
+  def set_search_result_arrays(search_term, page)
 
-    @list_array = []
     @partial_list_array = []
+    @number_of_rows = 0
+    @rows_per_page = 10
 
     if search_term == nil then search_term = '' end
 
     q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term}* or section_type_search:*#{search_term}* or summary_tesim:*#{search_term}* or marginalia_tesim:*#{search_term}* or subject_search:*#{search_term}* or language_search:*#{search_term}* or note_tesim:*#{search_term}* or editorial_note_tesim:*#{search_term}* or is_referenced_by_tesim:*#{search_term}*)"
-    fl = "id, entry_type_search, section_type_search, summary_tesim, marginalia_tesim, language_search, subject_search, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
+    fl = "numFound, id, entry_type_search, section_type_search, summary_tesim, marginalia_tesim, language_search, subject_search, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
+    start = (@page - 1) * @rows_per_page
 
-    SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
+    response = SolrQuery.new.solr_query(q, fl, @rows_per_page, nil, start)['response']
 
-      @match_term = search_term
-      if @match_term == '' then @match_term = '.*' end
+      @number_of_rows = response['numFound']
 
-      @element_array = []
-      entry_id = result['id']
-      @element_array << entry_id
-      get_entry_and_folio_details(entry_id)
-      @element_array << get_element(result['entry_type_search'])
-      @element_array << get_element(result['section_type_search'])
-      @element_array << get_element(result['summary_tesim'])
-      @element_array << get_element(result['marginalia_tesim'])
-      @element_array << get_element(result['language_search'])
-      @element_array << get_element(result['subject_search'])
-      @element_array << get_element(result['note_tesim'])
-      @element_array << get_element(result['editorial_note_tesim'])
-      @element_array << get_element(result['is_referenced_by_tesim'])
-      get_places(entry_id, search_term)
-      get_people(entry_id, search_term)
-      @list_array << @element_array
+      response['docs'].map do |result|
+
+        @match_term = search_term
+        if @match_term == '' then @match_term = '.*' end
+
+        @element_array = []
+        entry_id = result['id']
+        @element_array << entry_id
+        get_entry_and_folio_details(entry_id)
+        @element_array << get_element(result['entry_type_search'])
+        @element_array << get_element(result['section_type_search'])
+        @element_array << get_element(result['summary_tesim'])
+        @element_array << get_element(result['marginalia_tesim'])
+        @element_array << get_element(result['language_search'])
+        @element_array << get_element(result['subject_search'])
+        @element_array << get_element(result['note_tesim'])
+        @element_array << get_element(result['editorial_note_tesim'])
+        @element_array << get_element(result['is_referenced_by_tesim'])
+        get_places(entry_id, search_term)
+        get_people(entry_id, search_term)
+        @partial_list_array << @element_array
     end
 
-    get_facets
   end
 
-  def get_facets
-
-    #@person_set_array = @person_set_array.sort_by { |k| k[0] }
-
-    #@list_array = @person_list_array + @place_list_array + @subject_list_array
-    @partial_list_array = @list_array.slice((@page - 1) * 10, 10)
+  def set_facet_arrays
 
     @section_type_facet_array = []
     @person_as_written_facet_array = []
@@ -68,6 +69,7 @@ module Solr
 
   end
 
+  # Get the place data from solr for a particular entry_id and search term
   def get_places(entry_id, search_term)
 
     q = "relatedPlaceFor_ssim:#{entry_id} AND (place_as_written_tesim:*#{search_term}* or place_role_search:*#{search_term}* or place_type_search:*#{search_term}* or place_note_tesim:*#{search_term}*)"
@@ -91,6 +93,7 @@ module Solr
     @element_array << place_note_string
   end
 
+  # Get the person data from solr for a particular entry_id and search term
   def get_people(entry_id, search_term)
 
     q = "relatedAgentFor_ssim:#{entry_id} AND (person_as_written_tesim:*#{search_term}* or person_role_search:*#{search_term}* or person_descriptor_search:*#{search_term}* or person_descriptor_as_written_tesim:*#{search_term}* or person_note_tesim:*#{search_term}*)"
@@ -117,6 +120,7 @@ module Solr
     @element_array << person_note_string
   end
 
+  # Helper method for getting the person / place data
   def get_place_or_person_string(input_array, element_string)
 
     element_temp = get_element(input_array)
@@ -131,143 +135,68 @@ module Solr
     return result_string
   end
 
+  # This method uses the entry_id to get the title of the search result, i.e. 'Entry, Folio (Register)' and folio_id
   def get_entry_and_folio_details(entry_id)
+
+    # Get the entry_no and folio_id for the entry_id
     SolrQuery.new.solr_query('id:' + entry_id, 'entry_no_tesim, folio_ssim', 1)['response']['docs'].map do |result|
       entry_no = result['entry_no_tesim'].join
       folio_id = result['folio_ssim'].join
       preflabel = ''
+      # Get the preflabel for the folio_id
+      # From the preflabel, can form the title, i.e. 'Entry, Folio (Register)'
       SolrQuery.new.solr_query('id:' + folio_id, 'preflabel_tesim', 1)['response']['docs'].map do |result|
         preflabel = result['preflabel_tesim'].join
       end
+      # Remove 'Abp Reg' from the beginning of the preflabel and split the remaining string
+      # to get the register and folio
       preflabel = preflabel.sub 'Abp Reg', ''
       register = preflabel.split(' ')[0].to_s
       folio = preflabel.sub(register, '')
+      # Add the title and folio_id to the array instance
       @element_array << 'Entry ' + entry_no + ', ' + folio + " (Register " + register + ")"
       @element_array << folio_id
     end
   end
 
+  # Helper method to check if terms match the search term and if so, whether to put a comma infront of it
+  # i.e. this is required if it is not the first term in the string
   def get_element(input_array)
 
-    element = ''
+    str = ''
 
     if input_array != nil
       input_array.each do |t|
         if t.match(/#{@match_term}/i)
-          if element != '' then element = element + ', ' end
-          element = element + t
+          if str != '' then str = str + ', ' end
+          str = str + t
         end
       end
-    end
 
-    return element
-  end
+      i = -1
 
-  def get_data(search_term, page)
+      original_text_array = []
 
-    # PERSON #
-    @person_list_array = []
-    @person_set_array = []
+      # The following code highlights text which matches the search_term
+      # It highlights all combinations, e.g. 'york', 'York', 'YORK'
 
-    SolrQuery.new.solr_query("person_as_written_tesim:*", ' person_as_written_tesim, relatedAgentFor_ssim', 10000)['response']['docs'].map do |result|
+      if @search_term != ''
 
-      person_as_written = result['person_as_written_tesim'].join
-
-      if person_as_written.match(/#{search_term}/i)
-        element_list = []
-        entry_id = result['relatedAgentFor_ssim'].join
-        element_list << entry_id
-        element_list << person_as_written
-        element_list << 'Person'
-        get_entry_and_folio_details(entry_id, element_list)
-        @person_list_array << element_list
-        add_name_to_set(person_as_written, @person_set_array)
-      end
-    end
-
-    @person_list_array = @person_list_array.sort_by { |k| k[1] }
-    @person_set_array = @person_set_array.sort_by { |k| k[0] }
-
-    # PLACE #
-    @place_list_array = []
-    @place_set_array = []
-
-    SolrQuery.new.solr_query('place_as_written_tesim:*', 'place_as_written_tesim, relatedPlaceFor_ssim', 10000)['response']['docs'].map do |result|
-
-      place_as_written = result['place_as_written_tesim'].join
-
-      if place_as_written.match(/#{search_term}/i)
-        element_list = []
-        entry_id = result['relatedPlaceFor_ssim'].join
-        element_list << entry_id
-        element_list << place_as_written
-        element_list << 'Place'
-        get_entry_and_folio_details(entry_id, element_list)
-        @place_list_array << element_list
-        add_name_to_set(place_as_written, @place_set_array)
-      end
-    end
-
-    @place_list_array = @place_list_array.sort_by { |k| k[1] }
-    @place_set_array = @place_set_array.sort_by { |k| k[0] }
-
-    # SUBJECT #
-    @subject_list_array = []
-    @subject_set_array = []
-
-    # Get all the subject ids from the entries
-    SolrQuery.new.solr_query("subject_tesim:*", 'id, subject_tesim', 10000)['response']['docs'].map do |result|
-
-      subject_id_array = result['subject_tesim']
-
-      subject_id_array.each do |subject_id|
-
-        # Get the preflabels using the subject ids
-        SolrQuery.new.solr_query("id:#{subject_id}", 'id, preflabel_tesim', 1)['response']['docs'].map do |result2|
-
-          preflabel = result2['preflabel_tesim'].join
-
-          if preflabel.match(/#{search_term}/i)
-            element_list = []
-            entry_id = result['id']
-            element_list << entry_id
-            element_list << preflabel
-            element_list << 'Subject'
-            get_entry_and_folio_details(entry_id, element_list)
-            @subject_list_array << element_list
-            add_name_to_set(preflabel, @subject_set_array)
-          end
+        # First get all the diffferent combinations into an array
+        while i = str.index(/#{@search_term}/i, i+1)
+          original_text_array << str[i, @search_term.length]
         end
+
+        # Then highlight each combination in the string
+        original_text_array.each_with_index do |original_text, index|
+          str = str.gsub(original_text, "<span class=\'highlight_text\'>#{original_text}</span>")
+        end
+
       end
+
     end
 
-    @subject_list_array = @subject_list_array.sort_by { |k| k[1] }
-    @subject_set_array = @subject_set_array.sort_by { |k| k[0] }
-
-    @list_array = @person_list_array + @place_list_array + @subject_list_array
-    @partial_list_array = @list_array.slice((@page - 1) * 10, 10)
-
-  end
-
-  def add_name_to_set(name, set_array)
-
-    is_match = false
-
-    set_array.each_with_index do |array_element, index|
-      if array_element[0] == name
-        is_match = true
-        array_element[1] = array_element[1] + 1
-        break
-      end
-    end
-
-    if is_match == false
-      array_element = []
-      array_element << name
-      array_element << 1
-      set_array << array_element
-    end
-
+    return str
   end
 
   def get_solr_data(db_entry)
@@ -606,9 +535,10 @@ module Solr
     end
   end
 
+  # Gets the list of entries (id, entry_no) in the specific folio
   def get_entry_list(folio_id)
 
-    @entry_list = []
+    entry_list = []
 
     SolrQuery.new.solr_query("folio_ssim:#{folio_id}", 'id, entry_no_tesim', 10000, 'entry_no_si asc')['response']['docs'].map do |result|
       element_list = []
@@ -616,10 +546,10 @@ module Solr
       entry_no = result['entry_no_tesim'].join
       element_list << id
       element_list << entry_no
-      @entry_list << element_list
+      entry_list << element_list
     end
 
-    return @entry_list
+    return entry_list
 
   end
 

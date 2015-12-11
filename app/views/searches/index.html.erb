@@ -7,7 +7,6 @@
     <div id="facets" class="facets sidenav" style="padding-top: 25px">
 
       <div class="top-panel-heading panel-heading">
-
         <!--<h4 class="facets-heading" style="font-size: 1.1em">
           Limit your search
         </h4>-->
@@ -152,11 +151,12 @@
       <div style="margin-top: 40px">
 
       <%
-        start_index = ((@page - 1) * 10) + 1
-        end_index = ((@page - 1) * 10) + @partial_list_array.size
+        total_page_rows = (@page - 1) * @rows_per_page
+        start_index = total_page_rows + 1
+        end_index = total_page_rows + @partial_list_array.size
       %>
 
-      <% if @list_array.size == 0 %>
+      <% if @number_of_rows == 0 %>
           <strong>No entries match this search - please try another search</strong>
       <% else %>
 
@@ -167,8 +167,8 @@
          <% else %>
            <li><%= link_to 'Previous', searches_path(:search_term => @search_term, :page => @page, :previous => 'true') %></li>
          <% end %>
-           &nbsp;<span style="font-size: 1.1em"><%= start_index %> - <%= end_index %> of <strong><%= @list_array.size %></strong></span>&nbsp;
-         <% if @list_array.size <= 10 || (((@page - 1) * 10) + 10) > @list_array.size %>
+           &nbsp;<span style="font-size: 1.1em"><%= start_index %> - <%= end_index %> of <strong><%= @number_of_rows %></strong></span>&nbsp;
+         <% if @number_of_rows <= @rows_per_page || total_page_rows + @rows_per_page >= @number_of_rows %>
            <li><span style="color: grey">Next</span></li>
          <% else %>
            <li><%= link_to 'Next', searches_path(:search_term => @search_term, :page => @page, :next => 'true') %></li>
@@ -212,7 +212,7 @@
 
               <div style="padding-bottom: 15px">
 
-                <span class="results_title"><%= index + 1 %>.&nbsp;&nbsp;<%= link_to title, searches_show_path(:entry_id => entry_id, :folio_id => folio_id, :search_term => @search_term, :page => @page) %></span>
+                <span class="results_title"><%= total_page_rows + index + 1 %>.&nbsp;&nbsp;<%= link_to title, searches_show_path(:entry_id => entry_id, :folio_id => folio_id, :folio_title => title, :search_term => @search_term, :page => @page) %></span>
 
                 <div class="results_table">
 
@@ -221,126 +221,128 @@
                     <% if entry_type != '' %>
                         <tr>
                           <th>Entry Type:</th>
-                          <td>"<%= entry_type %>"</td>
+                          <td><%= entry_type.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if section_type != '' %>
                     <tr>
                       <th>Section Type:</th>
-                      <td>"<%= section_type %>"</td>
+                      <td><%= section_type.html_safe %></td>
                     </tr>
                     <% end %>
 
                     <% if summary != '' %>
                         <tr>
                           <th>Summary:</th>
-                          <td>"<%= summary %>"</td>
+                          <td><%= summary.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if marginalia != '' %>
                         <tr>
                           <th>Marginalia:</th>
-                          <td>"<%= marginalia %>"</td>
+                          <td><%= marginalia.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if language != '' %>
                         <tr>
                           <th>Language:</th>
-                          <td>"<%= language %>"</td>
+                          <td><%= language.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if subject != '' %>
                         <tr>
                           <th>Subject:</th>
-                          <td>"<%= subject %>"</td>
+                          <td>
+                           <%= subject.html_safe %>
+                           </td>
                         </tr>
                     <% end %>
 
                     <% if note != '' %>
                         <tr>
                           <th>Note:</th>
-                          <td>"<%= note %>"</td>
+                          <td><%= note.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if editorial_note != '' %>
                         <tr>
                           <th>Editorial Note:</th>
-                          <td>"<%= editorial_note %>"</td>
+                          <td><%= editorial_note.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if is_referenced_by != '' %>
                         <tr>
                           <th>Is Referenced By:</th>
-                          <td>"<%= is_referenced_by %>"</td>
+                          <td><%= is_referenced_by.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if place_as_written != '' %>
                         <tr>
                           <th>Place As Written:</th>
-                          <td>"<%= place_as_written %>"</td>
+                          <td><%= place_as_written.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if place_role != '' %>
                         <tr>
                           <th>Place Role:</th>
-                          <td>"<%= place_role %>"</td>
+                          <td><%= place_role.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if place_type != '' %>
                         <tr>
                           <th>Place Type:</th>
-                          <td>"<%= place_type %>"</td>
+                          <td><%= place_type.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if place_note != '' %>
                         <tr>
                           <th>Place Note:</th>
-                          <td>"<%= place_note %>"</td>
+                          <td><%= place_note.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if person_as_written != '' %>
                         <tr>
                           <th>Person As Written:</th>
-                          <td>"<%= person_as_written %>"</td>
+                          <td><%= person_as_written.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if person_role != '' %>
                         <tr>
                           <th>Person Role:</th>
-                          <td>"<%= person_role %>"</td>
+                          <td><%= person_role.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if person_descriptor != '' %>
                         <tr>
                           <th>Person Descriptor:</th>
-                          <td>"<%= person_descriptor %>"</td>
+                          <td><%= person_descriptor.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if person_descriptor_as_written != '' %>
                         <tr>
                           <th>Person Descriptor As Written:</th>
-                          <td>"<%= person_descriptor_as_written %>"</td>
+                          <td><%= person_descriptor_as_written.html_safe %></td>
                         </tr>
                     <% end %>
 
                     <% if person_note != '' %>
                         <tr>
                           <th>Person Note:</th>
-                          <td>"<%= person_note %>"</td>
+                          <td><%= person_note.html_safe %></td>
                         </tr>
                     <% end %>
 
@@ -353,9 +355,6 @@
 
     </div>
   </div>
-
-  <!--<div class="col-md-2"></div>-->
-
 </div>
 
 <div id="footer" class="row" style="height: 60px">

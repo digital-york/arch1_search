@@ -6,7 +6,7 @@ module SearchesHelper
     parse_terms_response(response, type);
   end
 
-# General method to parse ids into strings (py)
+  # General method to parse 'response' data into a string (used by get_str_from_id method above)
   def parse_terms_response(response, type)
 
     str = ''
@@ -23,7 +23,7 @@ module SearchesHelper
     return str
   end
 
-  # Set the folio and image session variables when the user selects an option from the drop-down list
+  # Return the folio_image location for the particular folio_id
   def get_folio_image(folio_id)
 
     folio_image = ''

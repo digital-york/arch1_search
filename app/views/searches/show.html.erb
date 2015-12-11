@@ -1,19 +1,28 @@
 <div class="row">
-  <div class="col-md-12" style="margin-top: 5px; padding-left: 5px">
-    <a href="<%= searches_path(:search_term => @search_term, :page => @page) %>" title="Go back to the search results"><span class="fa fa-chevron-circle-left fa-3x"></span></a></a>
+
+  <div class="col-md-1"></div>
+
+  <div class="col-md-3" id="left_frame">
   </div>
+
+  <div class="col-md-5" id="folio_title">
+    <%= @folio_title %>&nbsp;
+    <a href="<%= searches_path(:search_term => @search_term, :page => @page) %>" title="Return to search results"><span class="fa fa-chevron-circle-left fa-1x"></span></a></a>
+  </div>
+
+  <div class="col-md-2"></div>
+
 </div>
 
 <div class="row" style="margin-top: 0px">
 
-  <div class="col-md-1">
-  </div>
+  <div class="col-md-1"></div>
 
   <div class="col-md-3" id="left_frame">
     <%= render 'image_zoom_small' %>
   </div>
 
-  <div class="col-md-7" id='right_frame'>
+  <div class="col-md-5" id='right_frame'>
 
     <div class='tab1'>
 
@@ -32,7 +41,7 @@
                       <li><span class='highlight'>Entry <%= entry_no.to_s %></span></li>
                   <% else %>
                       <li>
-                        <span class='nohighlight'><%= link_to 'Entry ' + entry_no.to_s, searches_show_path(:entry_id => entry_id, :folio_id => @folio_id, :search_term => @search_term, :page => @page) %></span>
+                        <span class='nohighlight'><%= link_to 'Entry ' + entry_no.to_s, searches_show_path(:entry_id => entry_id, :folio_id => @folio_id, :folio_title => @folio_title, :search_term => @search_term, :page => @page) %></span>
                       </li>
                   <% end %>
               <% end %>
@@ -47,7 +56,7 @@
       <table>
         <%# Entry No %>
         <tr>
-          <th style="width: 22%">Entry No:</th>
+          <th style="width: 30%">Entry No:</th>
           <td style=""><%= @db_entry.entry_no %></td>
         </tr>
 
@@ -406,11 +415,9 @@
     </div>
   </div>
 
-  <div style='clear: both'></div>
+  <div class="col-md-2"></div>
 </div>
 
-</div>
-
-<div class="row" style="height: 60px">
+<div class="row" style="height: 100px">
   <div class="cold-md-12"></div>
 </div>

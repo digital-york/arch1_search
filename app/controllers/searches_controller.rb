@@ -18,9 +18,11 @@ class SearchesController < ApplicationController
       @page = @page.to_i
     end
 
-    # Get the data to display on the page (depending on the search term and page)
-    #get_data(@search_term, @page)
-    get_data2(@search_term, @page)
+    # Set the arrays which display the search results
+    set_search_result_arrays(@search_term, @page)
+
+    # Set the arrays which display the facets
+    set_facet_arrays
 
   end
 
@@ -33,6 +35,7 @@ class SearchesController < ApplicationController
     get_solr_data(@db_entry)
 
     @folio_id = params[:folio_id]
+    @folio_title = params[:folio_title]
 
     # Used to get the Tabs for the view page
     @entry_list = get_entry_list(@folio_id)
