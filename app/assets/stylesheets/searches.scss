@@ -1,4 +1,116 @@
-/***** sidebar *****/
+/***** General styles *****/
+body {
+  font-family: 'open_sansregular', sans-serif !important;
+}
+
+a, a:visited, a:hover, a:focus {
+  text-decoration: none;
+  color: #3e1c52;
+  background-color: transparent;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  margin-bottom: 0px;
+}
+/***** End of general styles *****/
+
+/***** Home page browse icons *****/
+#browse_icons table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+#browse_icons td {
+  width: 20%;
+  padding-top: 10px;
+  text-align: center;
+}
+
+.fa {
+  color: #403152;
+}
+
+.fa:hover {
+  color: #685185;
+}
+/***** End of home page browse icons *****/
+
+
+/***** Top menu *****/
+#top_menu {
+  height: 50px;
+  background-color: #403152;
+  text-align: center;
+  font-size: 1.2em;
+  padding-top: 10px;
+}
+
+#top_menu a {
+  color: #FFCC00;
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+#top_menu #contact {
+  text-align: right;
+}
+/***** End of top menu *****/
+
+/***** Search row *****/
+#search_row_home {
+  height: 350px;
+  background: url('/assets/arch_banner_home.jpg') no-repeat;
+  background-size: cover;
+  background-position: center top;
+}
+
+#search_row_default {
+  height: 110px;
+  background: url('/assets/arch_banner_default.jpg') no-repeat;
+  background-size: cover;
+  background-position: center bottom;
+}
+
+#search_box {
+  width: 612px;
+  border-color: black;
+  margin-left: 15px;
+  border-radius: 4px;
+}
+
+.go_button {
+  background-color: #FFCC00;
+  border-color: black;
+  color: black; margin-left: 10px;
+}
+
+.go_text {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+/***** End of search row *****/
+
+/***** Footer *****/
+#footer {
+  margin-top: 0px;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.footer_logo {
+  // width: 200px;
+  margin: 0px 50px;
+}
+
+/***** End of footer *****/
+
+
+/***** Facets (need to sort styles out!) *****/
 #sidebar, #facets {
   padding-bottom: 10px;
 }
@@ -95,59 +207,29 @@
   /* adjust as needed, taken from bootstrap.css */
 }
 
-/* Sidenav */
-
-#search_registers.form-control {
-  width: 612px;
-}
-
-.top-panel-heading.panel-heading {
-  padding-left: 0px;
-}
-
-.navbar-form {
-  padding-left: 0px;
-}
-
-//p, ol, ul, td {
-//  font-family: 'open_sansregular', sans-serif !important;
-//  font-size: 13px;
-//  line-height: 18px;
-//}
-
-body {
-  font-family: 'open_sansregular', sans-serif !important;
-  /*font-family: Arial;*/
-  //background: url('/assets/main_image.jpg') scroll 0 10% #000000;
-}
-
-//#banner {
-//  background: url('/assets/arch1_banner.jpg') repeat-x scroll 0 10% #000000;
-  //height: 110px;
-  //background-color: #67467a;
-//}
-
-.icon {
-  position: relative;
-  top: 1px;
-}
-
-a, a:visited, a:hover, a:focus {
-  /*font-size: 1.2em;*/
-  text-decoration: none;
-  //color: #248dc1;
-  color: #3e1c52;
-  background-color: transparent;
-  font-weight: bold;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
 .panel-title a {
   font-weight: bold;
   color: #666;
+}
+
+.panel-title {
+  font-size: 14px;
+}
+
+.panel {
+  margin-top: 10px!important;
+}
+/***** End of facets *****/
+
+/***** Search results page *****/
+#search_results {
+  padding-top: 8px;
+  padding-left: 70px;
+  font-size: 1em;
+}
+
+.results_title {
+  font-size: 1.2em;
 }
 
 .results_table table {
@@ -157,51 +239,28 @@ a:hover {
 
 .results_table th {
   font-weight: normal;
-  //font-size: 0.9em;
-  //font-style: italic;
   width: 200px;
   padding-left: 6px;
 }
 
-.results_table td {
-  //font-size: 0.9em;
+.highlight_text {
+  color: black;
+  background-color: #fff866;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-.example {
-  position: relative;
-  padding: 20px 60px 50px 30px;
-  margin: 20px 0;
-  overflow: hidden;
-}
-
-.example-val {
-  font: 400 12px Arial;
-  color: #888;
-  display: block;
-  margin: 15px 0;
-}
-
-.example-val:before {
-  content: "Value: ";
-  font: 700 12px Arial;
-}
-
-#left_frame {
-  //margin-left: 23px;
-  text-align: right;
-  //margin-right: 30px;
-  display: inline-block;
-  margin-top: 60px;
-}
-
-#right_frame {
-  padding-top: 34px;
+/***** Result page (title) *****/
+#folio_title {
+  font-size: 1.6em;
+  margin-top: 40px;
   padding-left: 40px;
+}
+/***** End of result page (title) *****/
+
+/***** Result page (image frame) *****/
+#image_frame {
+  text-align: right;
   display: inline-block;
+  margin-top: 30px;
 }
 
 #location1 {
@@ -211,149 +270,8 @@ a:hover {
   margin: 10px;
 }
 
-.tab1 table {
-width: 100%;
-  font-size: 0.8em;
-  table-layout: fixed;
-  margin: auto;
-}
-
-.tab1 th {
-  font-weight: normal;
-  text-align: left;
-}
-
-.tab1 {
-  float: left
-}
-
-.tab1 table {
-  //border-right: 1px solid #ACADB7;
-  //border-bottom: 1px solid #ACADB7;
-}
-
-.tab1 td, .tab1 th {
-  //border-top: 1px solid #ACADB7;
-  //border-left: 1px solid #ACADB7;
-  //font-size: 1.2em;
-  padding: 1px 8px;
-  vertical-align: top;
-}
-
-.tab1 th {
-  font-size: 1.3em;
-  font-style: italic;
-  text-align: left;
-  padding-left: 2px;
-  //background-color: #E1E1E1;
-}
-
-.tab1 td {
-font-size: 1.3em;
-  //background-color: #F2F0F0;
-}
-
-// Just to make the height of the view page elements match that of the edit elements
-// Doesn't work so well for multi elements though
-.tab1 th {
-  //height: 23px;
-}
-
-.tab2 table {
-  //font-size: 1em;
-  //border: 1px solid silver;
-  width: 96%;
-  float: left;
-  margin: 3px 3px 7px 0px;
-}
-
-.tab2 td, .tab2 th {
-  //border: none;
-}
-
-.tab2 td {
-  #background-color: white;
-}
-
-.tab2 th {
-  #background-color: #FFFFFF;
-  width: 115px;
-}
-
-#image_frame {
-  //float: left;
-  //background-color: #a29c8b;
-  display: inline-block;
-}
-
-#image_frame a {
-  //text-decoration: none;
-}
-
-#image_frame2 {
-  float: left;
-  background-color: #403C35;
-}
-
-#image_frame2 a {
-  text-decoration: none;
-}
-
-#image_header {
-  margin-top: 5px;
-  font-size: 1.4em;
-  //float: left;
-  //height: 38px;
-  //background-color: grey;
-  //background-color: #403152;
-  //width: 100%;
-  //padding-top: 5px;
-  //padding: 10px 0px;
-  //color: #F7F4EE;
-  color: #000000;
-  text-align: center;
-}
-
-#image_header2 {
-  font-size: 1em;
-  float: left;
-  height: 28px;
-  background-color: grey;
-  width: 100%;
-  padding-top: 5px;
-  color: #F7F4EE;
-  text-align: center;
-}
-
-#image_main {
-  float: left;
-  width: 100%;
-  padding: 15px 0px;
-}
-
-#image_main_left {
-  float: left;
-  width: 30px;
-  vertical-align: middle;
-}
-
-#image_main_center {
-  float: left;
-  width: 200px;
-}
-
-#image_main_right {
-  float: left;
-  width: 30px;
-  vertical-align: middle;
-}
-
 #image_footer {
   font-size: 1.2em;
-  //float: left;
-  //width: 100%;
-  //height: 38px;
-  //background-color: grey;
 }
 
 // Prevent blue line appearing in chrome around the canvas
@@ -361,59 +279,51 @@ font-size: 1.3em;
   outline: 0px;
 }
 
+.mag_icon {
+  font-size: 1.5em;
+  position: relative;
+  top: 4px;
+}
+/***** End of result page (image frame *****/
+
+/***** Result page (form frame) *****/
+#form_frame {
+  padding-top: 25px;
+  padding-left: 40px;
+  display: inline-block;
+}
+
+/***** Entry menu *****/
 #entry_menu {
   height: 26px;
   margin-top: 2px;
   padding-top: 7px;
-  //width: 900px;
-  //background-color: grey;
-  //background-color: #403152
-  #border-bottom: 2px solid black
+  padding-left: 0px;
 }
 
 #entry_menu ul {
-  background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
-  margin: 0;
-  padding: 0;
-}
-
-#entry_menu li {
-  //display: inline-block;
-  float: left;
-  font-size: 1.1em;
-  list-style: outside none none;
-  margin: 0;
-  padding: 4px 0 5px;
-  margin-right: 4px;
-}
-
-#entry_menubar {
-  height: 20px;
-  background-color: #e1e1e1;
-}
-
-.noth th {
+  margin: 0px;
   padding: 0px;
 }
 
+#entry_menu li {
+  float: left;
+  font-size: 1.0em;
+  list-style: outside none none;
+  margin: 0px;
+  padding: 4px 2px 2px 0px;
+  margin-right: 4px;
+}
+
 .highlight {
-  //color: #9c6b17;
   background-color: #403152;
-  //color: #FFCC00;
   color: #f3f3f3;
-  //background-color: #E1E1E1;
-  #background-color: #C5C5C5;
   border-radius: 6px 6px 0 0;
   padding: 6px 10px 6px 12px;
-  // This solves a problem in IE where the 'highlighted' tab is behind the row below thereby displaying a line which should be displayed
-  // Not sure why but it seems to move the element in front
-  opacity: 0.99;
   font-weight: bold;
 }
 
 .highlight a {
-  //color: #9C6B17;
-  //color: #FFCC00;
   text-decoration: none;
 }
 
@@ -430,133 +340,42 @@ font-size: 1.3em;
 }
 
 .nohighlight a:hover {
-  //color: #9C6B17;
-  //color: #403152;
   color: #606060;
-  //color: #FFCC00;
   text-decoration: none;
 }
+/***** End of entry menu *****/
 
-.panel-title {
-  font-size: 14px;
-}
-
-ul {
-  margin-bottom: 0px;
-}
-
-.reverse {
-  padding: 0px 3px;
-  color: white;
-  background-color: grey;
-}
-
-#banner {
-  height: 50px;
-  background-color: #403152;
-  text-align: center;
-  font-size: 1.2em;
-}
-
-#banner a {
-  color: #FFCC00;
-  margin-left: 15px;
-  margin-right: 15px;
-}
-
-.archbishop_logo {
-  //width: 50%;
-    height: 200px;
-    //height: auto;
-    //max-width: 10%;
-    border-right: 1px solid #676767;
-    border-bottom: 1px solid #676767;
-}
-
-.main_image {
-  background: url('/assets/main_image.jpg') scroll 0 90% #000000;
-  background-size: contain;
-  background-repeat: no-repeat;
+/***** Form *****/
+.tab1 table {
   width: 100%;
-  height: 0;
-  padding-top: 66.64%; /* (img-height / img-width * container-width) */
+  font-size: 0.8em;
+  table-layout: fixed;
+  margin: auto;
 }
 
-.footer_logo {
- // width: 200px;
-  margin: 0px 50px;
+.tab1 th {
+  font-weight: normal;
+  text-align: left;
+  padding: 1px 8px;
+  vertical-align: top;
+  font-size: 1.3em;
+  font-style: italic;
+  text-align: left;
+  padding-left: 2px;
 }
 
-#main_search {
-  height: 350px;
-  background: url('/assets/arch_banner3.jpg') no-repeat;
-  background-size: cover;
-  background-position: center top;
-}
-
-#main_search2 {
-  height: 110px;
-  background: url('/assets/arch_banner5.jpg') no-repeat;
-  background-size: cover;
-  background-position: center bottom;
-}
-
-#browse_icons table {
-  width: 100%;
-  margin-top: 20px;
-}
-
-#browse_icons td {
-  width: 20%;
-  padding-top: 10px;
-  text-align: center;
-}
-
-.fa {
-  color: #403152;
-}
-
-.fa:hover {
-  color: #685185;
-}
-
-.results_title {
-  font-size: 1.2em;
+.tab1 td {
+  padding: 1px 8px;
+  vertical-align: top;
+  font-size: 1.3em;
 }
 
 .tab1 .pad_th_person_place {
   padding: 2px 0px 2px 40px;
 }
 
-.pad_multi_element {
+.tab1 .pad_multi_element {
   padding: 2px 0px;
 }
-
-.image_title {
-  //background-color: #f0f0f0;
-  //background-color: #403152;
-  //color: #f3f3f3;
-  //margin: 0px 10px;
-  //border-radius: 5px;
-  //padding: 5px 0px;
-  color: #403152;
-}
-
-.mag_icon {
-  font-size: 1.5em;
-  position: relative;
-  top: 4px;
-}
-
-#folio_title {
-  //text-align: center;
-  font-size: 1.7em;
-  margin-top: 30px;
-  padding-left: 40px;
-}
-
-.highlight_text {
-  color: black;
-  background-color: #fff866;
-  //text-decoration:underline;
-}
+/***** End of form *****/
+/***** End of result page (form frame) *****/

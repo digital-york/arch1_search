@@ -2,7 +2,7 @@
 
   <div class="col-md-1"></div>
 
-  <div class="col-md-3" id="left_frame">
+  <div class="col-md-3">
   </div>
 
   <div class="col-md-5" id="folio_title">
@@ -18,18 +18,18 @@
 
   <div class="col-md-1"></div>
 
-  <div class="col-md-3" id="left_frame">
+  <div class="col-md-3" id="image_frame">
     <%= render 'image_zoom_small' %>
   </div>
 
-  <div class="col-md-5" id='right_frame'>
+  <div class="col-md-5" id='form_frame'>
 
     <div class='tab1'>
 
       <table>
 
         <%# Display tabs for entries %>
-        <tr class='noth'>
+        <tr>
           <th colspan='2' id='entry_menu'>
             <ul>
               <% @entry_list.each_with_index do |entry, index| %>

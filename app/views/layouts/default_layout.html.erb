@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Archbishops&#39; Registers</title>
+  <%= stylesheet_link_tag "application", media: "all" %>
+  <%= javascript_include_tag "application" %>
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+  <div id="top_menu" class="row">
+
+    <div class="col-md-2"></div>
+
+    <div class="col-md-8">
+      <%= link_to 'Home', home_page_index_path %>
+      <%= link_to 'Search', searches_path %>
+      <%= link_to 'Browse', home_page_index_path %>
+      <%= link_to 'APIs', home_page_index_path %>
+      <%= link_to 'About', home_page_index_path %>
+    </div>
+
+    <div class="col-md-2" id="contact">
+      <%= link_to 'Contact', home_page_index_path %>
+    </div>
+  </div>
+
+  <%# is_home_page is defined in 'home_page_controller.rb'' %>
+  <div class="row" <% if @is_home_page == true then %>id="search_row_home"<% else %>id="search_row_default"<% end %>>
+
+    <div class="col-md-4" style="padding-left: 0px"></div>
+
+    <div class="col-md-8">
+
+          <%= form_tag searches_index_path, :method => 'get' do |f| %>
+
+              <%# is_home_page is defined in 'home_page_controller.rb'' %>
+              <%
+                search_margin_top = '35px'
+                if @is_home_page == true then search_margin_top = '150px' end
+              %>
+
+              <div class="input-group search-input-group" style="margin-top: <%= search_margin_top %>">
+
+                <%= text_field_tag 'search_term', @search_term, class: 'form-control', id: 'search_box', placeholder: 'Search the registers...', :style => '' %>
+
+                <button type="submit" class="btn go_button">
+                  <span class="go_text">Go</span>
+                </button>
+
+              </div>
+
+          <% end %>
+
+    </div>
+  </div>
+
+  <%= yield %>
+
+  <hr style="margin: 20px 0px"/>
+
+  <div id="footer" class="row">
+
+    <div class="col-md-2"></div>
+
+    <div class="col-md-8">
+      <!--<a href="http://www.marcfitchfund.org.uk/" target="_blank"><%#= image_tag 'fitch_fund.gif', :class => 'footer_logo', :style => 'width: 120px' %></a>-->
+      <a href="#"><%= image_tag 'arch_logo.jpg', :class => 'footer_logo', :style => 'width: 140px' %></a>
+      <a href="https://mellon.org/" target="_blank"><%= image_tag 'mellon_logo.svg', :class => 'footer_logo', :style => 'width: 160px' %></a>
+      <a href="http://http://www.york.ac.uk/" target="_blank"><%= image_tag 'york_logo.gif', :class => 'footer_logo', :style => 'width: 180px' %></a>
+    </div>
+
+    <div class="col-md-2"></div>
+
+  </div>
+
+</div>
+
+</body>
+
+</html>

@@ -49,7 +49,7 @@ module Solr
     @place_as_written_facet_array = []
     @subject_facet_array = []
 
-    response = SolrQuery.new.solr_query2
+    response = SolrQuery.new.solr_query_facets
 
     response['facet_counts']['facet_fields']['section_type_facet'].each_slice(2).with_index do |t, index|
       @section_type_facet_array << t
@@ -173,25 +173,10 @@ module Solr
         end
       end
 
-      i = -1
-
-      original_text_array = []
-
       # The following code highlights text which matches the search_term
       # It highlights all combinations, e.g. 'york', 'York', 'YORK'
-
       if @search_term != ''
-
-        # First get all the diffferent combinations into an array
-        while i = str.index(/#{@search_term}/i, i+1)
-          original_text_array << str[i, @search_term.length]
-        end
-
-        # Then highlight each combination in the string
-        original_text_array.each_with_index do |original_text, index|
-          str = str.gsub(original_text, "<span class=\'highlight_text\'>#{original_text}</span>")
-        end
-
+        str = str.gsub(/#{@search_term}/i) {|sym| "<span class=\'highlight_text\'>#{sym}</span>" }
       end
 
     end

@@ -1,6 +1,6 @@
 class SearchesController < ApplicationController
 
-  layout 'searches'
+  layout 'default_layout'
 
   def index
 
@@ -45,21 +45,4 @@ class SearchesController < ApplicationController
 
   end
 
-  def new
-  end
-
-  def edit
-  end
-
-  def create
-  end
-
-  def update
-  end
-
-  def destroy
-  end
-
-  def index2
-  end
 end
