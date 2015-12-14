@@ -17,6 +17,11 @@ a:hover {
 ul {
   margin-bottom: 0px;
 }
+
+.alert-danger, .alert-info {
+  margin-top: 10px;
+  width: 500px;
+}
 /***** End of general styles *****/
 
 /***** Home page browse icons *****/
@@ -246,6 +251,10 @@ ul {
 .highlight_text {
   color: black;
   background-color: #fff866;
+}
+
+.pager {
+  margin: 0px;
 }
 
 /***** Result page (title) *****/

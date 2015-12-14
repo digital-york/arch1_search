@@ -15,3 +15,13 @@ function popup(page, folio_image) {
 
     window.open(page, "image_zoom_large_" + popup_id, 'status = 1, location = 1, top = ' + top + ', left = ' + left + ', height = ' + popupHeight + ', width = ' + popupWidth + ', scrollbars=yes');
 }
+
+function validate_search_field() {
+
+    var search_value = document.forms["search_form"]["search_box"].value;
+
+    if (search_value != '*' && search_value.length < 0) {
+        alert("Please enter two or more characters into the search box");
+        return false;
+    }
+}

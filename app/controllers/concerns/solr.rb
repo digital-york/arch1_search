@@ -1,29 +1,49 @@
 module Solr
 
-  # Set the partial_array which displays the search data
   def set_search_result_arrays(search_term, page)
 
-    @partial_list_array = []
-    @number_of_rows = 0
-    @rows_per_page = 10
-
-    if search_term == nil then search_term = '' end
-
+    # Get the matching entry ids (from the entries)
     q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term}* or section_type_search:*#{search_term}* or summary_tesim:*#{search_term}* or marginalia_tesim:*#{search_term}* or subject_search:*#{search_term}* or language_search:*#{search_term}* or note_tesim:*#{search_term}* or editorial_note_tesim:*#{search_term}* or is_referenced_by_tesim:*#{search_term}*)"
-    fl = "numFound, id, entry_type_search, section_type_search, summary_tesim, marginalia_tesim, language_search, subject_search, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
-    start = (@page - 1) * @rows_per_page
+    fl = 'id'
 
-    response = SolrQuery.new.solr_query(q, fl, @rows_per_page, nil, start)['response']
+    entry_id_set = Set.new
+    SolrQuery.new.solr_query(q, fl, 1000, nil, 0)['response']['docs'].map do |result|
+      entry_id_set << result['id']
+    end
 
-      @number_of_rows = response['numFound']
+    # Get the matching entry ids (from the people)
+    q = "has_model_ssim:RelatedAgent AND (person_as_written_tesim:*#{search_term}* person_descriptor_search:*#{search_term}* or person_descriptor_as_written_tesim:*#{search_term}* or person_note_tesim:*#{search_term}*)"
+    fl = 'relatedAgentFor_ssim'
 
-      response['docs'].map do |result|
+    SolrQuery.new.solr_query(q, fl, 1000, nil, 0)['response']['docs'].map do |result|
+      entry_id_set << result['relatedAgentFor_ssim'].join
+    end
+
+    # Get the matching entry ids (from the places)
+    q = "has_model_ssim:RelatedPlace AND (place_as_written_tesim:*#{search_term}* place_role_search:*#{search_term}* or place_type_search:*#{search_term}* or place_note_tesim:*#{search_term}*)"
+    fl = 'relatedPlaceFor_ssim'
+
+    SolrQuery.new.solr_query(q, fl, 1000, nil, 0)['response']['docs'].map do |result|
+      entry_id_set << result['relatedPlaceFor_ssim'].join
+    end
+
+    @number_of_rows = entry_id_set.size
+
+    # Get slice
+    entry_id_array = entry_id_set.to_a.slice((page - 1) * @rows_per_page, @rows_per_page)
+
+    entry_id_array.each do |entry_id|
+
+      q = "id:#{entry_id}"
+
+      fl = "entry_type_search, section_type_search, summary_tesim, marginalia_tesim, language_search, subject_search, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
+
+      SolrQuery.new.solr_query(q, fl, 1)['response']['docs'].map do |result|
 
         @match_term = search_term
         if @match_term == '' then @match_term = '.*' end
 
         @element_array = []
-        entry_id = result['id']
         @element_array << entry_id
         get_entry_and_folio_details(entry_id)
         @element_array << get_element(result['entry_type_search'])
@@ -38,16 +58,12 @@ module Solr
         get_places(entry_id, search_term)
         get_people(entry_id, search_term)
         @partial_list_array << @element_array
+      end
     end
 
   end
 
   def set_facet_arrays
-
-    @section_type_facet_array = []
-    @person_as_written_facet_array = []
-    @place_as_written_facet_array = []
-    @subject_facet_array = []
 
     response = SolrQuery.new.solr_query_facets
 
