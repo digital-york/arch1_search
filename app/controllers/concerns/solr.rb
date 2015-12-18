@@ -22,19 +22,34 @@ module Solr
     SolrQuery.new.solr_query(q, "id", 1000, nil, 0)['response']['docs'].map do |result|
       entry_id_set << result['id']
     end
+    #puts entry_id_set.inspect
 
     # Get the matching entry ids (from the people)
-    q = "has_model_ssim:RelatedAgent AND (person_as_written_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_as_written_search:*#{search_term2}* or person_note_search:*#{search_term2}*)"
+    q = "has_model_ssim:RelatedAgent AND (person_as_written_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_as_written_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
 
     SolrQuery.new.solr_query(q, "relatedAgentFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
-      entry_id_set << result['relatedAgentFor_ssim'].join
+      result['relatedAgentFor_ssim'].each do |related_agent|
+        # Check that the relatedAgentFor_ssim is an Entry (as can be a RelatedAgent)
+        SolrQuery.new.solr_query("id:#{related_agent}", "has_model_ssim", 1000, nil, 0)['response']['docs'].map do |result2|
+          if result2['has_model_ssim'].join == 'Entry'
+            entry_id_set << related_agent
+          end
+        end
+      end
     end
 
     # Get the matching entry ids (from the places)
-    q = "has_model_ssim:RelatedPlace AND (place_as_written_search:*#{search_term2}* place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}*)"
+    q = "has_model_ssim:RelatedPlace AND (place_as_written_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_same_as_search:*#{search_term2}*)"
 
     SolrQuery.new.solr_query(q, "relatedPlaceFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
-      entry_id_set << result['relatedPlaceFor_ssim'].join
+      result['relatedPlaceFor_ssim'].each do |related_place|
+        # Check that the relatedPlaceFor_ssim is an Entry (as can be a RelatedPlace)
+        SolrQuery.new.solr_query("id:#{related_place}", "has_model_ssim", 1000, nil, 0)['response']['docs'].map do |result2|
+          if result2['has_model_ssim'].join == 'Entry'
+            entry_id_set << related_place
+          end
+        end
+      end
     end
 
     # Now we have all the entry ids iterate through and get the facets
@@ -197,26 +212,29 @@ module Solr
 
     q = "relatedPlaceFor_ssim:#{entry_id} "
     if @display_type == 'matched records'
-      q = "relatedPlaceFor_ssim:#{entry_id} AND (place_as_written_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}*)"
+      q = "relatedPlaceFor_ssim:#{entry_id} AND (place_as_written_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_same_as_search:*#{search_term2}*)"
     end
-    fl = 'id, place_as_written_tesim, place_role_new_tesim, place_type_new_tesim, place_note_tesim'
+    fl = 'id, place_as_written_tesim, place_role_new_tesim, place_type_new_tesim, place_note_tesim, place_same_as_new_tesim'
 
     place_as_written_string = ''
     place_role_string = ''
     place_type_string = ''
     place_note_string = ''
+    place_same_as_string = ''
 
     SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
       place_as_written_string = place_as_written_string + get_place_or_person_string(result['place_as_written_tesim'], place_as_written_string)
       place_role_string = place_role_string + get_place_or_person_string(result['place_role_new_tesim'], place_role_string)
       place_type_string = place_type_string + get_place_or_person_string(result['place_type_new_tesim'], place_type_string)
       place_note_string = place_note_string + get_place_or_person_string(result['place_note_tesim'], place_note_string)
+      place_same_as_string = place_same_as_string + get_place_or_person_string(result['place_same_as_new_tesim'], place_same_as_string)
     end
 
     @element_array << place_as_written_string
     @element_array << place_role_string
     @element_array << place_type_string
     @element_array << place_note_string
+    @element_array << place_same_as_string
   end
 
   # Get the person data from solr for a particular entry_id and search term
@@ -224,15 +242,18 @@ module Solr
 
     q = "relatedAgentFor_ssim:#{entry_id}"
     if @display_type == 'matched records'
-      q = "relatedAgentFor_ssim:#{entry_id} AND (person_as_written_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_as_written_search:*#{search_term2}* or person_note_search:*#{search_term2}*)"
+      q = "relatedAgentFor_ssim:#{entry_id} AND (person_as_written_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_as_written_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
     end
-    fl = 'id, person_as_written_tesim, person_role_new_tesim, person_descriptor_new_tesim, person_descriptor_as_written_tesim, person_note_tesim'
+    fl = 'id, person_as_written_tesim, person_role_new_tesim, person_descriptor_new_tesim, person_descriptor_as_written_tesim, person_note_tesim, person_same_as_new_tesim, person_related_place_tesim, person_related_person_tesim'
 
     person_as_written_string = ''
     person_role_string = ''
     person_descriptor_string = ''
     person_descriptor_as_written_string = ''
     person_note_string = ''
+    person_same_as_string = ''
+    person_related_place_string = ''
+    person_related_person_string = ''
 
     SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
       person_as_written_string = person_as_written_string + get_place_or_person_string(result['person_as_written_tesim'], person_as_written_string)
@@ -240,6 +261,9 @@ module Solr
       person_descriptor_string = person_descriptor_string + get_place_or_person_string(result['person_descriptor_new_tesim'], person_descriptor_string)
       person_descriptor_as_written_string = person_descriptor_as_written_string + get_place_or_person_string(result['person_descriptor_as_written_tesim'], person_descriptor_as_written_string)
       person_note_string = person_note_string + get_place_or_person_string(result['person_note_tesim'], person_note_string)
+      person_same_as_string = person_same_as_string + get_place_or_person_string(result['person_same_as_new_tesim'], person_same_as_string)
+      person_related_place_string = person_related_place_string + get_place_or_person_string(result['person_related_place_tesim'], person_related_place_string)
+      person_related_person_string = person_related_person_string + get_place_or_person_string(result['person_related_person_tesim'], person_related_person_string)
     end
 
     @element_array << person_as_written_string
@@ -247,6 +271,9 @@ module Solr
     @element_array << person_descriptor_string
     @element_array << person_descriptor_as_written_string
     @element_array << person_note_string
+    @element_array << person_same_as_string
+    @element_array << person_related_place_string
+    @element_array << person_related_person_string
   end
 
   # Helper method for getting the person / place data
