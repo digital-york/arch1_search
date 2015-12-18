@@ -26,12 +26,13 @@
 
     <div class='tab1'>
 
-      <table cellspacing="20">
+      <table>
 
         <%# Display tabs for entries %>
         <tr>
-          <th colspan='2' id='entry_menu' style="background-color: transparent; border-left: none">
+          <th colspan='2' id='entry_menu' style="background-color: grey">
             <ul>
+              <li style="margin-left: 2px"></li>
               <% @entry_list.each_with_index do |entry, index| %>
                   <%
                      entry_id = entry[0]
@@ -48,13 +49,11 @@
             </ul>
           </th>
         </tr>
-      </table>
 
-      <table>
         <%# Entry No %>
         <tr>
-          <th style="width: 30%; border-top: 2px solid #403152">Entry No:</th>
-          <td class="test" style="border-top: 2px solid #403152"><%= @db_entry.entry_no %></td>
+          <th style="width: 30%; padding-top: 15px">Entry No:</th>
+          <td style="padding-top: 15px"><%= @db_entry.entry_no %></td>
         </tr>
 
         <%# Entry Type %>
@@ -409,11 +408,6 @@
                 </tr>
             <% end %>
         <% end %>
-
-        <tr>
-          <th class="table_border_bottom"></th>
-          <td class="table_border_bottom"></td>
-        </tr>
 
       </table>
     </div>

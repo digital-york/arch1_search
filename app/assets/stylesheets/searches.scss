@@ -228,7 +228,7 @@ ul {
 
 /***** Search results page *****/
 #search_results {
-  padding-top: 8px;
+  padding-top: 16px;
   padding-left: 70px;
   font-size: 1em;
 }
@@ -302,11 +302,11 @@ ul {
 #image_frame {
   text-align: right;
   display: inline-block;
-  margin-top: 25px;
+  margin-top: 15px;
 }
 
 #location1 {
-  float: left;
+  float: right;
   height: 400px;
   width: 320px;
   margin: 10px;
@@ -357,8 +357,11 @@ ul {
 }
 
 .highlight {
-  background-color: #403152;
-  color: #f3f3f3;
+  //background-color: #403152;
+  background-color: #f7f7f7;
+  border-bottom: 1px solid #f7f7f7;
+  #color: #f3f3f3;
+  color: #403152;
   border-radius: 6px 6px 0 0;
   padding: 6px 10px 6px 12px;
   font-weight: bold;
@@ -371,7 +374,7 @@ ul {
 .nohighlight {
   background-color: #C5C5C5;
   border-radius: 6px 6px 0 0;
-  padding: 6px 10px 5px 12px;
+  padding: 6px 10px 3px 12px;
 }
 
 .nohighlight a {
@@ -381,7 +384,7 @@ ul {
 }
 
 .nohighlight a:hover {
-  color: #606060;
+  color: #403152;
   text-decoration: none;
 }
 
@@ -391,12 +394,14 @@ ul {
 .tab1 table {
   width: 100%;
   font-size: 0.8em;
-  table-layout: fixed;
+  //table-layout: fixed;
   margin: auto;
+  border: 1px solid silver;
+  //border-collapse: separate;
 }
 
 .tab1 th, .tab1 td {
-  padding: 5px 8px 5px 8px;
+  padding: 5px 0px 5px 20px;
   background-color: #f7f7f7;
   vertical-align: top;
   font-size: 1.3em;
@@ -409,11 +414,6 @@ ul {
   font-size: 1.3em;
   font-style: italic;
   text-align: left;
-  border-left: 1px solid silver;
-}
-
-.tab1 td {
-  border-right: 1px solid silver;
 }
 
 .tab1 .pad_th_person_place {
