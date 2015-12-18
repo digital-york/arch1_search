@@ -26,11 +26,11 @@
 
     <div class='tab1'>
 
-      <table>
+      <table cellspacing="20">
 
         <%# Display tabs for entries %>
         <tr>
-          <th colspan='2' id='entry_menu'>
+          <th colspan='2' id='entry_menu' style="background-color: transparent; border-left: none">
             <ul>
               <% @entry_list.each_with_index do |entry, index| %>
                   <%
@@ -48,16 +48,13 @@
             </ul>
           </th>
         </tr>
-        <tr>
-          <th colspan="2" style="border-top: 2px solid #403152; height: 20px"></th>
-        </tr>
       </table>
 
       <table>
         <%# Entry No %>
         <tr>
-          <th style="width: 30%">Entry No:</th>
-          <td style=""><%= @db_entry.entry_no %></td>
+          <th style="width: 30%; border-top: 2px solid #403152">Entry No:</th>
+          <td class="test" style="border-top: 2px solid #403152"><%= @db_entry.entry_no %></td>
         </tr>
 
         <%# Entry Type %>
@@ -196,7 +193,8 @@
         <% @db_entry.db_related_places.each do |related_place| %>
 
             <tr>
-              <th colspan="2">Place:</th>
+              <th>Place:</th>
+              <td></td>
             </tr>
 
             <%# Place As Written %>
@@ -273,7 +271,8 @@
         <% @db_entry.db_related_agents.each do |related_agent| %>
 
             <tr>
-              <th colspan="2">Person:</th>
+              <th>Person:</th>
+              <td></td>
             </tr>
 
             <%# Person As Written %>
@@ -410,6 +409,11 @@
                 </tr>
             <% end %>
         <% end %>
+
+        <tr>
+          <th class="table_border_bottom"></th>
+          <td class="table_border_bottom"></td>
+        </tr>
 
       </table>
     </div>

@@ -302,7 +302,7 @@ ul {
 #image_frame {
   text-align: right;
   display: inline-block;
-  margin-top: 30px;
+  margin-top: 25px;
 }
 
 #location1 {
@@ -339,8 +339,7 @@ ul {
 #entry_menu {
   height: 26px;
   margin-top: 2px;
-  padding-top: 7px;
-  padding-left: 0px;
+  padding: 7px 0px 0px 0px;
 }
 
 #entry_menu ul {
@@ -385,6 +384,7 @@ ul {
   color: #606060;
   text-decoration: none;
 }
+
 /***** End of entry menu *****/
 
 /***** Form *****/
@@ -395,21 +395,25 @@ ul {
   margin: auto;
 }
 
+.tab1 th, .tab1 td {
+  padding: 5px 8px 5px 8px;
+  background-color: #f7f7f7;
+  vertical-align: top;
+  font-size: 1.3em;
+}
+
 .tab1 th {
   font-weight: normal;
   text-align: left;
-  padding: 1px 8px;
   vertical-align: top;
   font-size: 1.3em;
   font-style: italic;
   text-align: left;
-  padding-left: 2px;
+  border-left: 1px solid silver;
 }
 
 .tab1 td {
-  padding: 1px 8px;
-  vertical-align: top;
-  font-size: 1.3em;
+  border-right: 1px solid silver;
 }
 
 .tab1 .pad_th_person_place {
@@ -421,3 +425,11 @@ ul {
 }
 /***** End of form *****/
 /***** End of result page (form frame) *****/
+
+//.table_border_top {
+//  border-top: 1px solid #403152
+//}
+
+.table_border_bottom {
+  border-bottom: 1px solid silver;
+}

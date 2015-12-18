@@ -1,6 +1,6 @@
 module Solr
 
-  def set_search_result_arrays(search_term, page, section_type_facet, subject_facet, person_as_written_facet, place_as_written_facet)
+  def set_search_result_arrays
 
     @section_type_facet_hash = Hash.new 0
     @person_as_written_facet_hash = Hash.new 0
@@ -12,7 +12,7 @@ module Solr
     person_as_written_word_array = []
     place_as_written_word_array = []
 
-    search_term2 = search_term.downcase.gsub(/ /, '?')
+    search_term2 = @search_term.downcase.gsub(/ /, '?')
 
     # Get the matching entry ids (from the entries)
     q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
@@ -62,11 +62,11 @@ module Solr
         # If a section_type_facet has been chosen and there isn't a match
         # # for this entry, the document isn't valid
         # If there is a match, the document is valid and the facet becomes the one chosen by the user
-        if section_type_facet != nil and section_type_facet != ''
-          if !local_section_type_word_array.include? section_type_facet
+        if @section_type_facet != nil and @section_type_facet != ''
+          if !local_section_type_word_array.include? @section_type_facet
             is_valid = false
           else
-            local_section_type_word_array = [section_type_facet]
+            local_section_type_word_array = [@section_type_facet]
           end
         end
 
@@ -77,11 +77,11 @@ module Solr
           end
         end
 
-        if subject_facet != nil and subject_facet != ''
-          if !local_subject_word_array.include? subject_facet
+        if @subject_facet != nil and @subject_facet != ''
+          if !local_subject_word_array.include? @subject_facet
             is_valid = false
           else
-            local_subject_word_array = [subject_facet]
+            local_subject_word_array = [@subject_facet]
           end
         end
 
@@ -94,11 +94,11 @@ module Solr
           end
         end
 
-        if person_as_written_facet != nil and person_as_written_facet != ''
-          if !local_person_as_written_word_array.include? person_as_written_facet
+        if @person_as_written_facet != nil and @person_as_written_facet != ''
+          if !local_person_as_written_word_array.include? @person_as_written_facet
             is_valid = false
           else
-            local_person_as_written_word_array = [person_as_written_facet]
+            local_person_as_written_word_array = [@person_as_written_facet]
           end
         end
 
@@ -111,11 +111,11 @@ module Solr
           end
         end
 
-        if place_as_written_facet != nil and place_as_written_facet != ''
-          if !local_place_as_written_word_array.include? place_as_written_facet
+        if @place_as_written_facet != nil and @place_as_written_facet != ''
+          if !local_place_as_written_word_array.include? @place_as_written_facet
             is_valid = false
           else
-            local_place_as_written_word_array = [place_as_written_facet]
+            local_place_as_written_word_array = [@place_as_written_facet]
           end
         end
 
@@ -160,7 +160,7 @@ module Solr
     @number_of_rows = entry_id_set.size
 
     # Get the data for one page only, e.g. 10 rows
-    entry_id_array = entry_id_set.to_a.slice((page - 1) * @rows_per_page, @rows_per_page)
+    entry_id_array = entry_id_set.to_a.slice((@page - 1) * @rows_per_page, @rows_per_page)
 
     entry_id_array.each do |entry_id|
 
@@ -170,7 +170,7 @@ module Solr
 
       SolrQuery.new.solr_query(q, fl, 1)['response']['docs'].map do |result|
 
-        @match_term = search_term
+        @match_term = @search_term
         if @match_term == '' || @display_type == 'full display' || @display_type == 'summary' then @match_term = '.*' end
 
         @element_array = []
