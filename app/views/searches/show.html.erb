@@ -99,7 +99,7 @@
         <% end %>
 
         <%# Summary %>
-        <% if @db_entry.summary != '' %>
+        <% if @db_entry.summary != nil and @db_entry.summary != '' %>
             <tr>
               <th>Summary:</th>
               <td>

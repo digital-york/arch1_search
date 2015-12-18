@@ -6,143 +6,147 @@
 
     <% if @error == false or @number_of_rows > 0 %>
 
-      <div id="facets" class="facets sidenav" style="padding-top: 25px">
+        <div id="facets" class="facets sidenav" style="padding-top: 25px">
 
-      <div class="top-panel-heading panel-heading">
-        <!--<h4 class="facets-heading" style="font-size: 1.1em">
-          Limit your search
-        </h4>-->
-      </div>
-
-      <div id="facet-panel-collapse" class="collapse in panel-group">
-
-      <%# Section Type %>
-        <div class="panel panel-default facet_limit blacklight-format ">
-
-          <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format" aria-expanded="false">
-            <h5 class="panel-title facet-field-heading">
-              <a data-no-turbolink="true" href="#">Section Types</a>
-            </h5>
+          <div class="top-panel-heading panel-heading">
+            <!--<h4 class="facets-heading" style="font-size: 1.1em">
+              Limit your search
+            </h4>-->
           </div>
 
-          <div id="facet-format" class="panel-collapse facet-content collapse in" aria-expanded="false">
-            <div class="panel-body">
-              <ul class="facet-values list-unstyled">
-                <% @section_type_facet_array.each do |t| %>
-                    <%
-                       section_type_name = t[0]
-                       section_type_count = t[1]
-                    %>
+          <div id="facet-panel-collapse" class="collapse in panel-group">
+
+            <%# Section Type %>
+            <div class="panel panel-default facet_limit blacklight-format ">
+
+              <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format" aria-expanded="false">
+                <h5 class="panel-title facet-field-heading">
+                  <a data-no-turbolink="true" href="#">Section Types</a>
+                </h5>
+              </div>
+
+              <div id="facet-format" class="panel-collapse facet-content collapse in" aria-expanded="false">
+                <div class="panel-body">
+                  <ul class="facet-values list-unstyled">
+                    <% @section_type_facet_hash.each do |section_type_name, section_type_count| %>
+                        <li>
+                      <span class="facet-label
+                        <% if section_type_name == @section_type_facet then %>highlight_red
+                        <% end %>">
+                        <%= link_to section_type_name, searches_path(:page => @page, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => section_type_name, :subject_facet => @subject_facet, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => @place_as_written_facet), :class => 'facet_select' %></a>
+                      </span>
+                          <span class="facet-count"><%= section_type_count %></span>
+                        </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <%# Subjects %>
+            <div class="panel panel-default facet_limit blacklight-subject_topic_facet ">
+
+              <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-subject_topic_facet" aria-expanded="false">
+                <h5 class="panel-title facet-field-heading">
+                  <a data-no-turbolink="true" href="#">Subjects</a>
+                </h5>
+              </div>
+
+              <div id="facet-subject_topic_facet" class="panel-collapse facet-content collapse in" aria-expanded="false">
+                <div class="panel-body">
+                  <ul class="facet-values list-unstyled">
+                    <% @subject_facet_hash.each do |subject_name, subject_count| %>
+                        <li>
+                    <span class="facet-label
+                      <% if subject_name == @subject_facet then %>highlight_red
+                      <% end %>">
+                        <%= link_to subject_name, searches_path(:page => @page, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => @section_type_facet, :subject_facet => subject_name, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => @place_as_written_facet), :class => 'facet_select' %></a>
+                    </span>
+                          <span class="facet-count"><%= subject_count %></span>
+                        </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <%# Places As Written %>
+            <div class="panel panel-default facet_limit blacklight-pub_date ">
+
+              <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-pub_date" aria-expanded="false">
+                <h5 class="panel-title facet-field-heading">
+                  <a data-no-turbolink="true" href="#">Places As Written</a>
+                </h5>
+              </div>
+
+              <div id="facet-pub_date" class="panel-collapse facet-content collapse in" aria-expanded="false">
+                <div class="panel-body">
+                  <ul class="facet-values list-unstyled">
+                    <% @place_as_written_facet_hash.each do |place_as_written_name, place_count| %>
+                        <li>
+                      <span class="facet-label
+                        <% if place_as_written_name == @place_as_written_facet then %>highlight_red
+                        <% end %>">
+                        <%= link_to place_as_written_name, searches_path(:page => @page, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => place_as_written_name), :class => 'facet_select' %></a>
+                      </span>
+                          <span class="facet-count"><%= place_count %></span>
+                        </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <%# People As Written %>
+            <div class="panel panel-default facet_limit blacklight-format2 ">
+
+              <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format2" aria-expanded="false">
+                <h5 class="panel-title facet-field-heading">
+                  <a data-no-turbolink="true" href="#">People As Written</a>
+                </h5>
+              </div>
+
+              <div id="facet-format2" class="panel-collapse facet-content collapse in" aria-expanded="false">
+                <div class="panel-body">
+                  <ul class="facet-values list-unstyled">
+                    <% @person_as_written_facet_hash.each do |person_as_written_name, person_as_written_count| %>
+                        <li>
+                  <span class="facet-label
+                    <% if person_as_written_name == @person_as_written_facet then %>highlight_red
+                    <% end %>">
+                    <%= link_to person_as_written_name, searches_path(:page => @page, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_as_written_facet => person_as_written_name, :place_as_written_facet => @place_as_written_facet), :class => 'facet_select' %></a>
+                  </span>
+                          <span class="facet-count"><%= person_as_written_count %></span>
+                        </li>
+                    <% end %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <%# Dates %>
+            <div class="panel panel-default facet_limit blacklight-example_query_facet_field ">
+
+              <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-example_query_facet_field">
+                <h5 class="panel-title facet-field-heading">
+
+                  <a data-no-turbolink="true" href="#">Dates</a>
+                </h5>
+              </div>
+
+              <div id="facet-example_query_facet_field" class="panel-collapse facet-content collapse in">
+                <div class="panel-body">
+                  <ul class="facet-values list-unstyled">
                     <li>
-                      <span class="facet-label"><a class="facet_select" href=""><%= section_type_name %></a></span><span class="facet-count"><%= section_type_count %></span>
+
                     </li>
-                <% end %>
-              </ul>
+                  </ul>
+                </div>
+              </div>
             </div>
+
           </div>
         </div>
-
-        <%# Person %>
-        <div class="panel panel-default facet_limit blacklight-format ">
-
-          <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format" aria-expanded="false">
-            <h5 class="panel-title facet-field-heading">
-              <a data-no-turbolink="true" href="#">People</a>
-            </h5>
-          </div>
-
-          <div id="facet-format" class="panel-collapse facet-content collapse in" aria-expanded="false">
-            <div class="panel-body">
-              <ul class="facet-values list-unstyled">
-                <% @person_as_written_facet_array.each do |t| %>
-                <%
-                  person_as_written_name = t[0]
-                  person_as_written_count = t[1]
-                %>
-                <li>
-                  <span class="facet-label"><a class="facet_select" href=""><%= person_as_written_name %></a></span><span class="facet-count"><%= person_as_written_count %></span>
-                </li>
-                <% end %>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <%# Places %>
-        <div class="panel panel-default facet_limit blacklight-pub_date ">
-
-          <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-pub_date" aria-expanded="false">
-            <h5 class="panel-title facet-field-heading">
-              <a data-no-turbolink="true" href="#">Places</a>
-            </h5>
-          </div>
-
-          <div id="facet-pub_date" class="panel-collapse facet-content collapse in" aria-expanded="false">
-            <div class="panel-body">
-              <ul class="facet-values list-unstyled">
-                <% @place_as_written_facet_array.each do |t| %>
-                <%
-                  place_name = t[0]
-                  place_count = t[1]
-                %>
-                <li>
-                  <span class="facet-label"><a class="facet_select" href=""><%= place_name %></a></span><span class="facet-count"><%= place_count %></span>
-                </li>
-                <% end %>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <%# Subjects %>
-        <div class="panel panel-default facet_limit blacklight-subject_topic_facet ">
-
-          <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-subject_topic_facet" aria-expanded="false">
-            <h5 class="panel-title facet-field-heading">
-              <a data-no-turbolink="true" href="#">Subjects</a>
-            </h5>
-          </div>
-
-          <div id="facet-subject_topic_facet" class="panel-collapse facet-content collapse in" aria-expanded="false">
-            <div class="panel-body">
-              <ul class="facet-values list-unstyled">
-                <% @subject_facet_array.each do |t| %>
-                <%
-                  subject_name = t[0]
-                  subject_count = t[1]
-                %>
-                <li>
-                    <span class="facet-label"><a class="facet_select" href=""><%= subject_name %></a></span><span class="facet-count"><%= subject_count %></span>
-                  </li>
-                <% end %>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <%# Dates %>
-        <div class="panel panel-default facet_limit blacklight-example_query_facet_field ">
-
-          <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-example_query_facet_field">
-            <h5 class="panel-title facet-field-heading">
-
-              <a data-no-turbolink="true" href="#">Dates</a>
-            </h5>
-          </div>
-
-          <div id="facet-example_query_facet_field" class="panel-collapse facet-content collapse in">
-            <div class="panel-body">
-              <ul class="facet-values list-unstyled">
-                <li>
-
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
 
     <% end %>
 
@@ -150,48 +154,61 @@
 
   <div id="search_results" class="col-md-8">
 
-      <div style="margin-top: 40px">
+    <div style="margin-top: 40px">
 
       <%
-        total_page_rows = (@page - 1) * @rows_per_page
-        start_index = total_page_rows + 1
-        end_index = total_page_rows + @partial_list_array.size
+         total_page_rows = (@page - 1) * @rows_per_page
+         start_index = total_page_rows + 1
+         end_index = total_page_rows + @partial_list_array.size
       %>
 
-        <!-- Warn user if there are less than two characters entered into the search box -->
-        <!-- Note that this is for the server-side check and shouldn't happen in normal circumstances because there is a javascript check -->
-        <% if @error == true %>
-           <div class="alert alert-danger">
-             <strong>Please enter two or more characters into the search box</strong>
-           </div>
+      <!-- Warn user if there are less than two characters entered into the search box -->
+      <!-- Note that this is for the server-side check and shouldn't happen in normal circumstances because there is a javascript check -->
+      <% if @error == true %>
+          <div class="alert alert-danger">
+            <strong>Please enter two or more characters into the search box</strong>
+          </div>
       <% elsif @number_of_rows == 0 %>
-            <div class="alert alert-info">
-              <strong>No entries match this search - please try again</strong>
-            </div>
+          <div class="alert alert-info">
+            <strong>No entries match this search - please try again</strong>
+          </div>
       <% else %>
 
-       <div style="float: left">
-         <ul class="pager" style="text-align: left">
-         <% if @page == 1 %>
-           <li><span style="color: grey">Previous</span></li>
-         <% else %>
-           <li><%= link_to 'Previous', searches_path(:search_term => @search_term, :page => @page, :previous => 'true', :rows_per_page => @rows_per_page) %></li>
-         <% end %>
-           &nbsp;<span style="font-size: 1.1em"><%= start_index %> - <%= end_index %> of <strong><%= @number_of_rows %></strong></span>&nbsp;
-         <% if @number_of_rows <= @rows_per_page || total_page_rows + @rows_per_page >= @number_of_rows %>
-           <li><span style="color: grey">Next</span></li>
-         <% else %>
-           <li><%= link_to 'Next', searches_path(:search_term => @search_term, :page => @page, :next => 'true', :rows_per_page => @rows_per_page) %></li>
-         <% end %>
-         </ul>
-        </div>
 
-            <div style="float: left; margin-left: 200px; padding-top: 8px">
+          <div id="previous_next_bar">
+
+            <div style="float: left">
+
+              <ul class="pager" style="text-align: left">
+                <% if @page == 1 %>
+                    <li><span style="color: grey">Previous</span></li>
+                <% else %>
+                    <li><%= link_to 'Previous', searches_path(:search_term => @search_term, :page => @page, :previous => 'true', :rows_per_page => @rows_per_page, :display_type => @display_type, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => @place_as_written_facet) %></li>
+                <% end %>
+                &nbsp;<span style="font-size: 1.1em"><%= start_index %> - <%= end_index %>
+                of <strong><%= @number_of_rows %></strong></span>&nbsp;
+                <% if @number_of_rows <= @rows_per_page || total_page_rows + @rows_per_page >= @number_of_rows %>
+                    <li><span style="color: grey">Next</span></li>
+                <% else %>
+                    <li><%= link_to 'Next', searches_path(:search_term => @search_term, :page => @page, :next => 'true', :rows_per_page => @rows_per_page, :display_type => @display_type, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => @place_as_written_facet) %></li>
+                <% end %>
+              </ul>
+            </div>
+
+            <div style="float: left; margin-left: 30px; padding-top: 8px">
               Records per page:
             </div>
 
             <div style="float: left; margin-left: 6px">
-              <%= select_tag 'rows_per_page', options_for_select(['1', '2', '5'], @rows_per_page), :class => 'form-control', :onchange => 'this.form.submit()' %>
+              <%= select_tag 'rows_per_page', options_for_select(['1', '2', '5', '10'], @rows_per_page), :class => 'form-control', :onchange => 'this.form.submit()' %>
+            </div>
+
+            <div style="float: left; margin-left: 30px; padding-top: 8px">
+              Display type:
+            </div>
+
+            <div style="float: left; margin-left: 6px">
+              <%= select_tag 'display_type', options_for_select(['full display', 'summary', 'matched records'], @display_type), :class => 'form-control', :onchange => 'this.form.submit()' %>
             </div>
 
             <div style="float: left; margin-left: 25px;  padding-top: 8px">
@@ -202,18 +219,46 @@
               <%= select_tag 'sort_by', options_for_select(['relevance'], @sort_by), :class => 'form-control', :onchange => 'this.form.submit()' %>
             </div>
 
-            <div style="clear: both"></div>
+            <%# Hidden fields for when the form is submitted via the 'records per page' or 'sort by' javascript %>
+            <%= hidden_field_tag 'section_type_facet', @section_type_facet %>
+            <%= hidden_field_tag 'subject_facet', @subject_facet %>
+            <%= hidden_field_tag 'person_as_written_facet', @person_as_written_facet %>
+            <%= hidden_field_tag 'place_as_written_facet', @place_as_written_facet %>
+          </div>
+
+          <div style="clear: both"></div>
       <% end %>
 
-      </div>
+    </div>
 
-      <% if @error != true and @number_of_rows > 0 %>
+    <% if @error != true and @number_of_rows > 0 %>
 
-          <hr style="margin: 25px 0px 20px 0px; padding: 0px; text-align: left; width: 60%"/>
+        <hr style="margin: 25px 0px 20px 0px; padding: 0px; text-align: left; width: 80%"/>
 
-          <% @partial_list_array.each_with_index do |t, index| %>
+        <% if (@section_type_facet != nil and @section_type_facet != '') or (@subject_facet != nil and @subject_facet != '') or (@person_as_written_facet != nil and @person_as_written_facet != '') or (@place_as_written_facet != nil and @place_as_written_facet != '') %>
+            <div id="facets_bar">
 
-             <%
+              <% if @section_type_facet != nil and @section_type_facet != '' %>
+                  <span class="highlight_facet"><%= @section_type_facet %>&nbsp;&nbsp;<a href="<%= searches_path %>?search_term=<%= @search_term %>&amp;page=<%= @page %>&amp;rows_per_page=<%= @rows_per_page %>&amp;display_type=<%= @display_type %>&amp;section_type_facet=&amp;subject_facet=<%= @subject_facet %>&amp;person_as_written_facet=<%= @person_as_written_facet %>&amp;place_as_written_facet=<%= @place_as_written_facet %>"><span class="fa fa-times fa-1x"></span></a></span>
+              <% end %>
+
+              <% if @subject_facet != nil and @subject_facet != '' %>
+                  <span class="highlight_facet"><%= @subject_facet %>&nbsp;&nbsp;<a href="<%= searches_path %>?search_term=<%= @search_term %>&amp;page=<%= @page %>&amp;rows_per_page=<%= @rows_per_page %>&amp;display_type=<%= @display_type %>&amp;section_type_facet=<%= @section_type_facet %>&amp;subject_facet=&amp;person_as_written_facet=<%= @person_as_written_facet %>&amp;place_as_written_facet=<%= @place_as_written_facet %>"><span class="fa fa-times fa-1x"></span></a></span>
+              <% end %>
+
+              <% if @person_as_written_facet != nil and @person_as_written_facet != '' %>
+                  <span class="highlight_facet"><%= @person_as_written_facet %>&nbsp;&nbsp;<a href="<%= searches_path %>?search_term=<%= @search_term %>&amp;page=<%= @page %>&amp;rows_per_page=<%= @rows_per_page %>&amp;display_type=<%= @display_type %>&amp;section_type_facet=<%= @section_type_facet %>&amp;subject_facet=<%= @subject_facet %>&amp;person_as_written_facet=&amp;place_as_written_facet=<%= @place_as_written_facet %>"><span class="fa fa-times fa-1x"></span></a></span>
+              <% end %>
+
+              <% if @place_as_written_facet != nil and @place_as_written_facet != '' %>
+                  <span class="highlight_facet"><%= @place_as_written_facet %>&nbsp;&nbsp;<a href="<%= searches_path %>?search_term=<%= @search_term %>&amp;page=<%= @page %>&amp;rows_per_page=<%= @rows_per_page %>&amp;display_type=<%= @display_type %>&amp;section_type_facet=<%= @section_type_facet %>&amp;subject_facet=<%= @subject_facet %>&amp;person_as_written_facet=<%= @person_as_written_facet %>&amp;place_as_written_facet="><span class="fa fa-times fa-1x"></span></a></span>
+              <% end %>
+            </div>
+        <% end %>
+
+        <% @partial_list_array.each_with_index do |t, index| %>
+
+            <%
                entry_id = t[0]
                title = t[1]
                folio_id = t[2]
@@ -235,150 +280,155 @@
                person_descriptor = t[18]
                person_descriptor_as_written = t[19]
                person_note = t[20]
-             %>
+            %>
 
-              <div style="padding-bottom: 15px">
+            <div style="padding-bottom: 15px">
 
-                <span class="results_title"><%= total_page_rows + index + 1 %>.&nbsp;&nbsp;<%= link_to title, searches_show_path(:entry_id => entry_id, :folio_id => folio_id, :folio_title => title, :search_term => @search_term, :page => @page) %></span>
+              <span class="results_title"><%= total_page_rows + index + 1 %>
+                .&nbsp;&nbsp;<%= link_to title, searches_show_path(:entry_id => entry_id, :folio_id => folio_id, :folio_title => title, :search_term => @search_term, :page => @page) %></span>
 
-                <div class="results_table">
+              <div class="results_table">
 
-                  <table>
+                <table>
 
-                    <% if entry_type != '' %>
-                        <tr>
-                          <th>Entry Type:</th>
-                          <td><%= entry_type.html_safe %></td>
-                        </tr>
-                    <% end %>
+                  <% if entry_type != '' %>
+                      <tr>
+                        <th>Entry Type:</th>
+                        <td><%= entry_type.html_safe %></td>
+                      </tr>
+                  <% end %>
 
-                    <% if section_type != '' %>
-                    <tr>
-                      <th>Section Type:</th>
-                      <td><%= section_type.html_safe %></td>
-                    </tr>
-                    <% end %>
+                  <% if @display_type != 'summary' %>
+                      <% if section_type != '' %>
+                          <tr>
+                            <th>Section Type:</th>
+                            <td><%= section_type.html_safe %></td>
+                          </tr>
+                      <% end %>
+                  <% end %>
 
-                    <% if summary != '' %>
-                        <tr>
-                          <th>Summary:</th>
-                          <td><%= summary.html_safe %></td>
-                        </tr>
-                    <% end %>
+                  <% if summary != '' %>
+                      <tr>
+                        <th>Summary:</th>
+                        <td><%= summary.html_safe %></td>
+                      </tr>
+                  <% end %>
 
-                    <% if marginalia != '' %>
-                        <tr>
-                          <th>Marginalia:</th>
-                          <td><%= marginalia.html_safe %></td>
-                        </tr>
-                    <% end %>
+                  <% if @display_type != 'summary' %>
+                      <% if marginalia != '' %>
+                          <tr>
+                            <th>Marginalia:</th>
+                            <td><%= marginalia.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if language != '' %>
-                        <tr>
-                          <th>Language:</th>
-                          <td><%= language.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if language != '' %>
+                          <tr>
+                            <th>Language:</th>
+                            <td><%= language.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if subject != '' %>
-                        <tr>
-                          <th>Subject:</th>
-                          <td>
-                           <%= subject.html_safe %>
-                           </td>
-                        </tr>
-                    <% end %>
+                      <% if subject != '' %>
+                          <tr>
+                            <th>Subject:</th>
+                            <td>
+                              <%= subject.html_safe %>
+                            </td>
+                          </tr>
+                      <% end %>
 
-                    <% if note != '' %>
-                        <tr>
-                          <th>Note:</th>
-                          <td><%= note.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if note != '' %>
+                          <tr>
+                            <th>Note:</th>
+                            <td><%= note.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if editorial_note != '' %>
-                        <tr>
-                          <th>Editorial Note:</th>
-                          <td><%= editorial_note.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if editorial_note != '' %>
+                          <tr>
+                            <th>Editorial Note:</th>
+                            <td><%= editorial_note.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if is_referenced_by != '' %>
-                        <tr>
-                          <th>Is Referenced By:</th>
-                          <td><%= is_referenced_by.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if is_referenced_by != '' %>
+                          <tr>
+                            <th>Is Referenced By:</th>
+                            <td><%= is_referenced_by.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if place_as_written != '' %>
-                        <tr>
-                          <th>Place As Written:</th>
-                          <td><%= place_as_written.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if place_as_written != '' %>
+                          <tr>
+                            <th>Place As Written:</th>
+                            <td><%= place_as_written.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if place_role != '' %>
-                        <tr>
-                          <th>Place Role:</th>
-                          <td><%= place_role.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if place_role != '' %>
+                          <tr>
+                            <th>Place Role:</th>
+                            <td><%= place_role.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if place_type != '' %>
-                        <tr>
-                          <th>Place Type:</th>
-                          <td><%= place_type.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if place_type != '' %>
+                          <tr>
+                            <th>Place Type:</th>
+                            <td><%= place_type.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if place_note != '' %>
-                        <tr>
-                          <th>Place Note:</th>
-                          <td><%= place_note.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if place_note != '' %>
+                          <tr>
+                            <th>Place Note:</th>
+                            <td><%= place_note.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if person_as_written != '' %>
-                        <tr>
-                          <th>Person As Written:</th>
-                          <td><%= person_as_written.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if person_as_written != '' %>
+                          <tr>
+                            <th>Person As Written:</th>
+                            <td><%= person_as_written.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if person_role != '' %>
-                        <tr>
-                          <th>Person Role:</th>
-                          <td><%= person_role.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if person_role != '' %>
+                          <tr>
+                            <th>Person Role:</th>
+                            <td><%= person_role.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if person_descriptor != '' %>
-                        <tr>
-                          <th>Person Descriptor:</th>
-                          <td><%= person_descriptor.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if person_descriptor != '' %>
+                          <tr>
+                            <th>Person Descriptor:</th>
+                            <td><%= person_descriptor.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if person_descriptor_as_written != '' %>
-                        <tr>
-                          <th>Person Descriptor As Written:</th>
-                          <td><%= person_descriptor_as_written.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if person_descriptor_as_written != '' %>
+                          <tr>
+                            <th>Person Descriptor As Written:</th>
+                            <td><%= person_descriptor_as_written.html_safe %></td>
+                          </tr>
+                      <% end %>
 
-                    <% if person_note != '' %>
-                        <tr>
-                          <th>Person Note:</th>
-                          <td><%= person_note.html_safe %></td>
-                        </tr>
-                    <% end %>
+                      <% if person_note != '' %>
+                          <tr>
+                            <th>Person Note:</th>
+                            <td><%= person_note.html_safe %></td>
+                          </tr>
+                      <% end %>
+                  <% end %>
 
-                  </table>
-                </div>
+                </table>
               </div>
-          <% end %>
+            </div>
+        <% end %>
 
-      <% end %>
+    <% end %>
 
   </div>
 </div>

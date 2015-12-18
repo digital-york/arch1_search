@@ -245,7 +245,7 @@ ul {
 .results_table th {
   font-weight: normal;
   width: 200px;
-  padding-left: 6px;
+  padding-left: 11px;
 }
 
 .highlight_text {
@@ -255,6 +255,39 @@ ul {
 
 .pager {
   margin: 0px;
+}
+
+.highlight_red a {
+  color: red;
+}
+
+.highlight_facet {
+  background: none repeat scroll 0 0 #72698a;
+  border: 1px solid #8c84a2;
+  color: #FFFFFF;
+  margin: 15px 0px 15px 15px;
+  padding: 8px 15px;
+  border-radius: 7px;
+}
+
+#facets_bar {
+  width: 70%;
+  background-color: #f5f5f5;
+  border: 1px solid #d7d7d7;
+  border-radius: 3px;
+  box-shadow: 0px 2px 10px silver;
+  padding: 18px 5px;
+  margin-bottom: 20px;
+}
+
+.fa-times {
+ color: #FFFFFF;
+ font-size: 1.1em;
+}
+
+.fa-times:hover {
+  //color: #6510e0;
+  color: #FFCC00;
 }
 
 /***** Result page (title) *****/

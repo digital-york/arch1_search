@@ -1,95 +1,205 @@
 module Solr
 
-  def set_search_result_arrays(search_term, page)
+  def set_search_result_arrays(search_term, page, section_type_facet, subject_facet, person_as_written_facet, place_as_written_facet)
+
+    @section_type_facet_hash = Hash.new 0
+    @person_as_written_facet_hash = Hash.new 0
+    @place_as_written_facet_hash = Hash.new 0
+    @subject_facet_hash = Hash.new 0
+
+    section_type_word_array = []
+    subject_word_array = []
+    person_as_written_word_array = []
+    place_as_written_word_array = []
+
+    search_term2 = search_term.downcase.gsub(/ /, '?')
 
     # Get the matching entry ids (from the entries)
-    q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term}* or section_type_search:*#{search_term}* or summary_tesim:*#{search_term}* or marginalia_tesim:*#{search_term}* or subject_search:*#{search_term}* or language_search:*#{search_term}* or note_tesim:*#{search_term}* or editorial_note_tesim:*#{search_term}* or is_referenced_by_tesim:*#{search_term}*)"
-    fl = 'id'
+    q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
 
     entry_id_set = Set.new
-    SolrQuery.new.solr_query(q, fl, 1000, nil, 0)['response']['docs'].map do |result|
+
+    SolrQuery.new.solr_query(q, "id", 1000, nil, 0)['response']['docs'].map do |result|
       entry_id_set << result['id']
     end
 
     # Get the matching entry ids (from the people)
-    q = "has_model_ssim:RelatedAgent AND (person_as_written_tesim:*#{search_term}* person_descriptor_search:*#{search_term}* or person_descriptor_as_written_tesim:*#{search_term}* or person_note_tesim:*#{search_term}*)"
-    fl = 'relatedAgentFor_ssim'
+    q = "has_model_ssim:RelatedAgent AND (person_as_written_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_as_written_search:*#{search_term2}* or person_note_search:*#{search_term2}*)"
 
-    SolrQuery.new.solr_query(q, fl, 1000, nil, 0)['response']['docs'].map do |result|
+    SolrQuery.new.solr_query(q, "relatedAgentFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
       entry_id_set << result['relatedAgentFor_ssim'].join
     end
 
     # Get the matching entry ids (from the places)
-    q = "has_model_ssim:RelatedPlace AND (place_as_written_tesim:*#{search_term}* place_role_search:*#{search_term}* or place_type_search:*#{search_term}* or place_note_tesim:*#{search_term}*)"
-    fl = 'relatedPlaceFor_ssim'
+    q = "has_model_ssim:RelatedPlace AND (place_as_written_search:*#{search_term2}* place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}*)"
 
-    SolrQuery.new.solr_query(q, fl, 1000, nil, 0)['response']['docs'].map do |result|
+    SolrQuery.new.solr_query(q, "relatedPlaceFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
       entry_id_set << result['relatedPlaceFor_ssim'].join
     end
 
+    # Now we have all the entry ids iterate through and get the facets
+    entry_id_set.each do |entry_id|
+
+      local_section_type_word_array = []
+      local_subject_word_array = []
+      local_person_as_written_word_array = []
+      local_place_as_written_word_array = []
+
+      is_valid = true
+
+      SolrQuery.new.solr_query("id:#{entry_id}", "section_type_new_tesim, subject_new_tesim", 1000, nil, 0)['response']['docs'].map do |result|
+
+        # SECTION_TYPE FACET
+        # Add all the section types to a local array
+        # This local array is added to the facet array later on but only if this document is valid,
+        # i.e. includes the facets chosen by the user
+        if result['section_type_new_tesim'] != nil
+          result['section_type_new_tesim'].each do |section_type|
+            local_section_type_word_array << section_type
+          end
+        end
+
+        # If a section_type_facet has been chosen and there isn't a match
+        # # for this entry, the document isn't valid
+        # If there is a match, the document is valid and the facet becomes the one chosen by the user
+        if section_type_facet != nil and section_type_facet != ''
+          if !local_section_type_word_array.include? section_type_facet
+            is_valid = false
+          else
+            local_section_type_word_array = [section_type_facet]
+          end
+        end
+
+        # SUBJECT FACET
+        if result['subject_new_tesim'] != nil
+          result['subject_new_tesim'].each do |subject|
+            local_subject_word_array << subject
+          end
+        end
+
+        if subject_facet != nil and subject_facet != ''
+          if !local_subject_word_array.include? subject_facet
+            is_valid = false
+          else
+            local_subject_word_array = [subject_facet]
+          end
+        end
+
+        # PERSON_AS_WRITTEN FACET
+        SolrQuery.new.solr_query("relatedAgentFor_ssim:#{entry_id}", "person_as_written_tesim", 1000, nil, 0)['response']['docs'].map do |result|
+          if result['person_as_written_tesim'] != nil
+            result['person_as_written_tesim'].each do |person_as_written|
+              local_person_as_written_word_array << person_as_written
+            end
+          end
+        end
+
+        if person_as_written_facet != nil and person_as_written_facet != ''
+          if !local_person_as_written_word_array.include? person_as_written_facet
+            is_valid = false
+          else
+            local_person_as_written_word_array = [person_as_written_facet]
+          end
+        end
+
+        # PLACE_AS_WRITTEN FACET
+        SolrQuery.new.solr_query("relatedPlaceFor_ssim:#{entry_id}", "place_as_written_tesim", 1000, nil, 0)['response']['docs'].map do |result|
+          if result['place_as_written_tesim'] != nil
+            result['place_as_written_tesim'].each do |place_as_written_tesim|
+              local_place_as_written_word_array << place_as_written_tesim
+            end
+          end
+        end
+
+        if place_as_written_facet != nil and place_as_written_facet != ''
+          if !local_place_as_written_word_array.include? place_as_written_facet
+            is_valid = false
+          else
+            local_place_as_written_word_array = [place_as_written_facet]
+          end
+        end
+
+      end
+
+      if is_valid == true
+        section_type_word_array.concat local_section_type_word_array
+        subject_word_array.concat local_subject_word_array
+        person_as_written_word_array.concat local_person_as_written_word_array
+        place_as_written_word_array.concat local_place_as_written_word_array
+      else
+        entry_id_set.delete(entry_id)
+      end
+    end
+
+    # Sort the word arrays and create a hash with the facets and facet counts
+    if section_type_word_array != nil
+      section_type_word_array.sort.each do |word|
+        @section_type_facet_hash[word] += 1
+      end
+    end
+
+    if subject_word_array != nil
+      subject_word_array.sort.each do |word|
+        @subject_facet_hash[word] += 1
+      end
+    end
+
+    if person_as_written_word_array != nil
+      person_as_written_word_array.sort.each do |word|
+        @person_as_written_facet_hash[word] += 1
+      end
+    end
+
+    if place_as_written_word_array != nil
+      place_as_written_word_array.sort.each do |word|
+        @place_as_written_facet_hash[word] += 1
+      end
+    end
+
+    # This is used on the display page
     @number_of_rows = entry_id_set.size
 
-    # Get slice
+    # Get the data for one page only, e.g. 10 rows
     entry_id_array = entry_id_set.to_a.slice((page - 1) * @rows_per_page, @rows_per_page)
 
     entry_id_array.each do |entry_id|
 
       q = "id:#{entry_id}"
 
-      fl = "entry_type_search, section_type_search, summary_tesim, marginalia_tesim, language_search, subject_search, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
+      fl = "entry_type_new_tesim, section_type_new_tesim, summary_tesim, marginalia_tesim, language_new_tesim, subject_new_tesim, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
 
       SolrQuery.new.solr_query(q, fl, 1)['response']['docs'].map do |result|
 
         @match_term = search_term
-        if @match_term == '' then @match_term = '.*' end
+        if @match_term == '' || @display_type == 'full display' || @display_type == 'summary' then @match_term = '.*' end
 
         @element_array = []
         @element_array << entry_id
         get_entry_and_folio_details(entry_id)
-        @element_array << get_element(result['entry_type_search'])
-        @element_array << get_element(result['section_type_search'])
+        @element_array << get_element(result['entry_type_new_tesim'])
+        @element_array << get_element(result['section_type_new_tesim'])
         @element_array << get_element(result['summary_tesim'])
         @element_array << get_element(result['marginalia_tesim'])
-        @element_array << get_element(result['language_search'])
-        @element_array << get_element(result['subject_search'])
+        @element_array << get_element(result['language_new_tesim'])
+        @element_array << get_element(result['subject_new_tesim'])
         @element_array << get_element(result['note_tesim'])
         @element_array << get_element(result['editorial_note_tesim'])
         @element_array << get_element(result['is_referenced_by_tesim'])
-        get_places(entry_id, search_term)
-        get_people(entry_id, search_term)
+        get_places(entry_id, search_term2)
+        get_people(entry_id, search_term2)
         @partial_list_array << @element_array
       end
     end
-
-  end
-
-  def set_facet_arrays
-
-    response = SolrQuery.new.solr_query_facets
-
-    response['facet_counts']['facet_fields']['section_type_facet'].each_slice(2).with_index do |t, index|
-      @section_type_facet_array << t
-    end
-
-    response['facet_counts']['facet_fields']['person_as_written_facet'].each_slice(2).with_index do |t, index|
-      @person_as_written_facet_array << t
-    end
-
-    response['facet_counts']['facet_fields']['place_as_written_facet'].each_slice(2).with_index do |t, index|
-      @place_as_written_facet_array << t
-    end
-
-    response['facet_counts']['facet_fields']['subject_facet'].each_slice(2).with_index do |t, index|
-      @subject_facet_array << t
-    end
-
   end
 
   # Get the place data from solr for a particular entry_id and search term
-  def get_places(entry_id, search_term)
+  def get_places(entry_id, search_term2)
 
-    q = "relatedPlaceFor_ssim:#{entry_id} AND (place_as_written_tesim:*#{search_term}* or place_role_search:*#{search_term}* or place_type_search:*#{search_term}* or place_note_tesim:*#{search_term}*)"
-    fl = 'id, place_as_written_tesim, place_role_search, place_type_search, place_note_tesim'
+    q = "relatedPlaceFor_ssim:#{entry_id} "
+    if @display_type == 'matched records'
+      q = "relatedPlaceFor_ssim:#{entry_id} AND (place_as_written_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}*)"
+    end
+    fl = 'id, place_as_written_tesim, place_role_new_tesim, place_type_new_tesim, place_note_tesim'
 
     place_as_written_string = ''
     place_role_string = ''
@@ -98,8 +208,8 @@ module Solr
 
     SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
       place_as_written_string = place_as_written_string + get_place_or_person_string(result['place_as_written_tesim'], place_as_written_string)
-      place_role_string = place_role_string + get_place_or_person_string(result['place_role_search'], place_role_string)
-      place_type_string = place_type_string + get_place_or_person_string(result['place_type_search'], place_type_string)
+      place_role_string = place_role_string + get_place_or_person_string(result['place_role_new_tesim'], place_role_string)
+      place_type_string = place_type_string + get_place_or_person_string(result['place_type_new_tesim'], place_type_string)
       place_note_string = place_note_string + get_place_or_person_string(result['place_note_tesim'], place_note_string)
     end
 
@@ -110,10 +220,13 @@ module Solr
   end
 
   # Get the person data from solr for a particular entry_id and search term
-  def get_people(entry_id, search_term)
+  def get_people(entry_id, search_term2)
 
-    q = "relatedAgentFor_ssim:#{entry_id} AND (person_as_written_tesim:*#{search_term}* or person_role_search:*#{search_term}* or person_descriptor_search:*#{search_term}* or person_descriptor_as_written_tesim:*#{search_term}* or person_note_tesim:*#{search_term}*)"
-    fl = 'id, person_as_written_tesim, person_role_search, person_descriptor_search, person_descriptor_as_written_tesim, person_note_tesim'
+    q = "relatedAgentFor_ssim:#{entry_id}"
+    if @display_type == 'matched records'
+      q = "relatedAgentFor_ssim:#{entry_id} AND (person_as_written_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_as_written_search:*#{search_term2}* or person_note_search:*#{search_term2}*)"
+    end
+    fl = 'id, person_as_written_tesim, person_role_new_tesim, person_descriptor_new_tesim, person_descriptor_as_written_tesim, person_note_tesim'
 
     person_as_written_string = ''
     person_role_string = ''
@@ -123,8 +236,8 @@ module Solr
 
     SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
       person_as_written_string = person_as_written_string + get_place_or_person_string(result['person_as_written_tesim'], person_as_written_string)
-      person_role_string = person_role_string + get_place_or_person_string(result['person_role_search'], person_role_string)
-      person_descriptor_string = person_descriptor_string + get_place_or_person_string(result['person_descriptor_search'], person_descriptor_string)
+      person_role_string = person_role_string + get_place_or_person_string(result['person_role_new_tesim'], person_role_string)
+      person_descriptor_string = person_descriptor_string + get_place_or_person_string(result['person_descriptor_new_tesim'], person_descriptor_string)
       person_descriptor_as_written_string = person_descriptor_as_written_string + get_place_or_person_string(result['person_descriptor_as_written_tesim'], person_descriptor_as_written_string)
       person_note_string = person_note_string + get_place_or_person_string(result['person_note_tesim'], person_note_string)
     end
@@ -180,19 +293,23 @@ module Solr
   def get_element(input_array)
 
     str = ''
+    is_match = false
 
     if input_array != nil
       input_array.each do |t|
         if t.match(/#{@match_term}/i)
-          if str != '' then str = str + ', ' end
-          str = str + t
+          is_match = true
         end
+        if str != '' then str = str + ', ' end
+        str = str + t
       end
 
       # The following code highlights text which matches the search_term
       # It highlights all combinations, e.g. 'york', 'York', 'YORK'
-      if @search_term != ''
+      if is_match == true and @search_term != ''
         str = str.gsub(/#{@search_term}/i) {|sym| "<span class=\'highlight_text\'>#{sym}</span>" }
+      elsif is_match == false and @search_term != ''
+        str = ''
       end
 
     end

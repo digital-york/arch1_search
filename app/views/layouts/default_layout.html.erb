@@ -21,13 +21,9 @@
       <%= link_to 'Home', home_page_index_path %>
       <%= link_to 'Search', searches_path %>
       <%= link_to 'Browse', home_page_index_path %>
-      <%= link_to 'APIs', home_page_index_path %>
       <%= link_to 'About', home_page_index_path %>
     </div>
 
-    <div class="col-md-2" id="contact">
-      <%= link_to 'Contact', home_page_index_path %>
-    </div>
   </div>
 
   <%= form_tag searches_index_path, :method => 'get', :id => 'search_form', :onsubmit => 'return validate_search_field()' do |f| %>
