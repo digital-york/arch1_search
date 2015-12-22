@@ -1,0 +1,9 @@
+:terms:
+    - :id: http://fakeurl.me/certain
+      :term: certain
+    - :id: http://fakeurl.me/uncertain
+      :term: uncertain
+    - :id: http://fakeurl.me/inferred
+      :term: inferred
+    - :id: http://fakeurl.me/approximate
+      :term: approximate
