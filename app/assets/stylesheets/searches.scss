@@ -1,6 +1,6 @@
 /***** General styles *****/
 body {
-  font-family: 'open_sansregular', sans-serif !important;
+  font-family: Arial, Verdana;
 }
 
 a, a:visited, a:hover, a:focus {
@@ -194,7 +194,7 @@ ul {
 
 .panel-heading.collapse-toggle .panel-title:after {
   /* symbol for "opening" panels */
-  font-family: 'Glyphicons Halflings';
+  //font-family: 'Glyphicons Halflings';
   /* essential for enabling glyphicon */
   content: "\e114";
   /* adjust as needed, taken from bootstrap.css */
@@ -401,7 +401,7 @@ ul {
 }
 
 .tab1 th, .tab1 td {
-  padding: 5px 0px 5px 20px;
+  padding: 5px 10px 5px 10px;
   background-color: #f7f7f7;
   vertical-align: top;
   font-size: 1.3em;

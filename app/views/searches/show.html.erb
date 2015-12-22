@@ -88,9 +88,7 @@
         <% if @db_entry.continues_on != nil && @db_entry.continues_on != '' %>
             <tr>
               <th>Continues on next folio:</th>
-              <td>
-                <%= image_tag 'tick.png', class: 'tick_icon' %>
-              </td>
+              <td><span class="fa fa-check fa-lg"></span></td>
             </tr>
         <% end %>
 
