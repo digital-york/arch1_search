@@ -33,7 +33,7 @@
                       <span class="facet-label
                         <% if section_type_name == @section_type_facet then %>highlight_red
                         <% end %>">
-                        <%= link_to section_type_name, searches_path(:page => @page, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => section_type_name, :subject_facet => @subject_facet, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => @place_as_written_facet), :class => 'facet_select' %></a>
+                        <%= link_to section_type_name, searches_path(:page => 1, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => section_type_name, :subject_facet => @subject_facet, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => @place_as_written_facet), :class => 'facet_select' %></a>
                       </span>
                           <span class="facet-count"><%= section_type_count %></span>
                         </li>
@@ -60,7 +60,7 @@
                     <span class="facet-label
                       <% if subject_name == @subject_facet then %>highlight_red
                       <% end %>">
-                        <%= link_to subject_name, searches_path(:page => @page, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => @section_type_facet, :subject_facet => subject_name, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => @place_as_written_facet), :class => 'facet_select' %></a>
+                        <%= link_to subject_name, searches_path(:page => 1, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => @section_type_facet, :subject_facet => subject_name, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => @place_as_written_facet), :class => 'facet_select' %></a>
                     </span>
                           <span class="facet-count"><%= subject_count %></span>
                         </li>
@@ -87,7 +87,7 @@
                       <span class="facet-label
                         <% if place_as_written_name == @place_as_written_facet then %>highlight_red
                         <% end %>">
-                        <%= link_to place_as_written_name, searches_path(:page => @page, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => place_as_written_name), :class => 'facet_select' %></a>
+                        <%= link_to place_as_written_name, searches_path(:page => 1, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_as_written_facet => @person_as_written_facet, :place_as_written_facet => place_as_written_name), :class => 'facet_select' %></a>
                       </span>
                           <span class="facet-count"><%= place_count %></span>
                         </li>
@@ -114,7 +114,7 @@
                   <span class="facet-label
                     <% if person_as_written_name == @person_as_written_facet then %>highlight_red
                     <% end %>">
-                    <%= link_to person_as_written_name, searches_path(:page => @page, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_as_written_facet => person_as_written_name, :place_as_written_facet => @place_as_written_facet), :class => 'facet_select' %></a>
+                    <%= link_to person_as_written_name, searches_path(:page => 1, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_as_written_facet => person_as_written_name, :place_as_written_facet => @place_as_written_facet), :class => 'facet_select' %></a>
                   </span>
                           <span class="facet-count"><%= person_as_written_count %></span>
                         </li>
