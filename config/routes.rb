@@ -20,8 +20,12 @@ Rails.application.routes.draw do
   get 'index2' => 'searches#index2'
 
   # added (ja)
-  get 'browse/registers'
   get 'browse/index'
+  get 'browse/registers'
+  get 'browse/people'
+  get 'browse/places'
+  get 'browse/groups'
+  get 'browse/subjects'
   get 'about/index'
   get 'browse' => 'browse#index'
   get 'about' => 'about#index'

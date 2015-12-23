@@ -3,26 +3,34 @@
     <div class="col-md-8">
 
         <% if params['register_id'].nil? or params['register_id'] == '' %>
-            <h1>Browse Registers</h1>
+            <h1>Browse Registers<span style="float: right">
+                <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
+            </span></h1>
+
             <%
                @coll_list.each_with_index do |p, i| %>
-                <div>
+                <div class="col-md-12">
                     <h2><%= p[1][0] %></h2>
                     <% get_registers_in_order(p[0]).each_with_index do |pair, index|
                       # Add a new row to the table if there are more than 5 registers
-                      #if index.modulo(5).zero?        %>
+                    %>
                         <div class="col-md-3 registers-grid">
                             <%= link_to browse_registers_path(register_id: pair[0]) do %>
-                                <%= image_tag get_thumb(pair[0]), size: "200" %>
+                                <%= image_tag get_thumb(pair[0]) %>
                             <% end %>
                             <br/>
-                            <strong><%= pair[1][0] %></strong></a>
+                            <p width="100%"><strong><%= pair[1][0] %></strong>
                             <br/>
-                            <%= pair[1][1] %>
+                            <%= pair[1][1] %></p>
                         </div>
+                        <% num = index + 1
+                           if num.modulo(4).zero? %>
+                            </div>
+                            <div style="clear: both;"></div>
+                            <div class="col-md-12">
+                        <% end %>
                     <%
-                       #   end
-                       end %>
+                    end %>
                 </div>
                 <div style="clear: both;"></div>
             <% end

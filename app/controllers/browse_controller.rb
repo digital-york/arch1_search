@@ -66,6 +66,26 @@ class BrowseController < ApplicationController
     end
   end
 
+  # browse/people
+  def people
+
+  end
+
+  # browse/groups
+  def groups
+
+  end
+
+  # browse/places
+  def places
+
+  end
+
+  # browse/subjects
+  def subjects
+
+  end
+
   def reset_session_variables
     session[:folio] = nil
     session[:folio_id] = nil
