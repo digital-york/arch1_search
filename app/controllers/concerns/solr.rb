@@ -14,7 +14,7 @@ module Solr
       person_as_written_word_array = []
       place_as_written_word_array = []
 
-      search_term2 = @search_term.downcase.gsub(/ /, '?')
+      search_term2 = @search_term.downcase.gsub(/ /, '*')
 
       # Get the matching entry ids (from the entries)
       q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
@@ -358,7 +358,7 @@ module Solr
 
   end
 
-  # Helper method to check if terms match the search term and if so, whether to put a comma infront of it
+  # Helper method to check if terms match the search term and if so, whether to put a comma in front of it
   # i.e. this is required if it is not the first term in the string
   def get_element(input_array)
 
@@ -379,9 +379,13 @@ module Solr
         end
 
         # The following code highlights text which matches the search_term
-        # It highlights all combinations, e.g. 'york', 'York', 'YORK'
+        # It highlights all combinations, e.g. 'york', 'York', 'YORK', 'paul young', 'paul g', etc
         if is_match == true and @search_term != ''
-          str = str.gsub(/#{@search_term}/i) { |sym| "<span class=\'highlight_text\'>#{sym}</span>" }
+          # Replace all spaces with '.*' so that it searches for all characters in between text, e.g. 'paul y' will find 'paul young'
+          temp = @search_term.gsub(/\s+/, '.*');
+          str = str.gsub(/#{temp}/i) do |term|
+            "<span class=\'highlight_text\'>#{term}</span>"
+          end
         elsif is_match == false and @search_term != ''
           str = ''
         end

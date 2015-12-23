@@ -36,21 +36,22 @@
     <div class="col-md-8">
 
 
-              <%# is_home_page is defined in 'home_page_controller.rb'' %>
-              <%
-                search_margin_top = '35px'
-                if @is_home_page == true then search_margin_top = '150px' end
-              %>
+      <%# is_home_page is defined in 'home_page_controller.rb'' %>
+      <%
+         search_margin_top = '35px'
+         if @is_home_page == true then
+           search_margin_top = '150px'
+         end
+      %>
 
-              <div class="input-group search-input-group" style="margin-top: <%= search_margin_top %>">
+      <div class="input-group search-input-group" style="margin-top: <%= search_margin_top %>">
 
-                <%= text_field_tag 'search_term', @search_term, :class => 'form-control', :id => 'search_box', :placeholder => 'Search the registers...' %>
+        <%= text_field_tag 'search_term', @search_term, :class => 'form-control', :id => 'search_box', :placeholder => 'Search the registers...' %>
 
-                <button type="submit" class="btn go_button">
-                  <span class="go_text">Go</span>
-                </button>
-              </div>
-
+        <button type="submit" class="btn go_button">
+          <span class="go_text">Go</span>
+        </button>
+      </div>
 
     </div>
   </div>
@@ -69,7 +70,7 @@
       <!--<a href="http://www.marcfitchfund.org.uk/" target="_blank"><%#= image_tag 'fitch_fund.gif', :class => 'footer_logo', :style => 'width: 120px' %></a>-->
       <a href="#"><%= image_tag 'arch_logo.jpg', :class => 'footer_logo', :style => 'width: 140px' %></a>
       <a href="https://mellon.org/" target="_blank"><%= image_tag 'mellon_logo.svg', :class => 'footer_logo', :style => 'width: 160px' %></a>
-      <a href="http://http://www.york.ac.uk/" target="_blank"><%= image_tag 'york_logo.gif', :class => 'footer_logo', :style => 'width: 180px' %></a>
+      <a href="http://www.york.ac.uk/" target="_blank"><%= image_tag 'york_logo.gif', :class => 'footer_logo', :style => 'width: 180px' %></a>
     </div>
 
     <div class="col-md-2"></div>
