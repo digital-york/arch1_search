@@ -16,7 +16,7 @@ class GroupTerms
   def all
     #sort_order = 'preflabel_si asc'
     #parse_authority_response(SolrQuery.new.solr_query(q='inScheme_ssim:"' + terms_id + '"',fl='',rows=1000,sort=sort_order))
-    ['not supported']
+    ['terms is not supported; use search or show']
   end
 
   def find id

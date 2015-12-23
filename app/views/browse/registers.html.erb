@@ -1,46 +1,80 @@
-
 <div class="row">
     <div class="col-md-2"></div>
     <div class="col-md-8">
 
-    <% if params['register_id'].nil? or params['register_id'] == '' %>
-        <h1>Browse Registers</h1>
-        <%
-           @coll_list.each_with_index do |p, i| %>
-             <div>
-                <h2><%=p[1][0]%></h2>
-                <% get_registers_in_order(p[0]).each_with_index do |pair, index|
-                 # Add a new row to the table if there are more than 5 registers
-                 #if index.modulo(5).zero? %>
-                    <div class="col-md-3">
-                        <a href="/browse/register?register_id=<%= pair[0] %>&amp;register_name=<%=pair[1][0] %>"><%= image_tag get_thumb(pair[0]) %>
-                        <br/>
-                        <strong><%= pair[1][0] %></strong></a>
-                        <br/>
-                        <%= pair[1][1] %>
-                    </div>
-                  <%
-                  #   end
-                  end %>
-             </div><div style="clear: both;"></div>
+        <% if params['register_id'].nil? or params['register_id'] == '' %>
+            <h1>Browse Registers</h1>
+            <%
+               @coll_list.each_with_index do |p, i| %>
+                <div>
+                    <h2><%= p[1][0] %></h2>
+                    <% get_registers_in_order(p[0]).each_with_index do |pair, index|
+                      # Add a new row to the table if there are more than 5 registers
+                      #if index.modulo(5).zero?        %>
+                        <div class="col-md-3 registers-grid">
+                            <%= link_to browse_registers_path(register_id: pair[0]) do %>
+                                <%= image_tag get_thumb(pair[0]), size: "200" %>
+                            <% end %>
+                            <br/>
+                            <strong><%= pair[1][0] %></strong></a>
+                            <br/>
+                            <%= pair[1][1] %>
+                        </div>
+                    <%
+                       #   end
+                       end %>
+                </div>
+                <div style="clear: both;"></div>
             <% end
-         %>
-    </div>
-    <div class="col-md-2"></div>
-    <% else %>
-    <div class="col-md-8">
-        <h1><%=params['register_name']%></h1>
-        <p>add a back button and sort this out!</p>
+            %>
 
-        <%= openseadragon_picture_tag ['http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=/usr/digilib-webdocs/digilibImages/HOA/current/A/20151206/Abp_Reg_03_0055.jp2.dzi','http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?IIIF=/usr/digilib-webdocs/digilibImages/HOA/current/A/20151206/Abp_Reg_03_0055.jp2/info.json'], {data: { openseadragon: { sequenceMode: true }}}
-        %>
-        <div id="html-overlay" style='color: white'>
+        <% else %>
+            <h1><%= session['register_name'] %></h1>
             <br />
-            <h2>Folio xxx</h2>
-            <p>some other info</p></div>
+            <span style="float: right"><%= link_to '', browse_registers_path, class: 'fa fa-chevron-circle-left fa-2x' %>
+                    </span>
+                <span>&lt;&nbsp;
+                    <% if session[:first_folio_id] == session[:folio_id] %>
+                    <strong style="color: lightgray">Previous</strong>
+                    <% else %>
+                    <%= link_to 'Previous', browse_registers_path(register_id: session['register_id'], folio: session['folio'].to_i - 1) %>
+                    <% end %>
+                    |
+                    <% if session[:last_folio_id] == session[:folio_id] %>
+                    <strong style="color: lightgray">Next</strong>
+                    <% else %>
+                    <%= link_to 'Next', browse_registers_path(register_id: session['register_id'], folio: session['folio'].to_i + 1) %>
+                    <% end %>
+                    &nbsp;&gt;
+                    &nbsp; <%= session[:folio].to_i %> of <%= session[:length] %>
+                    </span>
+
+            <! -- I have no idea why the following is working, but it is! -->
+                <%= form_tag(controller: 'browse', action: 'registers', method: 'get', id: 'choose_folio') do %>
+                <strong style="margin-left: 20px">Current Folio</strong>:
+                    <%= select_tag 'folio', options_for_select(@folio_list, session[:folio]), :class => 'choose_folio' %>
+                <% end %>
+            <form name="myForm" id="choose_folio" method="get" action="/browse/registers">
+                <%= hidden_field_tag(:register_id, session[:register_id]) %>
+            </form>
+
+            <br/>
+
+            <% tile_sources = get_tile_sources_for_folio(session['folio_id']) %>
+            <% unless session[:alt].nil? %>
+                <p>Click on the arrow below to see an UV image of this folio.</p>
+            <% end %>
+
+            <% unless session[:entries_exist].nil? %>
+                <p>Entries on this folio have been indexed. View <%= link_to 'Entries', '#entries' %> at the bottom of this page.</p>
+            <% end %>
+            <div>
+                <%= openseadragon_picture_tag tile_sources %>
+            </div>
+
+            <%= render 'entries' %>
+        <% end %>
+
     </div>
-
-    <% end %>
-
     <div class="col-md-2"></div>
 </div>

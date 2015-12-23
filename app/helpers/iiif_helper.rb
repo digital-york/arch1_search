@@ -56,11 +56,4 @@ module IiifHelper
     end
     manifest
   end
-
-  def get_tile_sources(pid)
-
-    tile_sources = ['http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=/usr/digilib-webdocs/digilibImages/HOA/current/A/20151206/Abp_Reg_03_0055.jp2.dzi'], { data: { openseadragon: { preserveViewport: true, visibilityRatio: 1, overlays: [ {  py: 0, width: 6425,height: 8535, id: 'html-overlay'} ] }}}
-    tile_sources
-  end
-
 end
