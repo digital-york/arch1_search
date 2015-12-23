@@ -27,7 +27,7 @@ module Solr
 
       # Get the matching entry ids (from the people)
       q = "has_model_ssim:RelatedAgent AND (person_as_written_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_as_written_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
-
+      puts q
       SolrQuery.new.solr_query(q, "relatedAgentFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
         result['relatedAgentFor_ssim'].each do |related_agent|
           # Check that the relatedAgentFor_ssim is an Entry (as can be a RelatedAgent)
