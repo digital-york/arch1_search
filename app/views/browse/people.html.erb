@@ -6,8 +6,72 @@
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span></h1>
 
-        <p><%=@search_array %></p>
+        <p>
+            <% ('a'..'z').to_a.each do |l| %>
+                <% if l != 'z' %>
+                    <%=link_to l.upcase, browse_people_path(:letter => l.upcase) %> |
+                <% else %>
+                    <%=link_to l.upcase, browse_people_path(:letter => l.upcase) %> |
+                    <%=link_to 'All', browse_people_path %>
+                <% end %>
+            <% end %>
+        </p>
+        <% unless session[:letter].nil? %>
+            <p>Searching for terms beginning with <strong><%= session[:letter] %></strong></p>
+        <% end %>
 
+        <table class="vocabs-table auths-table">
+            <% @search_array.each do |person| %>
+                <tr>
+                    <td><%= link_to person['label'], searches_path(:search_term => person['label']) %></td>
+                    <td>
+                        <%= button_tag 'Show | Hide Details', :type => 'button', :class => 'show_hide' %>
+                        <div class="tog" style="display: none">
+                            <% unless person['family'].nil? %>
+                                <br/><strong>Family Name:</strong> <%= person['family'] %>
+                            <% end
+                               unless person['pre_title'].nil? %>
+                                <br/><strong>Pre-Title:</strong> <%= person['pre_title'] %>
+                            <% end
+                               unless person['given'].nil? %>
+                                <br/><strong>Given Name:</strong> <%= person['given'] %>
+                            <% end
+                               unless person['dates'].nil? %>
+                                <br/><strong>Dates:</strong> <%= person['dates'] %>
+                            <% end
+                               unless person['dates_of_office'].nil? %>
+                                <br/><strong>Dates of Office:</strong> <%= person['dates_of_office'] %>
+                            <% end
+                               unless person['epithet'].nil? %>
+                                <br/><strong>Epithet:</strong> <%= person['epithet'] %>
+                            <% end
+                               unless person['post_title'].nil? %>
+                                <br/><strong>Title:</strong> <%= person['post_title'] %>
+                            <% end
+                               unless person['variants'].nil? %>
+                                <br/><strong>Variants:</strong>
+                                <% person['variants'].each do |p| %>
+                                    <%= p %>;&nbsp;
+                                <% end %>
+                            <% end
+                               unless person['note'].nil? %>
+                                <br/><strong>Note:</strong> <%= person['note'] %>
+                            <% end
+                               unless person['related_authority'].nil? %>
+                                <br/><strong>Related Authority:</strong> <br />
+                                <% person['related_authority'].each do |p| %>
+                                    <% if p.starts_with? 'http' %>
+                                        <%= link_to p, p %><br />
+                                    <% else %>
+                                    <%= p %>
+                                    <% end %>
+                                <% end %>
+                            <% end %>
+                        </div>
+                    </td>
+                </tr>
+            <% end %>
+        </table>
 
     </div>
     <div class="col-md-2"></div>

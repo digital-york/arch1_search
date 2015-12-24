@@ -49,7 +49,11 @@ class PersonTerms
         'given' => if result['given_tesim'] then result['given_tesim'].join end,
         'dates' => if result['dates_tesim'] then result['dates_tesim'].join end,
         'epithet' => if result['epithet_tesim'] then result['epithet_tesim'].join end,
-        'post_title' => if result['post_preflabel_tesim'] then result['post_preflabel_tesim'].join end
+        'post_title' => if result['post_preflabel_tesim'] then result['post_preflabel_tesim'].join end,
+        'dates_of_office' => if result['dates_of_office_tesim'] then result['dates_of_office_tesim'].join end,
+        'note' => if result['note_tesim'] then result['note_tesim'].join end,
+        'related_authority' => if result['related_authority_tesim'] then result['related_authority_tesim'] end,
+        'variants' => if result['altlabel_tesim'] then result['altlabel_tesim'] end
                           }
     end
   end

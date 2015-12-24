@@ -68,22 +68,65 @@ class BrowseController < ApplicationController
 
   # browse/people
   def people
+    reset_session_variables
     @search_array = PersonTerms.new('subauthority').internal_all
+    # Limit by alphabet
+    unless params['letter'].nil? or params['letter'] =='All' or params['letter'].size() != 1
+      unless params['letter'] =='All'
+        session[:letter] = params['letter']
+      end
+      arr = []
+      @search_array.each do | alpha |
+        if alpha['label'][0].downcase == params['letter'].downcase
+          arr << alpha
+        end
+      end
+      @search_array = arr
+    end
   end
 
   # browse/groups
   def groups
+    reset_session_variables
     @search_array = GroupTerms.new('subauthority').internal_all
+    # Limit by alphabet
+    unless params['letter'].nil? or params['letter'] =='All' or params['letter'].size() != 1
+      unless params['letter'] =='All'
+        session[:letter] = params['letter']
+      end
+      arr = []
+      @search_array.each do | alpha |
+        if alpha['label'][0].downcase == params['letter'].downcase
+          arr << alpha
+        end
+      end
+      @search_array = arr
+    end
   end
 
   # browse/places
   def places
+    reset_session_variables
     @search_array = PlaceTerms.new('subauthority').internal_all
+    # Limit by alphabet
+    unless params['letter'].nil? or params['letter'] =='All' or params['letter'].size() != 1
+      unless params['letter'] =='All'
+        session[:letter] = params['letter']
+      end
+      arr = []
+      @search_array.each do | alpha |
+        if alpha['label'][0].downcase == params['letter'].downcase
+          arr << alpha
+        end
+      end
+      @search_array = arr
+    end
   end
 
   # browse/subjects
   def subjects
-
+    # Get the top-level list (this is a hash which contains the 2nd level and 3rd level lists)
+    @top_level_list = SubjectTerms.new('subauthority').get_subject_list_top_level
   end
 
   def reset_session_variables
@@ -95,6 +138,7 @@ class BrowseController < ApplicationController
     session[:register_name] = nil
     session[:alt] = nil
     session[:entries_exist] = nil
+    session[:letter] = nil
   end
 
   #whitelist params

@@ -7,10 +7,60 @@
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span>
         </h1>
+        <p>
+        <% ('a'..'z').to_a.each do |l| %>
+          <% if l != 'z' %>
+                <%=link_to l.upcase, browse_groups_path(:letter => l.upcase) %> |
+            <% else %>
+                <%=link_to l.upcase, browse_groups_path(:letter => l.upcase) %> |
+                <%=link_to 'All', browse_groups_path %>
+            <% end %>
+        <% end %>
+        </p>
+        <% unless session[:letter].nil? %>
+        <p>Searching for terms beginning with <strong><%= session[:letter] %></strong></p>
+        <% end %>
 
-        <p><%= @search_array %></p>
-
-        <p><%= link_to 'Search', searches_path(:search_term => 'Kettleby') %></p>
+        <table class="vocabs-table auths-table">
+            <% @search_array.each do |group| %>
+                <tr>
+                    <td><%= link_to group['label'], searches_path(:search_term => group['label']) %></td>
+                    <td>
+                        <%= button_tag 'Show | Hide Details', :type => 'button', :class => 'show_hide' %>
+                        <div class="tog" style="display: none">
+                            <% unless group['name'].nil? %>
+                                <br/><strong>Name:</strong> <%= group['name'] %>
+                            <% end
+                               unless group['dates'].nil? %>
+                                <br/><strong>Dates:</strong> <%= group['dates'] %>
+                            <% end
+                               unless group['qualifier'].nil? %>
+                                <br/><strong>Qualifier:</strong> <%= group['qualifier'] %>
+                            <% end
+                               unless group['variants'].nil? %>
+                                <br/><strong>Variants:</strong>
+                                <% group['variants'].each do |p| %>
+                                    <%= p %>;&nbsp;
+                                <% end %>
+                            <% end
+                               unless group['note'].nil? %>
+                                <br/><strong>Note:</strong> <%= group['note'] %>
+                            <% end
+                               unless group['related_authority'].nil? %>
+                                <br/><strong>Related Authority:</strong> <br />
+                                <% group['related_authority'].each do |p| %>
+                                    <% if p.starts_with? 'http' %>
+                                        <%= link_to p, p %><br />
+                                    <% else %>
+                                        <%= p %>
+                                    <% end %>
+                                <% end %>
+                            <% end %>
+                        </div>
+                    </td>
+                </tr>
+            <% end %>
+        </table>
 
     </div>
     <div class="col-md-2"></div>

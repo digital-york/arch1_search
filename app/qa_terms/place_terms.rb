@@ -52,8 +52,11 @@ class PlaceTerms
         'parentADM2' => if result['parent_ADM2_tesim'] then result['parent_ADM2_tesim'].join end,
         'parentADM3' => if result['parent_ADM3_tesim'] then result['parent_ADM3_tesim'].join end,
         'parentADM4' => if result['parent_ADM4_tesim'] then result['parent_ADM4_tesim'].join end,
-        'place name' => if result['place_name_tesim'] then result['place_name_tesim'].join end,
-        'featuretype' => if result['feature_code_tesim'] then result['feature_code_tesim'].join end
+        'place_name' => if result['place_name_tesim'] then result['place_name_tesim'].join end,
+        'featuretype' => if result['feature_code_tesim'] then result['feature_code_tesim'] end,
+        'note' => if result['note_tesim'] then result['note_tesim'].join end,
+        'related_authority' => if result['related_authority_tesim'] then result['related_authority_tesim'] end,
+        'variants' => if result['altlabel_tesim'] then result['altlabel_tesim'] end
       }
     end
   end
