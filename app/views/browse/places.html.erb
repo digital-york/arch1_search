@@ -1,0 +1,83 @@
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+
+            <h1>Browse Places<span style="float: right">
+                <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
+            </span></h1>
+
+        <p>
+            <% ('a'..'z').to_a.each do |l| %>
+                <% if l != 'z' %>
+                    <%=link_to l.upcase, browse_places_path(:letter => l.upcase) %> |
+                <% else %>
+                    <%=link_to l.upcase, browse_places_path(:letter => l.upcase) %> |
+                    <%=link_to 'All', browse_places_path %>
+                <% end %>
+            <% end %>
+        </p>
+        <% unless session[:letter].nil? %>
+            <p>Searching for terms beginning with <strong><%= session[:letter] %></strong></p>
+        <% end %>
+
+        <table class="vocabs-table auths-table">
+            <% @search_array.each do |place| %>
+                <tr>
+                    <td><%= link_to place['label'], searches_path(:search_term => place['label']) %></td>
+                    <td>
+                        <%= button_tag 'Show | Hide Details', :type => 'button', :class => 'show_hide' %>
+                        <div class="tog" style="display: none">
+                            <% unless place['place_name'].nil? %>
+                                <br/><strong>Place Name:</strong> <%= place['place_name'] %>
+                            <% end
+                               unless place['parentADM4'].nil? %>
+                                <br /><strong>Within:</strong> <%= place['parentADM4'] %>
+                            <% end
+                               unless place['parentADM3'].nil? %>
+                                <br /><strong>Within:</strong> <%= place['parentADM3'] %>
+                            <% end
+                               unless place['parentADM2'].nil? %>
+                                <br /><strong>Within:</strong> <%= place['parentADM2'] %>
+                            <% end
+                               unless place['parentADM1'].nil? %>
+                                <br /><strong>Within:</strong> <%= place['parentADM1'] %>
+                            <% end
+                               unless place['countrycode'].nil? %>
+                                <br /><strong>Country:</strong> <%= place['countrycode'] %>
+                            <% end
+                               unless place['featuretype'].nil? %>
+                                <br/><strong>Place Type:</strong>
+                                <% place['featuretype'].each do |p| %>
+                                    <%= p %>;&nbsp;
+                                    <% end %>
+                            <% end
+                               unless place['variants'].nil? %>
+                                <br/><strong>Variants:</strong>
+                                <% place['variants'].each do |p| %>
+                                    <%= p %>;&nbsp;
+                                <% end %>
+                            <% end
+                               unless place['note'].nil? %>
+                                <br/><strong>Note:</strong> <%= place['note'] %>
+                            <% end
+                               unless place['related_authority'].nil? %>
+                                <br/><strong>Related Authority:</strong> <br />
+                                <% place['related_authority'].each do |p| %>
+                                    <% if p.starts_with? 'http' %>
+                                        <%= link_to p, p %><br />
+                                    <% else %>
+                                        <%= p %>
+                                    <% end %>
+                                <% end %>
+                            <% end %>
+                        </div>
+                    </td>
+                    </td>
+
+                </tr>
+            <% end %>
+        </table>
+
+    </div>
+    <div class="col-md-2"></div>
+</div>

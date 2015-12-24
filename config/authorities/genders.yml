@@ -1,0 +1,7 @@
+:terms:
+    - :id: http://fakeurl.me/female
+      :term: female
+    - :id: http://fakeurl.me/male
+      :term: male
+    - :id: http://fakeurl.me/unknown
+      :term: unknown

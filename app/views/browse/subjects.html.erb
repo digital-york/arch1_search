@@ -1,0 +1,51 @@
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+
+            <h1>Browse Subjects<span style="float: right">
+                <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
+            </span></h1>
+
+        <table class="vocabs-table auths-table">
+            <% @top_level_list.each do |subject| %>
+                <tr style="width: 100%">
+                    <td><%= link_to subject['label'], searches_path(:search_term => subject['label']) %>
+
+                        <% unless subject['definition'].nil? %>
+                            -- <strong>Definition:</strong> <%= subject['definition'] %>
+                        <% end
+                           unless subject['alt_labels'].nil? %>
+                             -- <strong>Use For:</strong>
+                            <% subject['alt_labels'].each do |p| %>
+                                <%= p %>;&nbsp;
+                            <% end %>
+                        <% end %>
+
+                        <% unless subject[:elements].nil? %>
+                            <br /><br /><%= button_tag 'Sub-headings', :type => 'button', :class => 'show_hide' %>
+                            <ul class="tog" style="display: none">
+                            <% subject[:elements].each do |p| %>
+                                <li><%= link_to p['label'], searches_path(:search_term => p['label']) %>
+                                    <% unless p['definition'].nil? %>
+                                        -- <strong>Definition:</strong> <%= p['definition'] %>
+                                    <% end
+                                       unless p['alt_labels'].nil? %>
+                                        -- <strong>Use For:</strong>
+                                        <% p['alt_labels'].each do |p| %>
+                                            <%= p %>;&nbsp;
+                                        <% end %>
+                                    <% end %>
+                                </li>
+                            <% end %>
+                            </ul>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </table>
+
+
+
+    </div>
+    <div class="col-md-2"></div>
+</div>

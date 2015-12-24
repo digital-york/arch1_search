@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount Qa::Engine => '/qa'
+
 
   get 'searches/index'
   #get 'searches/new'
@@ -16,6 +18,17 @@ Rails.application.routes.draw do
   get 'image_zoom_large' => 'image_zoom_large#index'
 
   get 'index2' => 'searches#index2'
+
+  # added (ja)
+  get 'browse/index'
+  get 'browse/registers'
+  get 'browse/people'
+  get 'browse/places'
+  get 'browse/groups'
+  get 'browse/subjects'
+  get 'about/index'
+  get 'browse' => 'browse#index'
+  get 'about' => 'about#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
