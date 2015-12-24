@@ -21,7 +21,7 @@ class TermsBase
   end
 
   def find id
-    parse_authority_response(SolrQuery.new.solr_query(q='inScheme_ssim:"' + terms_id + '" AND id:"' + id + '"',fl='id,preflabel_tesim,definition_tesim,broader_tesim'))
+    parse_authority_response(SolrQuery.new.solr_query(q='inScheme_ssim:"' + terms_id + '" AND id:"' + id + '"',fl='id,preflabel_tesim,definition_tesim,broader_tesim','',1))
   end
 
   def find_id val

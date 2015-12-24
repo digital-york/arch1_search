@@ -2,10 +2,15 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
 
-            <h1>Browse Groups<span style="float: right">
+        <h1>Browse Groups
+            <span style="float: right">
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
-            </span></h1>
+            </span>
+        </h1>
 
+        <p><%= @search_array %></p>
+
+        <p><%= link_to 'Search', searches_path(:search_term => 'Kettleby') %></p>
 
     </div>
     <div class="col-md-2"></div>

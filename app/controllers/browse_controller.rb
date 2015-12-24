@@ -68,17 +68,17 @@ class BrowseController < ApplicationController
 
   # browse/people
   def people
-
+    @search_array = PersonTerms.new('subauthority').internal_all
   end
 
   # browse/groups
   def groups
-
+    @search_array = GroupTerms.new('subauthority').internal_all
   end
 
   # browse/places
   def places
-
+    @search_array = PlaceTerms.new('subauthority').internal_all
   end
 
   # browse/subjects
