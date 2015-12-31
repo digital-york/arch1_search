@@ -17,6 +17,10 @@ class SearchesController < ApplicationController
       @display_type = params[:display_type]
       @number_of_rows = 0
 
+      if @display_type == nil
+        @display_type = 'full display'
+      end
+
       # This is how many characters need to be added before the search will work
       # Is turned off at the moment
       @minimum_search_chars = 3
@@ -39,7 +43,8 @@ class SearchesController < ApplicationController
 
       # Check if there are less than minimum_search_chars entered into the search box
       # Note that this is for the server-side check and shouldn't happen in normal circumstances because there is a javascript check -->
-      if @search_term != '*' && @search_term.length < @minimum_search_chars
+      # Note that 'NO_SEARCH' is passed from the 'Search' link on the menu - i.e. don't search when coming from this link
+      if @search_term != 'NO_SEARCH' and @search_term != '*' and @search_term.length < @minimum_search_chars
         @error = true
         @page = 1
 
@@ -64,6 +69,9 @@ class SearchesController < ApplicationController
 
         # Set arrays which display data on the page
         set_search_result_arrays
+
+        # If we come to this page from the 'Search' menu link, make sure to remove the search temr otherisw it appears in the search box
+        if @search_term == 'NO_SEARCH' then @search_term = '' end
       end
 
     rescue => error

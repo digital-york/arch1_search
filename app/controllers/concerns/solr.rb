@@ -189,7 +189,7 @@ module Solr
 
         SolrQuery.new.solr_query(q, fl, 1)['response']['docs'].map do |result|
 
-          # Decide what things to display according to the display_type
+          # Display all the text if not 'matched records'
           @match_term = @search_term
           if @match_term == '' || @display_type == 'full display' || @display_type == 'summary' then
             @match_term = '.*'
