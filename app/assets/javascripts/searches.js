@@ -20,8 +20,8 @@ function validate_search_field() {
 
     var search_value = document.forms["search_form"]["search_box"].value;
 
-    if (search_value != '*' && search_value.length < 0) {
-        alert("Please enter two or more characters into the search box");
+    if (search_value != '*' && search_value.length < 3) {
+        alert("Please enter three or more characters into the search box");
         return false;
     }
 }

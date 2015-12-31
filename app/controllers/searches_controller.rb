@@ -19,7 +19,7 @@ class SearchesController < ApplicationController
 
       # This is how many characters need to be added before the search will work
       # Is turned off at the moment
-      @minimum_search_chars = 0
+      @minimum_search_chars = 3
 
       if @search_term == nil then @search_term = '' end
 
@@ -37,7 +37,7 @@ class SearchesController < ApplicationController
       @place_as_written_facet_array = []
       @subject_facet_array = []
 
-      # Check if there are less than two characters entered into the search box
+      # Check if there are less than minimum_search_chars entered into the search box
       # Note that this is for the server-side check and shouldn't happen in normal circumstances because there is a javascript check -->
       if @search_term != '*' && @search_term.length < @minimum_search_chars
         @error = true

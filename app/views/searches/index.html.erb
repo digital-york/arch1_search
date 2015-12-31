@@ -162,11 +162,11 @@
          end_index = total_page_rows + @partial_list_array.size
       %>
 
-      <!-- Warn user if there are less than two characters entered into the search box -->
+      <!-- Warn user if there are less than three characters entered into the search box -->
       <!-- Note that this is for the server-side check and shouldn't happen in normal circumstances because there is a javascript check -->
       <% if @error == true %>
           <div class="alert alert-danger">
-            <strong>Please enter two or more characters into the search box</strong>
+            <strong>Please enter three or more characters into the search box</strong>
           </div>
       <% elsif @number_of_rows == 0 %>
           <div class="alert alert-info">
