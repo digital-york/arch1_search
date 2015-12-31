@@ -1,7 +1,9 @@
+<%# Display OpenSeadragon image here %>
 <div id="location1" style="background-color: black"></div>
 
 <div style="clear: both"></div>
 
+<%# Display links to large image zom %>
 <div id="image_footer" style="text-align: center">
   <em><%= link_to 'Click here to enlarge', '#', :onclick => "popup('/image_zoom_large', '" + @folio_id + "'); return false" %></em>:
   <a href='#' onclick="popup('/image_zoom_large', '<%= @folio_id %>'); return false" title="Click here to enlarge"><span class='fa fa-search-plus fa-2x mag_icon'></span></a>
@@ -9,6 +11,7 @@
 
 <div style="clear: both"></div>
 
+<%# Display OpenSeadragon image at 'location1' above  %>
 <script type="text/javascript">
     var viewer = OpenSeadragon({
         id: "location1",

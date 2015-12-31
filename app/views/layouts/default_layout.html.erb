@@ -12,6 +12,7 @@
 
 <div class="container-fluid">
 
+  <%# Display the top menu including the links %>
   <div id="top_menu" class="row">
 
     <div class="col-md-2"></div>
@@ -25,10 +26,10 @@
 
   </div>
 
+  <%# Display the search box %>
   <%= form_tag searches_index_path, :method => 'get', :id => 'search_form', :onsubmit => 'return validate_search_field()' do |f| %>
 
-
-  <%# is_home_page is defined in 'home_page_controller.rb'' %>
+  <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the size of the background image here %>
   <div class="row" <% if @is_home_page == true then %>id="search_row_home"<% else %>id="search_row_default"<% end %>>
 
     <div class="col-md-4" style="padding-left: 0px"></div>
@@ -36,7 +37,7 @@
     <div class="col-md-8">
 
 
-      <%# is_home_page is defined in 'home_page_controller.rb'' %>
+      <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the margin_top height here %>
       <%
          search_margin_top = '35px'
          if @is_home_page == true then
@@ -56,12 +57,14 @@
     </div>
   </div>
 
+  <%# Display main code %>
   <%= yield %>
 
   <% end %>
 
   <hr style="margin: 20px 0px"/>
 
+  <%# Display footer logos %>
   <div id="footer" class="row">
 
     <div class="col-md-2"></div>

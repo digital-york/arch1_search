@@ -5,6 +5,7 @@
   <div class="col-md-3">
   </div>
 
+  <%# Display the folio title and the 'go back' arrow %>
   <div class="col-md-5" id="folio_title">
     <%= @folio_title %>&nbsp;
     <a href="<%= searches_path(:search_term => @search_term, :page => @page) %>" title="Return to search results"><span class="fa fa-chevron-circle-left fa-1x"></span></a></a>
@@ -18,6 +19,7 @@
 
   <div class="col-md-1"></div>
 
+  <%# Display the small image zoom %>
   <div class="col-md-3" id="image_frame">
     <%= render 'image_zoom_small' %>
   </div>
@@ -49,6 +51,8 @@
             </ul>
           </th>
         </tr>
+
+        <%# Display entry data %>
 
         <%# Entry No %>
         <tr>
