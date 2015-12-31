@@ -1,0 +1,61 @@
+// Place all the styles related to the browse controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+// added (ja)
+
+.openseadragon-viewer {
+  background-color: black !important;
+}
+
+.vocabs-table {
+  margin-top: 20px;
+  width: 80%;
+  color: #333333;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.vocabs-table th {
+  background-color: #f5f5f5;
+  padding: 9.5px;
+  border: 1px solid #ccc;
+}
+
+.vocabs-table td {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 9.5px;
+}
+
+.registers-grid {
+  margin-top: 2%;
+}
+
+.registers-grid img {
+  width: 100%;
+  max-width: 200px;
+}
+
+.auths-table {
+  width: 100% !important;
+}
+
+.auths-table td {
+  width: 50%;
+  word-wrap: break-word;
+}
+.auths-table a {
+  text-decoration: underline;
+}
+
+h1 {
+  color: #3e1c52 !important;
+  font-size: 2em !important;
+  font-weight: bolder !important;
+}
+
+h2 {
+  color: #3e1c52 !important;
+  font-size: 1.6em !important;
+  font-weight: bolder !important;
+}

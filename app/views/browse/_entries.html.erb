@@ -1,0 +1,392 @@
+<% unless session[:entries_exist].nil? %>
+    <a id="entries"></a>
+    <h2>Entries</h2>
+
+
+    <div class='tab1'>
+
+        <table>
+
+            <%# Display tabs for entries %>
+            <tr>
+                <th colspan='2' id='entry_menu' style="background-color: grey">
+                    <ul>
+                        <li style="margin-left: 2px"></li>
+                        <% @entry_list.each_with_index do |entry, index| %>
+                            <%
+                               entry_id = entry[0]
+                               entry_no = entry[1]
+                            %>
+                            <% if entry_id == @db_entry.entry_id %>
+                                <li><span class='highlight'>Entry <%= entry_no.to_s %></span></li>
+                            <% else %>
+                                <li>
+                                    <span class='nohighlight'><%= link_to 'Entry ' + entry_no.to_s, browse_registers_path(:register_id => session[:register_id], :folio => session[:folio], :entry_no => entry_no.to_s) + '#entries' %></span>
+                                </li>
+                            <% end %>
+                        <% end %>
+                    </ul>
+                </th>
+            </tr>
+
+            <%# Entry No %>
+            <tr>
+                <th style="width: 30%; padding-top: 15px">Entry No:</th>
+                <td style="padding-top: 15px"><%= @db_entry.entry_no %></td>
+            </tr>
+
+            <%# Entry Type %>
+            <% if @db_entry.db_entry_types.size > 0 %>
+                <tr>
+                    <th>Entry Type:</th>
+                    <td>
+                        <% @db_entry.db_entry_types.each do |entry_type| %>
+                            <div class="pad_multi_element">
+                                <%= get_str_from_id(entry_type.name, 'preflabel_tesim') %>
+                            </div>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+
+            <%# Section Type %>
+            <% if @db_entry.db_section_types.size > 0 %>
+                <tr>
+                    <th>Section Type:</th>
+                    <td>
+                        <% @db_entry.db_section_types.each do |section_type| %>
+                            <div class="pad_multi_element">
+                                <%= get_str_from_id(section_type.name, 'preflabel_tesim') %>
+                            </div>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+
+            <%# Continues On %>
+            <% if @db_entry.continues_on != nil && @db_entry.continues_on != '' %>
+                <tr>
+                    <th>Continues on next folio:</th>
+                    <td><span class="fa fa-check fa-lg"></span></td>
+                </tr>
+            <% end %>
+
+            <%# Summary %>
+            <% if @db_entry.summary != nil and @db_entry.summary != '' %>
+                <tr>
+                    <th>Summary:</th>
+                    <td>
+                        <%= @db_entry.summary %>
+                    </td>
+                </tr>
+            <% end %>
+
+            <%# Marginalia %>
+            <% if @db_entry.db_marginalia.size > 0 %>
+                <tr>
+                    <th>Marginalia:</th>
+                    <td>
+                        <% @db_entry.db_marginalia.each do |marginalium| %>
+                            <div class="pad_multi_element">
+                                <%= marginalium.name %>
+                            </div>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+
+            <%# Language %>
+            <% if @db_entry.db_languages.size > 0 %>
+                <tr>
+                    <th>Language:</th>
+                    <td>
+                        <% @db_entry.db_languages.each do |language| %>
+                            <div class="pad_multi_element">
+                                <%= get_str_from_id(language.name, 'preflabel_tesim') %>
+                            </div>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+
+            <%# Subject %>
+            <% if @db_entry.db_subjects.size > 0 %>
+                <tr>
+                    <th>Subject:</th>
+                    <td>
+                        <% @db_entry.db_subjects.each do |subject| %>
+                            <div class="pad_multi_element">
+                                <%= get_str_from_id(subject.name, 'preflabel_tesim') %>
+                            </div>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+
+            <%# Note %>
+            <% if @db_entry.db_notes.size > 0 %>
+                <tr>
+                    <th>Note:</th>
+                    <td>
+                        <% @db_entry.db_notes.each do |note| %>
+                            <div class="pad_multi_element">
+                                <%= note.name %>
+                            </div>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+
+            <%# Editorial Note %>
+            <% if @db_entry.db_editorial_notes.size > 0 %>
+                <tr>
+                    <th>Editorial Note:</th>
+                    <td>
+                        <% @db_entry.db_editorial_notes.each do |editorial_note| %>
+                            <div class="pad_multi_element">
+                                <%= editorial_note.name %>
+                            </div>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+
+            <%# Referenced By %>
+            <% if @db_entry.db_is_referenced_bys.size > 0 %>
+                <tr>
+                    <th>Referenced By:</th>
+                    <td>
+                        <% @db_entry.db_is_referenced_bys.each do |is_referenced_by| %>
+                            <div class="pad_multi_element">
+                                <%= is_referenced_by.name %>
+                            </div>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+
+            <%# Related Place %>
+            <% @db_entry.db_related_places.each do |related_place| %>
+
+                <tr>
+                    <th>Place:</th>
+                    <td></td>
+                </tr>
+
+                <%# Place As Written %>
+                <% if related_place.db_place_as_writtens.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">As Written:</th>
+                        <td>
+                            <% related_place.db_place_as_writtens.each do |place_as_written| %>
+                                <div class="pad_multi_element">
+                                    <%= place_as_written.name %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Place Name Authority (Same As) %>
+                <% if related_place.place_same_as != nil %>
+                    <tr>
+                        <th class="pad_th_person_place">Name Authority:</th>
+                        <td>
+                            <div class="pad_multi_element">
+                                <%= get_place_same_as(related_place.place_same_as) %>
+                            </div>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Place Role %>
+                <% if related_place.db_place_roles.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">Role:</th>
+                        <td>
+                            <% related_place.db_place_roles.each do |place_role| %>
+                                <div class="pad_multi_element">
+                                    <%= get_str_from_id(place_role.name, 'preflabel_tesim') %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Place Type %>
+                <% if related_place.db_place_types.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">Type:</th>
+                        <td>
+                            <% related_place.db_place_types.each do |place_type| %>
+                                <div class="pad_multi_element">
+                                    <%= get_str_from_id(place_type.name, 'preflabel_tesim') %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Place Note %>
+                <% if related_place.db_place_notes.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">Note:</th>
+                        <td>
+                            <% related_place.db_place_notes.each do |place_note| %>
+                                <div class="pad_multi_element">
+                                    <%= place_note.name %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+
+            <% end %>
+
+            <%# Related Agent %>
+            <% @db_entry.db_related_agents.each do |related_agent| %>
+
+                <tr>
+                    <th>Person:</th>
+                    <td></td>
+                </tr>
+
+                <%# Person As Written %>
+                <% if related_agent.db_person_as_writtens.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">As Written:</th>
+                        <td>
+                            <% related_agent.db_person_as_writtens.each do |person_as_written| %>
+                                <div class="pad_multi_element">
+                                    <%= person_as_written.name %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Person Name Authority (Same As) %>
+                <% if related_agent.person_same_as != nil %>
+                    <tr>
+                        <th class="pad_th_person_place">Name Authority:</th>
+                        <td>
+                            <div class="pad_multi_element">
+                                <%= get_person_same_as(related_agent.person_same_as) %>
+                            </div>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Person Group %>
+                <% if related_agent.person_same_as != nil %>
+                    <tr>
+                        <th class="pad_th_person_place">Person / Group:</th>
+                        <td>
+                            <div class="pad_multi_element">
+                                <%= related_agent.person_group %>
+                            </div>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Person Gender %>
+                <% if related_agent.person_gender != nil %>
+                    <tr>
+                        <th class="pad_th_person_place">Person / Group:</th>
+                        <td>
+                            <div class="pad_multi_element">
+                                <%= related_agent.person_gender %>
+                            </div>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Person Role %>
+                <% if related_agent.db_person_roles.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">Role:</th>
+                        <td>
+                            <% related_agent.db_person_roles.each do |person_role| %>
+                                <div class="pad_multi_element">
+                                    <%= get_str_from_id(person_role.name, 'preflabel_tesim') %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Person Descriptor %>
+                <% if related_agent.db_person_descriptors.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">Descriptor:</th>
+                        <td>
+                            <% related_agent.db_person_descriptors.each do |person_descriptor| %>
+                                <div class="pad_multi_element">
+                                    <%= get_str_from_id(person_descriptor.name, 'preflabel_tesim') %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Person Descriptor As Written %>
+                <% if related_agent.db_person_descriptor_as_writtens.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">Descriptor As Written:</th>
+                        <td>
+                            <% related_agent.db_person_descriptor_as_writtens.each do |person_descriptor_as_written| %>
+                                <div class="pad_multi_element">
+                                    <%= get_str_from_id(person_descriptor_as_written.name, 'preflabel_tesim') %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Person Note %>
+                <% if related_agent.db_person_notes.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">Note:</th>
+                        <td>
+                            <% related_agent.db_person_notes.each do |person_note| %>
+                                <div class="pad_multi_element">
+                                    <%= person_note.name %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Person Related Place %>
+                <% if related_agent.db_person_related_places.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">Related Place:</th>
+                        <td>
+                            <% related_agent.db_person_related_places.each do |related_place| %>
+                                <div class="pad_multi_element">
+                                    <%= related_place.name %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+
+                <%# Person Related Person %>
+                <% if related_agent.db_person_related_people.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">Related Person:</th>
+                        <td>
+                            <% related_agent.db_person_related_people.each do |related_person| %>
+                                <div class="pad_multi_element">
+                                    <%= related_person.name %>
+                                </div>
+                            <% end %>
+                        </td>
+                    </tr>
+                <% end %>
+            <% end %>
+
+        </table>
+    </div>
+<% end %>
+

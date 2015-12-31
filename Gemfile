@@ -11,6 +11,12 @@ gem 'rsolr-ext'
 
 gem 'dotenv-rails', :groups => [:development, :test, :production]
 
+# added (ja)
+gem 'osullivan'
+gem 'openseadragon' # to install run: bundle exec rails g openseadragon:install
+gem 'qa'
+# end
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.1'
 # Use sqlite3 as the database for Active Record
