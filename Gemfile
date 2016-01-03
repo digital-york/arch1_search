@@ -14,6 +14,8 @@ gem 'dotenv-rails', :groups => [:development, :test, :production]
 # added (ja)
 gem 'osullivan'
 gem 'openseadragon' # to install run: bundle exec rails g openseadragon:install
+gem 'faraday'
+gem 'faraday_middleware'
 gem 'qa'
 # end
 

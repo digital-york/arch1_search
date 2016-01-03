@@ -74,6 +74,8 @@
             <% unless session[:entries_exist].nil? %>
                 <p>Entries on this folio have been indexed. View <%= link_to 'Entries', '#entries' %> at the bottom of this page.</p>
             <% end %>
+            <%= make_manifest(session[:register_id]) %>
+
             <div>
                 <%= openseadragon_picture_tag tile_sources %>
             </div>
