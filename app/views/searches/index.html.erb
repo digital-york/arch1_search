@@ -14,9 +14,10 @@
             </h4>-->
           </div>
 
+          <%# Display facets %>
           <div id="facet-panel-collapse" class="collapse in panel-group">
 
-            <%# Section Type %>
+            <%# Section Type Facet %>
             <div class="panel panel-default facet_limit blacklight-format ">
 
               <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format" aria-expanded="false">
@@ -43,7 +44,7 @@
               </div>
             </div>
 
-            <%# Subjects %>
+            <%# Subjects Facet %>
             <div class="panel panel-default facet_limit blacklight-subject_topic_facet ">
 
               <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-subject_topic_facet" aria-expanded="false">
@@ -70,7 +71,7 @@
               </div>
             </div>
 
-            <%# Places As Written %>
+            <%# Places As Written Facet %>
             <div class="panel panel-default facet_limit blacklight-pub_date ">
 
               <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-pub_date" aria-expanded="false">
@@ -97,7 +98,7 @@
               </div>
             </div>
 
-            <%# People As Written %>
+            <%# People As Written FAcet %>
             <div class="panel panel-default facet_limit blacklight-format2 ">
 
               <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format2" aria-expanded="false">
@@ -124,7 +125,7 @@
               </div>
             </div>
 
-            <%# Dates %>
+            <%# Dates Facet %>
             <div class="panel panel-default facet_limit blacklight-example_query_facet_field ">
 
               <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-example_query_facet_field">
@@ -162,11 +163,11 @@
          end_index = total_page_rows + @partial_list_array.size
       %>
 
-      <!-- Warn user if there are less than two characters entered into the search box -->
+      <!-- Warn user if there are less than three characters entered into the search box -->
       <!-- Note that this is for the server-side check and shouldn't happen in normal circumstances because there is a javascript check -->
       <% if @error == true %>
           <div class="alert alert-danger">
-            <strong>Please enter two or more characters into the search box</strong>
+            <strong>Please enter three or more characters into the search box</strong>
           </div>
       <% elsif @number_of_rows == 0 %>
           <div class="alert alert-info">
@@ -174,7 +175,7 @@
           </div>
       <% else %>
 
-
+          <%# Display previous...next arrows, rows per page, display type and sort by %>
           <div id="previous_next_bar">
 
             <div style="float: left">
@@ -235,6 +236,7 @@
 
         <hr style="margin: 25px 0px 20px 0px; padding: 0px; text-align: left; width: 80%"/>
 
+        <%# Display facet choices %>
         <% if (@section_type_facet != nil and @section_type_facet != '') or (@subject_facet != nil and @subject_facet != '') or (@person_as_written_facet != nil and @person_as_written_facet != '') or (@place_as_written_facet != nil and @place_as_written_facet != '') %>
             <div id="facets_bar">
 
@@ -256,6 +258,7 @@
             </div>
         <% end %>
 
+        <%# Display search results %>
         <% @partial_list_array.each_with_index do |t, index| %>
 
             <%

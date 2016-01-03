@@ -1,5 +1,6 @@
 module Solr
 
+  # Sets the facet arrays and search results according to the search term
   def set_search_result_arrays
 
     begin
@@ -14,6 +15,7 @@ module Solr
       person_as_written_word_array = []
       place_as_written_word_array = []
 
+      # Replace all spaces in a searh term with asterisks
       search_term2 = @search_term.downcase.gsub(/ /, '*')
 
       # Get the matching entry ids (from the entries)
@@ -171,12 +173,14 @@ module Solr
         end
       end
 
-      # This is used on the display page
+      # This variable is used on the display page
       @number_of_rows = entry_id_set.size
 
       # Get the data for one page only, e.g. 10 rows
       entry_id_array = entry_id_set.to_a.slice((@page - 1) * @rows_per_page, @rows_per_page)
 
+      # Iterate over the 10 (or less) entries and get all the data to display
+      # Also highlight the search term
       entry_id_array.each do |entry_id|
 
         q = "id:#{entry_id}"
@@ -185,11 +189,13 @@ module Solr
 
         SolrQuery.new.solr_query(q, fl, 1)['response']['docs'].map do |result|
 
+          # Display all the text if not 'matched records'
           @match_term = @search_term
           if @match_term == '' || @display_type == 'full display' || @display_type == 'summary' then
             @match_term = '.*'
           end
 
+          # Build up the element_aaray with the entry_id, etc
           @element_array = []
           @element_array << entry_id
           get_entry_and_folio_details(entry_id)
@@ -215,7 +221,7 @@ module Solr
 
   end
 
-  # Get the place data from solr for a particular entry_id and search term
+  # Get the place data from solr for a particular entry_id and search term (see above method call)
   def get_places(entry_id, search_term2)
 
     begin
@@ -253,7 +259,7 @@ module Solr
 
   end
 
-  # Get the person data from solr for a particular entry_id and search term
+  # Get the person data from solr for a particular entry_id and search term (see above method call)
   def get_people(entry_id, search_term2)
 
     begin
@@ -399,6 +405,13 @@ module Solr
     return str
   end
 
+
+  # This method gets all the solr data from an entry into a db_entry database object
+  # We did this because getting the data using activeFedora is too slow
+  # It is used to display the data on the view pages and when a user is editing the entry form
+  # but activeFedora is used when the user actually saves the form (so that the data goes into Fedora)
+  # Note that although we are using an object which corresponds to the database tables, we don't actually populate the tables with any data
+  # It appears that rails requires the tables to be there even if you don't use them in order to create a database object
   def get_solr_data(db_entry)
 
     begin
@@ -407,7 +420,7 @@ module Solr
 
         if result['entry_no_tesim'] != nil
 
-          db_entry.id = 1 #db_entry.entry_id.gsub(/test:/, '').to_i
+          db_entry.id = 1
 
           db_entry.entry_no = result['entry_no_tesim'].join()
 
@@ -511,7 +524,7 @@ module Solr
 
               db_entry_date.date_id = date_id
 
-              db_entry_date.id = 1 #date_id.gsub(/test:/, '').to_i
+              db_entry_date.id = 1
 
               SolrQuery.new.solr_query('has_model_ssim:SingleDate AND dateFor_ssim:' + date_id, 'id, date_tesim, date_type_tesim, date_certainty_tesim', 100)['response']['docs'].map do |result2|
 
@@ -770,7 +783,12 @@ module Solr
 
 end
 
+# Writes error message to the log
 def log_error(method, file, error)
-  time = Time.now.strftime('[%d/%m/%Y %H:%M:%S]').to_s
-  logger.error "#{time} EXCEPTION IN #{file}, method='#{method}' [#{error}]"
+  time = ''
+  # Only add time for development log because production already outputs timestamp
+  if Rails.env == 'development'
+    time = Time.now.strftime('[%d/%m/%Y %H:%M:%S] ').to_s
+  end
+  logger.error "#{time}EXCEPTION IN #{file}, method='#{method}' [#{error}]"
 end

@@ -1,3 +1,4 @@
+// Pop-up for the image zoom
 function popup(page, folio_image) {
 
     page = page + "?folio_id=" + folio_image
@@ -16,12 +17,14 @@ function popup(page, folio_image) {
     window.open(page, "image_zoom_large_" + popup_id, 'status = 1, location = 1, top = ' + top + ', left = ' + left + ', height = ' + popupHeight + ', width = ' + popupWidth + ', scrollbars=yes');
 }
 
+// Check that the search value s greater or equal to 3 characters
+// Note that '*' searches for anything at the moment (for testing) - this could be removed from the live code
 function validate_search_field() {
 
     var search_value = document.forms["search_form"]["search_box"].value;
 
-    if (search_value != '*' && search_value.length < 0) {
-        alert("Please enter two or more characters into the search box");
+    if (search_value != '*' && search_value.length < 3) {
+        alert("Please enter three or more characters into the search box");
         return false;
     }
 }

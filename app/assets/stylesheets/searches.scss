@@ -1,3 +1,4 @@
+
 /***** General styles *****/
 body {
   font-family: Arial, Verdana;
@@ -196,7 +197,7 @@ ul {
 
 .panel-heading.collapse-toggle .panel-title:after {
   /* symbol for "opening" panels */
-  //font-family: 'Glyphicons Halflings';
+  font-family: 'Glyphicons Halflings';
   /* essential for enabling glyphicon */
   content: "\e114";
   /* adjust as needed, taken from bootstrap.css */
