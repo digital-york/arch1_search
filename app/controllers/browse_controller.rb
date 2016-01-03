@@ -12,16 +12,16 @@ class BrowseController < ApplicationController
   def registers
     reset_session_variables
 
-    if params['register_id'].nil? or params['register_id'] == ''
+    if browse_params['register_id'].nil? or browse_params['register_id'] == ''
       # Get collections
       @coll_list = get_collections
     else
 
-      session[:register_id] = params[:register_id]
+      session[:register_id] = browse_params['register_id']
       session[:register_name] = get_register_name(session[:register_id])
 
       # Set the folio and image session variables when a folio is chosen from the drop-down list
-      if params[:set_folio] == 'true'
+      if browse_params['set_folio'] == 'true'
         set_folio_and_image_drop_down
       end
 
@@ -36,23 +36,23 @@ class BrowseController < ApplicationController
         set_first_and_last_folio
       end
 
-      if params['folio'].nil? or params['folio'] == '' or params['folio'] == '0' or params['folio'].to_i > session[:length]
+      if browse_params['folio'].nil? or browse_params['folio'] == '' or browse_params['folio'] == '0' or browse_params['folio'].to_i > session[:length]
         session[:folio] = '1'
         session[:folio_id] = @fol_list[0]
         get_entries(session[:folio_id])
       else
-        session[:folio] = params['folio'].to_i
-        session[:folio_id] = @fol_list[params['folio'].to_i - 1]
+        session[:folio] = browse_params['folio'].to_i
+        session[:folio_id] = @fol_list[browse_params['folio'].to_i - 1]
         get_entries(session[:folio_id])
       end
 
       unless session[:entries_exist].nil?
         # Create a new DbEntry model from the database tables
         @db_entry = DbEntry.new
-        if params['entry_no'].nil?
+        if browse_params['entry_no'].nil?
           @db_entry.entry_id = session[:entries_exist][0]
         else
-          @db_entry.entry_id = session[:entries_exist][params[:entry_no].to_i - 1]
+          @db_entry.entry_id = session[:entries_exist][browse_params['entry_no'].to_i - 1]
 
         end
 
@@ -71,13 +71,13 @@ class BrowseController < ApplicationController
     reset_session_variables
     @search_array = PersonTerms.new('subauthority').internal_all
     # Limit by alphabet
-    unless params['letter'].nil? or params['letter'] =='All' or params['letter'].size() != 1
-      unless params['letter'] =='All'
-        session[:letter] = params['letter']
+    unless browse_params['letter'].nil? or browse_params['letter'] =='All' or browse_params['letter'].size() != 1
+      unless browse_params['letter'] =='All'
+        session[:letter] = browse_params['letter']
       end
       arr = []
       @search_array.each do | alpha |
-        if alpha['label'][0].downcase == params['letter'].downcase
+        if alpha['label'][0].downcase == browse_params['letter'].downcase
           arr << alpha
         end
       end
@@ -90,13 +90,13 @@ class BrowseController < ApplicationController
     reset_session_variables
     @search_array = GroupTerms.new('subauthority').internal_all
     # Limit by alphabet
-    unless params['letter'].nil? or params['letter'] =='All' or params['letter'].size() != 1
-      unless params['letter'] =='All'
-        session[:letter] = params['letter']
+    unless browse_params['letter'].nil? or browse_params['letter'] =='All' or browse_params['letter'].size() != 1
+      unless browse_params['letter'] =='All'
+        session[:letter] = browse_params['letter']
       end
       arr = []
       @search_array.each do | alpha |
-        if alpha['label'][0].downcase == params['letter'].downcase
+        if alpha['label'][0].downcase == browse_params['letter'].downcase
           arr << alpha
         end
       end
@@ -109,13 +109,13 @@ class BrowseController < ApplicationController
     reset_session_variables
     @search_array = PlaceTerms.new('subauthority').internal_all
     # Limit by alphabet
-    unless params['letter'].nil? or params['letter'] =='All' or params['letter'].size() != 1
-      unless params['letter'] =='All'
-        session[:letter] = params['letter']
+    unless browse_params['letter'].nil? or browse_params['letter'] =='All' or browse_params['letter'].size() != 1
+      unless browse_params['letter'] =='All'
+        session[:letter] = browse_params['letter']
       end
       arr = []
       @search_array.each do | alpha |
-        if alpha['label'][0].downcase == params['letter'].downcase
+        if alpha['label'][0].downcase == browse_params['letter'].downcase
           arr << alpha
         end
       end
@@ -142,5 +142,13 @@ class BrowseController < ApplicationController
   end
 
   #whitelist params
+  private
+  # Using a private method to encapsulate the permissible parameters
+  # is just a good pattern since you'll be able to reuse the same
+  # permit list between create and update. Also, you can specialize
+  # this method with per-user checking of permissible attributes.
+  def browse_params
+    params.permit(:letter, :register_id, :set_folio,:folio, :folio_id,:entry_no)
+  end
 
 end

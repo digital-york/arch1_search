@@ -37,6 +37,7 @@
         <% else %>
             <h1><%= session['register_name'] %></h1>
             <br />
+            <%= form_tag(browse_registers_path, method: 'get', id: 'choose_folio') do %>
             <span style="float: right"><%= link_to '', browse_registers_path, class: 'fa fa-chevron-circle-left fa-2x' %>
                     </span>
                 <span>&lt;&nbsp;
@@ -55,14 +56,11 @@
                     &nbsp; <%= session[:folio].to_i %> of <%= session[:length] %>
                     </span>
 
-            <! -- I have no idea why the following is working, but it is! -->
-                <%= form_tag(controller: 'browse', action: 'registers', method: 'get', id: 'choose_folio') do %>
-                <strong style="margin-left: 20px">Current Folio</strong>:
+                    <%= label_tag('Current Folio: ') %>
+                    <%= hidden_field_tag(:register_id, session[:register_id]) %>
                     <%= select_tag 'folio', options_for_select(@folio_list, session[:folio]), :class => 'choose_folio' %>
                 <% end %>
-            <form name="myForm" id="choose_folio" method="get" action="/browse/registers">
-                <%= hidden_field_tag(:register_id, session[:register_id]) %>
-            </form>
+
 
             <br/>
 
@@ -74,7 +72,7 @@
             <% unless session[:entries_exist].nil? %>
                 <p>Entries on this folio have been indexed. View <%= link_to 'Entries', '#entries' %> at the bottom of this page.</p>
             <% end %>
-            <%= make_manifest(session[:register_id]) %>
+
 
             <div>
                 <%= openseadragon_picture_tag tile_sources %>

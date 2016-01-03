@@ -9,7 +9,7 @@
         <table class="vocabs-table auths-table">
             <% @top_level_list.each do |subject| %>
                 <tr style="width: 100%">
-                    <td><%= link_to subject['label'], searches_path(:search_term => subject['label']) %>
+                    <td style="width: 30% !important"><%= link_to subject['label'], searches_path(:search_term => subject['label']) %>
 
                         <% unless subject['definition'].nil? %>
                             -- <strong>Definition:</strong> <%= subject['definition'] %>
@@ -20,10 +20,11 @@
                                 <%= p %>;&nbsp;
                             <% end %>
                         <% end %>
-
+                    </td><td>
                         <% unless subject[:elements].nil? %>
-                            <br /><br /><%= button_tag 'Sub-headings', :type => 'button', :class => 'show_hide' %>
+                            <%= button_tag 'Sub-headings', :type => 'button', :class => 'show_hide' %>
                             <ul class="tog" style="display: none">
+                            <br />
                             <% subject[:elements].each do |p| %>
                                 <li><%= link_to p['label'], searches_path(:search_term => p['label']) %>
                                     <% unless p['definition'].nil? %>
