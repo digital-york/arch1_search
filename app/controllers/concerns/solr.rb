@@ -42,7 +42,6 @@ module Solr
 
       # Get the matching entry ids (from the places)
       q = "has_model_ssim:RelatedPlace AND (place_as_written_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_same_as_search:*#{search_term2}*)"
-
       SolrQuery.new.solr_query(q, "relatedPlaceFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
         result['relatedPlaceFor_ssim'].each do |related_place|
           # Check that the relatedPlaceFor_ssim is an Entry (as can be a RelatedPlace)
@@ -373,6 +372,8 @@ module Solr
       is_match = false
 
       if input_array != nil
+
+        # Iterate over the input array and add columns between elements
         input_array.each do |t|
           if t.match(/#{@match_term}/i)
             is_match = true
@@ -404,7 +405,6 @@ module Solr
 
     return str
   end
-
 
   # This method gets all the solr data from an entry into a db_entry database object
   # We did this because getting the data using activeFedora is too slow
