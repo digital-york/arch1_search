@@ -24,7 +24,7 @@ module RegisterFolioHelper
     # get the file paths from the register
     get_order(reg).each do | target |
       @query_obj.solr_query('hasTarget_ssim:' + target,'file_path_tesim',1,'preflable_si asc')['response']['docs'][0]['file_path_tesim']
-      tile_sources << "http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{@query_obj.solr_query('hasTarget_ssim:' + target,'file_path_tesim',1,'preflabel_si asc')['response']['docs'][0]['file_path_tesim'][0]}.dzi"
+      tile_sources << "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{@query_obj.solr_query('hasTarget_ssim:' + target,'file_path_tesim',1,'preflabel_si asc')['response']['docs'][0]['file_path_tesim'][0]}.dzi"
     end
     tile_sources
   end
@@ -34,10 +34,10 @@ module RegisterFolioHelper
     @query_obj = SolrQuery.new
     response = @query_obj.solr_query('hasTarget_ssim:' + fol,'file_path_tesim',2,'preflabel_si asc')['response']['docs']
     # get the file paths from the register
-    tile_sources << "http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{response[0]['file_path_tesim'][0]}.dzi"
+    tile_sources << "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{response[0]['file_path_tesim'][0]}.dzi"
     unless response[1].nil?
       session[:alt] = 'yes'
-      tile_sources << "http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{response[1]['file_path_tesim'][0]}.dzi"
+      tile_sources << "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{response[1]['file_path_tesim'][0]}.dzi"
     end
     tile_sources
   end
