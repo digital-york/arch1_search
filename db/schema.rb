@@ -11,14 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-# Includes all database tables for the form
+ActiveRecord::Schema.define(version: 20160110000133) do
 
-ActiveRecord::Schema.define(version: 20151112111639) do
-
-  create_table "searches", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "books", force: :cascade do |t|
+    t.string   "title"
+    t.text     "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "db_date_certainties", force: :cascade do |t|
@@ -209,6 +208,11 @@ ActiveRecord::Schema.define(version: 20151112111639) do
 
   add_index "db_subjects", ["db_entry_id"], name: "index_db_subjects_on_db_entry_id"
 
+  create_table "iiifs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "searches", force: :cascade do |t|
     t.text     "query_params"
     t.integer  "user_id"
@@ -234,6 +238,5 @@ ActiveRecord::Schema.define(version: 20151112111639) do
     t.datetime "updated_at"
     t.boolean  "guest",                  default: false
   end
-
 
 end

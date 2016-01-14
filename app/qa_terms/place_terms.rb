@@ -56,7 +56,8 @@ class PlaceTerms
         'featuretype' => if result['feature_code_tesim'] then result['feature_code_tesim'] end,
         'note' => if result['note_tesim'] then result['note_tesim'].join end,
         'related_authority' => if result['related_authority_tesim'] then result['related_authority_tesim'] end,
-        'variants' => if result['altlabel_tesim'] then result['altlabel_tesim'] end
+        'variants' => if result['altlabel_tesim'] then result['altlabel_tesim'] end,
+        'used' => if result['used_tesim'] then result['used_tesim'] end
       }
     end
   end

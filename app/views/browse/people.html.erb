@@ -2,7 +2,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
 
-            <h1>Browse People <span style="float: right">
+            <h1>People <span style="float: right">
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span></h1>
 
@@ -23,9 +23,15 @@
         <table class="vocabs-table auths-table">
             <% @search_array.each do |person| %>
                 <tr>
-                    <td><%= link_to person['label'], searches_path(:search_term => person['label']) %></td>
                     <td>
-                        <%= button_tag 'Show | Hide Details', :type => 'button', :class => 'show_hide' %>
+                        <% if person['used'].nil? %>
+                            <%= person['label'] %>
+                        <% else %>
+                            <%= link_to person['label'], searches_path(:search_term => person['label']) %>
+                    <% end %>
+                    </td>
+                    <td>
+                        <%= button_tag 'Show Details', :type => 'button', :class => 'show_hide' %>
                         <div class="tog" style="display: none">
                             <% unless person['family'].nil? %>
                                 <br/><strong>Family Name:</strong> <%= person['family'] %>

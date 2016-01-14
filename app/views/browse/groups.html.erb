@@ -2,7 +2,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
 
-        <h1>Browse Groups
+        <h1>Relgious Houses, Groups and Organisations
             <span style="float: right">
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span>
@@ -24,9 +24,15 @@
         <table class="vocabs-table auths-table">
             <% @search_array.each do |group| %>
                 <tr>
-                    <td><%= link_to group['label'], searches_path(:search_term => group['label']) %></td>
                     <td>
-                        <%= button_tag 'Show | Hide Details', :type => 'button', :class => 'show_hide' %>
+                        <% if group['used'].nil? %>
+                            <%= group['label'] %>
+                        <% else %>
+                            <%= link_to group['label'], searches_path(:search_term => group['label']) %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <%= button_tag 'Show Details', :type => 'button', :class => 'show_hide' %>
                         <div class="tog" style="display: none">
                             <% unless group['name'].nil? %>
                                 <br/><strong>Name:</strong> <%= group['name'] %>

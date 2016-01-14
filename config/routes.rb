@@ -3,12 +3,7 @@ Rails.application.routes.draw do
 
 
   get 'searches/index'
-  #get 'searches/new'
   get 'searches/show'
-  #get 'searches/create'
-  #get 'searches/edit'
-  #get 'searches/update'
-  #get 'searches/destroy'
   get 'home_page/index'
 
   resources :searches
@@ -20,6 +15,18 @@ Rails.application.routes.draw do
   get 'index2' => 'searches#index2'
 
   # added (ja)
+
+  get 'iiif/index'
+  #get 'iiif/show'
+  get 'iiif/:id/:region/:size/:rotation/:quality' , controller: :iiif, action: :show
+  get 'iiif/:id/info.json' , controller: :iiif, action: :show
+  get 'iiif/manifest/:register_id' , controller: :iiif, action: :manifest
+  get 'iiif/manifest' => 'iiif#manifest'
+  get 'iiif/download/:folio_id' , controller: :iiif, action: :download
+  get 'iiif/download' => 'iiif#download'
+
+  resources :iiif
+
   get 'browse/index'
   get 'browse/registers'
   get 'browse/people'
@@ -29,6 +36,7 @@ Rails.application.routes.draw do
   get 'about/index'
   get 'browse' => 'browse#index'
   get 'about' => 'about#index'
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

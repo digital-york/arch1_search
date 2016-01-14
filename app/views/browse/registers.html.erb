@@ -2,15 +2,32 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
 
-        <% if params['register_id'].nil? or params['register_id'] == '' %>
+        <% if (params['collection'].nil? or params['collection'] == '') and (params['register_id'].nil? or params['register_id'] == '') %>
             <h1>Browse Registers<span style="float: right">
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span></h1>
-
+            <div class="col-md-3"></div>
             <%
-               @coll_list.each_with_index do |p, i| %>
+
+               @coll_list.each do |p| %>
+                <div class="col-md-3 collections-grid">
+                    <%= link_to browse_registers_path(collection: p[0]) do %>
+                        <%= image_tag get_thumb(p[0]) %>
+                    <% end %>
+                    <br/>
+                    <p width="100%"><strong><%= p[1][0] %></strong></p>
+                </div>
+            <% end
+            %>
+            <div class="col-md-3"></div>
+        <% elsif params['register_id'].nil? or params['register_id'] == '' %>
+            <%
+               @coll_list.each do |p| %>
                 <div class="col-md-12">
-                    <h2><%= p[1][0] %></h2>
+                    <h1><%= p[1][0] %><span style="float: right">
+                <%= link_to '', browse_registers_path, class: 'fa fa-chevron-circle-left fa-2x' %>
+                </span></h1>
+                    <br /><br /><br />
                     <% get_registers_in_order(p[0]).each_with_index do |pair, index| %>
                         <div class="col-md-2 registers-grid">
                             <%= link_to browse_registers_path(register_id: pair[0]) do %>
@@ -18,8 +35,8 @@
                             <% end %>
                             <br/>
                             <p width="100%"><strong><%= pair[1][0] %></strong>
-                            <br/>
-                            <%= pair[1][1] %></p>
+                                <br/>
+                                <%= pair[1][1] %></p>
                         </div>
                         <% num = index + 1
                            if num.modulo(6).zero? %>
@@ -28,17 +45,19 @@
                             <div class="col-md-12">
                         <% end %>
                     <%
-                    end %>
-                </div>
-                <div style="clear: both;"></div>
-            <% end
-            %>
-
+                       end %>
+                    </div>
+                    <div style="clear: both;"></div>
+            <% end %>
         <% else %>
             <h1><%= session['register_name'] %></h1>
+
             <br />
             <%= form_tag(browse_registers_path, method: 'get', id: 'choose_folio') do %>
-            <span style="float: right"><%= link_to '', browse_registers_path, class: 'fa fa-chevron-circle-left fa-2x' %>
+            <span style="float: right">
+                <%= link_to '', { controller: 'iiif', action: 'download', folio_id: session[:folio_id] }, class: 'fa fa-download fa-2x', :title => 'Download this image' %>
+                <%= link_to '', browse_registers_path, class: 'fa fa-chevron-circle-left fa-2x', :title => 'Go back' %>
+
                     </span>
                 <span>&lt;&nbsp;
                     <% if session[:first_folio_id] == session[:folio_id] %>

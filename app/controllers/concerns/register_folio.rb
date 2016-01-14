@@ -99,10 +99,10 @@ module RegisterFolio
       q = SolrQuery.new
       set_order
       # Get the list of folios in order
-      @order.each_with_index  do |o, i|
+      @order.each_with_index do |o, i|
         q.solr_query('id:"' + o + '"', 'preflabel_tesim', rows=1)['response']['docs'].map.each do |res|
           num = i + 1
-          @folio_list << [res['preflabel_tesim'][0],num.to_s]
+          @folio_list << [res['preflabel_tesim'][0], num.to_s]
         end
       end
 
@@ -119,18 +119,17 @@ module RegisterFolio
 
     begin
 
-      # Get the collections so that we can get a list of registers in order
       registers = Hash.new
       q = SolrQuery.new
       # Get the ordered list of registers
 
-      q.solr_query('has_model_ssim:OrderedCollection', 'id')['response']['docs'].map.each do |result|
+      q.solr_query('has_model_ssim:OrderedCollection', 'id',2)['response']['docs'].map.each do |result|
         collection = result['id']
 
-        q.solr_query('id:"' + collection + '/list_source"', 'ordered_targets_ssim')['response']['docs'].map.each do |res|
+        q.solr_query('id:"' + collection + '/list_source"', 'ordered_targets_ssim',1)['response']['docs'].map.each do |res|
           order = res['ordered_targets_ssim']
           order.each do |o|
-            q.solr_query('id:"' + o + '"', 'id,preflabel_tesim,reg_id_tesim')['response']['docs'].map.each do |r|
+            q.solr_query('id:"' + o + '"', 'id,preflabel_tesim,reg_id_tesim',45)['response']['docs'].map.each do |r|
               registers[r['id']] = [r['reg_id_tesim'][0], r['preflabel_tesim'][0]]
             end
           end
@@ -171,14 +170,19 @@ module RegisterFolio
   end
 
   def get_entries(fol)
-    session[:entries_exist] = []
-    q = SolrQuery.new
-    q.solr_query('folio_ssim:"' + fol + '"', 'id', 100, 'entry_no_si asc')['response']['docs'].map.each do | result |
-      session[:entries_exist] << result['id']
+    begin
+      session[:entries_exist] = []
+      q = SolrQuery.new
+      q.solr_query('folio_ssim:"' + fol + '"', 'id', 100, 'entry_no_si asc')['response']['docs'].map.each do |result|
+        session[:entries_exist] << result['id']
+      end
+      if session[:entries_exist] == []
+        session[:entries_exist] = nil
+      end
     end
-    if session[:entries_exist] == []
-      session[:entries_exist] = nil
-    end
+  rescue => error
+    log_error(__method__, __FILE__, error)
+    raise
   end
 
 end

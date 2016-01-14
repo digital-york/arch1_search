@@ -11,23 +11,43 @@
             <tr>
                 <th colspan='2' id='entry_menu' style="background-color: grey">
                     <ul>
-                        <li style="margin-left: 2px"></li>
+                        <%# Display 1 - 9 %>
                         <% @entry_list.each_with_index do |entry, index| %>
                             <%
                                entry_id = entry[0]
                                entry_no = entry[1]
                             %>
-                            <% if entry_id == @db_entry.entry_id %>
-                                <li><span class='highlight'>Entry <%= entry_no.to_s %></span></li>
-                            <% else %>
-                                <li>
-                                    <span class='nohighlight'><%= link_to 'Entry ' + entry_no.to_s, browse_registers_path(:register_id => session[:register_id], :folio => session[:folio], :entry_no => entry_no.to_s) + '#entries' %></span>
-                                </li>
+                            <% if entry_no.length == 1 %>
+                                <% if entry_id == @db_entry.entry_id %>
+                                    <li><span class='highlight'>Entry <%= entry_no.to_s %></span></li>
+                                <% else %>
+                                    <li>
+                                        <span class='nohighlight'><%= link_to 'Entry ' + entry_no.to_s, browse_registers_path(:register_id => session[:register_id], :folio => session[:folio], :entry_no => entry_no.to_s) + '#entries' %></span>
+                                    </li>
+                                <% end %>
+                            <% end %>
+                        <% end %>
+                        <%# Display 10 - 99 %>
+                        <% @entry_list.each_with_index do |entry, index| %>
+                            <%
+                               entry_id = entry[0]
+                               entry_no = entry[1]
+                            %>
+                            <% if entry_no.length == 2 %>
+                                <% if entry_id == @db_entry.entry_id %>
+                                    <li><span class='highlight'>Entry <%= entry_no.to_s %></span></li>
+                                <% else %>
+                                    <li>
+                                        <span class='nohighlight'><%= link_to 'Entry ' + entry_no.to_s, browse_registers_path(:register_id => session[:register_id], :folio => session[:folio], :entry_no => entry_no.to_s) + '#entries' %></span>
+                                    </li>
+                                <% end %>
                             <% end %>
                         <% end %>
                     </ul>
                 </th>
             </tr>
+
+            <%# Display entry data %>
 
             <%# Entry No %>
             <tr>
@@ -165,6 +185,70 @@
                 </tr>
             <% end %>
 
+            <%# Entry Dates %>
+            <% @db_entry.db_entry_dates.each do |entry_date| %>
+
+                <tr>
+                    <th>Dates:</th>
+                    <td></td>
+                </tr>
+
+                <% dates = Hash.new() %>
+                <% entry_date.db_single_dates.each do |single_date| %>
+
+                    <% if single_date.date_type.size > 0 %>
+                        <% unless single_date.date.nil? %>
+                            <% if single_date.date_type == 'single' %>
+                                <tr>
+                                    <th class="pad_th_person_place">Date:</th>
+                                    <td style="padding-top: 15px">
+                                        <%= single_date.date %>
+                                        <% unless single_date.date == 'undated' %>
+                                            <% if single_date.db_date_certainties.size > 0 %>
+                                                <% certs = '' %>
+                                                <% single_date.db_date_certainties.each do |cert| %>
+                                                    <% certs = cert.name + ';' %>
+                                                <% end %>
+                                                <%= ' (' + certs[0, certs.length - 1] + ')' %>
+                                            <% end %>
+                                        <% end %>
+                            <% else %>
+
+                                <% dt = single_date.date
+                                   unless single_date.date == 'undated'
+                                     if single_date.db_date_certainties.size > 0
+                                       certs = ''
+                                       single_date.db_date_certainties.each do |cert|
+                                         certs = cert.name + ';'
+                                       end
+                                       dates[single_date.date_type] = dt + ' (' + certs[0, certs.length - 1] + ')'
+                                     end %>
+                                <% end %>
+                            <% end %>
+                        <% end %>
+                    <% end %>
+                <% end %>
+                <% if dates.size > 0 %>
+                    <tr>
+                        <th class="pad_th_person_place">Date:</th>
+                        <td style="padding-top: 15px"><%= dates['start'] %> -  <%= dates['end'] %></td>
+                    </tr>
+                <% end %>
+                <% unless entry_date.date_role.nil? %>
+                    <tr>
+                        <th class="pad_th_person_place">Date role:</th>
+                        <td style="padding-top: 15px">
+                            <%= get_str_from_id(entry_date.date_role, 'preflabel_tesim') %>
+                        </td>
+                    </tr>
+                <% end %>
+                <% unless entry_date.date_note.nil? %>
+                    <tr>
+                        <th class="pad_th_person_place">Note:</th>
+                        <td style="padding-top: 15px"><%= entry_date.date_note %></td>
+                    </tr>
+                <% end %>
+            <% end %>
             <%# Related Place %>
             <% @db_entry.db_related_places.each do |related_place| %>
 

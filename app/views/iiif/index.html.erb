@@ -1,0 +1,22 @@
+<!-- # added (ja) -->
+<div class="row">
+    <div class="col-md-2"></div>
+
+    <div class="col-md-8" style="padding-top: 20px">
+
+        <h1>IIIF</h1>
+
+        <%= render 'iiif' %>
+
+        <h2>Available Manifests</h2>
+            <% @manifests.each do | manifest | %>
+        <p>
+            <%= link_to manifest[1][1], { controller: 'iiif', action: 'manifest', register_id: manifest[0] }, :target => "_blank" %>
+         <%= link_to image_tag('iiif.png', height: 40), { controller: 'iiif', action: 'manifest', register_id: manifest[0] }, :title => 'IIIF Manifest', :target => "_blank" %>
+        </p>
+        <% end %>
+
+    </div>
+
+    <div class="col-md-2"></div>
+</div>

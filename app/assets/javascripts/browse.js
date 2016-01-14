@@ -7,7 +7,20 @@ $(document).ready(function () {
     });
 
     $('body').on('click', '.show_hide', function(e) {
-        //$(this)
         $(this).next(".tog").toggle();
+        if ($(this).hasClass('fa-plus')) {
+            $(this).removeClass('fa-plus').addClass('fa-minus');
+        }
+        else if ($(this).hasClass('fa-minus')) {
+            $(this).removeClass('fa-minus').addClass('fa-plus');
+        }
+
+        if ($(this).text() == 'Show Details') {
+            $(this).text('Hide Details');
+        }
+        else if ($(this).text() == 'Hide Details') {
+            $(this).text('Show Details');
+        }
+
     });
 });

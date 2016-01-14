@@ -12,8 +12,9 @@ class SearchesController < ApplicationController
       @page = params[:page]
       @section_type_facet = params[:section_type_facet]
       @subject_facet = params[:subject_facet]
-      @person_as_written_facet = params[:person_as_written_facet]
-      @place_as_written_facet = params[:place_as_written_facet]
+      @person_same_as_facet = params[:person_same_as_facet]
+      @place_same_as_facet = params[:place_same_as_facet]
+      @date_facet = params[:date_facet]
       @display_type = params[:display_type]
       @number_of_rows = 0
 
@@ -37,9 +38,10 @@ class SearchesController < ApplicationController
       # Initialise the arrays which display data on the page
       @partial_list_array = []
       @section_type_facet_array = []
-      @person_as_written_facet_array = []
-      @place_as_written_facet_array = []
+      @person_same_as_facet_array = []
+      @place_same_as_facet_array = []
       @subject_facet_array = []
+      @date_facet_array = []
 
       # Check if there are less than minimum_search_chars entered into the search box
       # Note that this is for the server-side check and shouldn't happen in normal circumstances because there is a javascript check -->
@@ -70,7 +72,7 @@ class SearchesController < ApplicationController
         # Set arrays which display data on the page
         set_search_result_arrays
 
-        # If we come to this page from the 'Search' menu link, make sure to remove the search temr otherisw it appears in the search box
+        # If we come to this page from the 'Search' menu link, make sure to remove the search term otherwise it appears in the search box
         if @search_term == 'NO_SEARCH' then @search_term = '' end
       end
 

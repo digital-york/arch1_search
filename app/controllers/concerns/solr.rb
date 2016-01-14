@@ -6,14 +6,16 @@ module Solr
     begin
 
       @section_type_facet_hash = Hash.new 0
-      @person_as_written_facet_hash = Hash.new 0
-      @place_as_written_facet_hash = Hash.new 0
+      @person_same_as_facet_hash = Hash.new 0
+      @place_same_as_facet_hash = Hash.new 0
       @subject_facet_hash = Hash.new 0
+      @date_facet_hash = Hash.new 0
 
       section_type_word_array = []
       subject_word_array = []
-      person_as_written_word_array = []
-      place_as_written_word_array = []
+      person_same_as_word_array = []
+      place_same_as_word_array = []
+      date_word_array = []
 
       # Replace all spaces in a searh term with asterisks
       search_term2 = @search_term.downcase.gsub(/ /, '*')
@@ -28,7 +30,7 @@ module Solr
       end
 
       # Get the matching entry ids (from the people)
-      q = "has_model_ssim:RelatedAgent AND (person_as_written_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_as_written_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
+      q = "has_model_ssim:RelatedAgent AND (person_same_as_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
       SolrQuery.new.solr_query(q, "relatedAgentFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
         result['relatedAgentFor_ssim'].each do |related_agent|
           # Check that the relatedAgentFor_ssim is an Entry (as can be a RelatedAgent)
@@ -41,7 +43,7 @@ module Solr
       end
 
       # Get the matching entry ids (from the places)
-      q = "has_model_ssim:RelatedPlace AND (place_as_written_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_same_as_search:*#{search_term2}*)"
+      q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_same_as_search:*#{search_term2}*)"
 
       SolrQuery.new.solr_query(q, "relatedPlaceFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
         result['relatedPlaceFor_ssim'].each do |related_place|
@@ -54,13 +56,46 @@ module Solr
         end
       end
 
+      # Get the matching entry ids (from the entry dates)
+      q = "has_model_ssim:EntryDate AND (date_note_tesim:*#{search_term2}*"
+
+      SolrQuery.new.solr_query(q, "entryDateFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
+        result['entryDateFor_ssim'].each do |entry_date|
+          SolrQuery.new.solr_query("id:#{entry_date}", "has_model_ssim", 1000, nil, 0)['response']['docs'].map do |result2|
+            if result2['has_model_ssim'].join == 'Entry'
+              entry_id_set << entry_date
+            end
+          end
+        end
+      end
+
+      # Get the matching entry ids (from the single dates)
+      q = "has_model_ssim:SingleDate AND (date_tesim:*#{search_term2}*"
+
+      # get the matching entry date ids
+      SolrQuery.new.solr_query(q, "dateFor_ssim", 1000, nil, 0)['response']['docs'].map do |res|
+        res['dateFor_ssim'].each do |single_date|
+          # from the entry dates, get the entry ids
+          SolrQuery.new.solr_query("id:#{single_date}", "entryDateFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
+            result['entryDateFor_ssim'].each do |entry_date|
+              SolrQuery.new.solr_query("id:#{entry_date}", "has_model_ssim", 1000, nil, 0)['response']['docs'].map do |result2|
+                if result2['has_model_ssim'].join == 'Entry'
+                  entry_id_set << entry_date
+                end
+              end
+            end
+          end
+        end
+      end
+
       # Now we have all the entry ids iterate through and get the facets
       entry_id_set.each do |entry_id|
 
         local_section_type_word_array = []
         local_subject_word_array = []
-        local_person_as_written_word_array = []
-        local_place_as_written_word_array = []
+        local_person_same_as_word_array = []
+        local_place_same_as_word_array = []
+        local_date_word_array = []
 
         is_valid = true
 
@@ -102,47 +137,77 @@ module Solr
             end
           end
 
-          # PERSON_AS_WRITTEN FACET
-          SolrQuery.new.solr_query("relatedAgentFor_ssim:#{entry_id}", "person_as_written_tesim", 1000, nil, 0)['response']['docs'].map do |result|
-            if result['person_as_written_tesim'] != nil
-              result['person_as_written_tesim'].each do |person_as_written|
-                local_person_as_written_word_array << person_as_written
+          # PERSON_SAME_AS FACET
+          SolrQuery.new.solr_query("relatedAgentFor_ssim:#{entry_id}", "person_same_as_new_tesim", 1000, nil, 0)['response']['docs'].map do |result|
+            if result['person_same_as_new_tesim'] != nil
+              result['person_same_as_new_tesim'].each do |person_same_as|
+                local_person_same_as_word_array << person_same_as
               end
             end
           end
 
-          if @person_as_written_facet != nil and @person_as_written_facet != ''
-            if !local_person_as_written_word_array.include? @person_as_written_facet
+          if @person_same_as_facet != nil and @person_same_as_facet != ''
+            if !local_person_same_as_word_array.include? @person_same_as_facet
               is_valid = false
             else
-              local_person_as_written_word_array = [@person_as_written_facet]
+              local_person_same_as_word_array = [@person_same_as_facet]
             end
           end
 
-          # PLACE_AS_WRITTEN FACET
-          SolrQuery.new.solr_query("relatedPlaceFor_ssim:#{entry_id}", "place_as_written_tesim", 1000, nil, 0)['response']['docs'].map do |result|
-            if result['place_as_written_tesim'] != nil
-              result['place_as_written_tesim'].each do |place_as_written_tesim|
-                local_place_as_written_word_array << place_as_written_tesim
+          # PLACE_SAME_AS FACET
+          SolrQuery.new.solr_query("relatedPlaceFor_ssim:#{entry_id}", "place_same_as_new_tesim", 1000, nil, 0)['response']['docs'].map do |result|
+            if result['place_same_as_new_tesim'] != nil
+              result['place_same_as_new_tesim'].each do |place_same_as_tesim|
+                local_place_same_as_word_array << place_same_as_tesim
               end
             end
           end
 
-          if @place_as_written_facet != nil and @place_as_written_facet != ''
-            if !local_place_as_written_word_array.include? @place_as_written_facet
+          if @place_same_as_facet != nil and @place_same_as_facet != ''
+            if !local_place_same_as_word_array.include? @place_same_as_facet
               is_valid = false
             else
-              local_place_as_written_word_array = [@place_as_written_facet]
+              local_place_same_as_word_array = [@place_same_as_facet]
             end
           end
 
+          # DATES FACET
+          SolrQuery.new.solr_query("entryDateFor_ssim:#{entry_id}", "id", 1000, nil, 0)['response']['docs'].map do |res|
+            SolrQuery.new.solr_query("dateFor_ssim:#{res['id']}", "date_tesim", 1000, nil, 0)['response']['docs'].map do |result|
+              if result['date_tesim'] != nil
+                result['date_tesim'].each do |date_tesim|
+                  # get year only
+                  date = date_tesim.gsub('[', '').gsub(']', '')
+                  begin
+                    # get the first four chars; if these are a valid number over 1000 add them
+                    if date == 'undated'
+                      local_date_word_array << date
+                    elsif date[0..3].to_i >= 1000
+                      local_date_word_array << date[0..3]
+                    end
+                  rescue
+                    # if the value isn't a number, skip
+                  end
+                end
+              end
+            end
+          end
+
+          if @date_facet != nil and @date_facet != ''
+            if !local_date_word_array.include? @date_facet
+              is_valid = false
+            else
+              local_date_word_array = [@date_facet]
+            end
+          end
         end
 
         if is_valid == true
           section_type_word_array.concat local_section_type_word_array
           subject_word_array.concat local_subject_word_array
-          person_as_written_word_array.concat local_person_as_written_word_array
-          place_as_written_word_array.concat local_place_as_written_word_array
+          person_same_as_word_array.concat local_person_same_as_word_array
+          place_same_as_word_array.concat local_place_same_as_word_array
+          date_word_array.concat local_date_word_array
         else
           entry_id_set.delete(entry_id)
         end
@@ -161,15 +226,21 @@ module Solr
         end
       end
 
-      if person_as_written_word_array != nil
-        person_as_written_word_array.sort.each do |word|
-          @person_as_written_facet_hash[word] += 1
+      if person_same_as_word_array != nil
+        person_same_as_word_array.sort.each do |word|
+          @person_same_as_facet_hash[word] += 1
         end
       end
 
-      if place_as_written_word_array != nil
-        place_as_written_word_array.sort.each do |word|
-          @place_as_written_facet_hash[word] += 1
+      if place_same_as_word_array != nil
+        place_same_as_word_array.sort.each do |word|
+          @place_same_as_facet_hash[word] += 1
+        end
+      end
+
+      if date_word_array != nil
+        date_word_array.sort.each do |word|
+          @date_facet_hash[word] += 1
         end
       end
 
@@ -210,9 +281,78 @@ module Solr
           @element_array << get_element(result['is_referenced_by_tesim'])
           get_places(entry_id, search_term2)
           get_people(entry_id, search_term2)
+          get_dates(entry_id, search_term2)
           @partial_list_array << @element_array
         end
       end
+
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      raise
+    end
+
+  end
+
+  def get_dates(entry_id, search_term2)
+
+    begin
+      # entry date
+      q = "entryDateFor_ssim:#{entry_id} "
+      if @display_type == 'matched records'
+        q = "entryDateFor_ssim:#{entry_id} AND (date_note_tesim:*#{search_term2}* AND date_role_new_tesim:*#{search_term2}*)"
+      end
+      fl = 'id, date_note_tesim, date_role_new_tesim'
+
+      date_role_string = ''
+      date_note_string = ''
+
+      SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
+        date_role_string = date_role_string + get_place_or_person_string(result['date_role_new_tesim'], date_role_string)
+        date_note_string = date_note_string + get_place_or_person_string(result['date_note_tesim'], date_note_string)
+      end
+
+      @element_array << date_role_string
+      @element_array << date_note_string
+
+      # single dates
+
+      date_string = ''
+      date_type_string = ''
+      date_certainty_string = ''
+      date_start_string = ''
+      date_type_start_string = ''
+      date_certainty_start_string = ''
+      date_end_string = ''
+      date_type_end_string = ''
+      date_certainty_end_string = ''
+
+      SolrQuery.new.solr_query("entryDateFor_ssim:#{entry_id}", "id", 1000, nil, 0)['response']['docs'].map do |res|
+        entry_id2 = res['id']
+        q = "dateFor_ssim:#{entry_id2} "
+        if @display_type == 'matched records'
+          q = "dateFor_ssim:#{entry_id2} AND (date_certainty_tesim:*#{search_term2}* AND date_tesim:*#{search_term2}* AND date_certainty_tesim:*#{search_term2}*)"
+        end
+        fl = 'id, date_tesim,date_type_tesim, date_certainty_tesim'
+        SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
+          if result['date_type_tesim'].join == 'single'
+            date_string = date_string + get_place_or_person_string(result['date_tesim'], date_string)
+            date_certainty_string = date_certainty_string + get_place_or_person_string(result['date_certainty_tesim'], date_certainty_string)
+          elsif result['date_type_tesim'].join == 'start'
+            date_start_string = date_start_string + get_place_or_person_string(result['date_tesim'], date_start_string)
+            date_certainty_start_string = date_certainty_start_string + get_place_or_person_string(result['date_certainty_tesim'], date_certainty_start_string)
+          elsif result['date_type_tesim'].join == 'end'
+            date_end_string = date_end_string + get_place_or_person_string(result['date_tesim'], date_end_string)
+            date_certainty_end_string = date_certainty_end_string + get_place_or_person_string(result['date_certainty_tesim'], date_certainty_end_string)
+          end
+        end
+      end
+
+      @element_array << date_string
+      @element_array << date_certainty_string
+      @element_array << date_start_string
+      @element_array << date_certainty_start_string
+      @element_array << date_end_string
+      @element_array << date_certainty_end_string
 
     rescue => error
       log_error(__method__, __FILE__, error)
@@ -225,7 +365,6 @@ module Solr
   def get_places(entry_id, search_term2)
 
     begin
-
       q = "relatedPlaceFor_ssim:#{entry_id} "
       if @display_type == 'matched records'
         q = "relatedPlaceFor_ssim:#{entry_id} AND (place_as_written_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_same_as_search:*#{search_term2}*)"
@@ -266,14 +405,14 @@ module Solr
 
       q = "relatedAgentFor_ssim:#{entry_id}"
       if @display_type == 'matched records'
-        q = "relatedAgentFor_ssim:#{entry_id} AND (person_as_written_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_as_written_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
+        q = "relatedAgentFor_ssim:#{entry_id} AND (person_as_written_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
       end
-      fl = 'id, person_as_written_tesim, person_role_new_tesim, person_descriptor_new_tesim, person_descriptor_as_written_tesim, person_note_tesim, person_same_as_new_tesim, person_related_place_tesim, person_related_person_tesim'
+      fl = 'id, person_as_written_tesim, person_role_new_tesim, person_descriptor_new_tesim, person_descriptor_same_as_tesim, person_note_tesim, person_same_as_new_tesim, person_related_place_tesim, person_related_person_tesim'
 
       person_as_written_string = ''
       person_role_string = ''
       person_descriptor_string = ''
-      person_descriptor_as_written_string = ''
+      person_descriptor_same_as_string = ''
       person_note_string = ''
       person_same_as_string = ''
       person_related_place_string = ''
@@ -283,7 +422,7 @@ module Solr
         person_as_written_string = person_as_written_string + get_place_or_person_string(result['person_as_written_tesim'], person_as_written_string)
         person_role_string = person_role_string + get_place_or_person_string(result['person_role_new_tesim'], person_role_string)
         person_descriptor_string = person_descriptor_string + get_place_or_person_string(result['person_descriptor_new_tesim'], person_descriptor_string)
-        person_descriptor_as_written_string = person_descriptor_as_written_string + get_place_or_person_string(result['person_descriptor_as_written_tesim'], person_descriptor_as_written_string)
+        person_descriptor_same_as_string = person_descriptor_same_as_string + get_place_or_person_string(result['person_descriptor_same_as_tesim'], person_descriptor_same_as_string)
         person_note_string = person_note_string + get_place_or_person_string(result['person_note_tesim'], person_note_string)
         person_same_as_string = person_same_as_string + get_place_or_person_string(result['person_same_as_new_tesim'], person_same_as_string)
         person_related_place_string = person_related_place_string + get_place_or_person_string(result['person_related_place_tesim'], person_related_place_string)
@@ -293,7 +432,7 @@ module Solr
       @element_array << person_as_written_string
       @element_array << person_role_string
       @element_array << person_descriptor_string
-      @element_array << person_descriptor_as_written_string
+      @element_array << person_descriptor_same_as_string
       @element_array << person_note_string
       @element_array << person_same_as_string
       @element_array << person_related_place_string

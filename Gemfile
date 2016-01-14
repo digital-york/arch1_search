@@ -14,9 +14,9 @@ gem 'dotenv-rails', :groups => [:development, :test, :production]
 # added (ja)
 gem 'osullivan'
 gem 'openseadragon' # to install run: bundle exec rails g openseadragon:install
-gem 'faraday'
-gem 'faraday_middleware'
 gem 'qa'
+gem 'active-fedora'
+gem 'active_fedora-noid'
 # end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

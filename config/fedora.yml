@@ -1,0 +1,16 @@
+development:
+  user: fedoraAdmin
+  password: <%= ENV['DEV_ADMIN_PASSWORD'] %>
+  url: http://127.0.0.1:8080/fedora/rest
+  # url: http://localhost:8080/fcrepo/rest
+  base_path: /dev
+test:
+  user: fedoraAdmin
+  password: <%= ENV['TEST_ADMIN_PASSWORD'] %>
+  url: http://127.0.0.1:8080/fedora/rest
+  base_path: /test
+production:
+  user: fedoraAdmin
+  password: <%= ENV['PROD_ADMIN_PASSWORD'] %>
+  url: <%= ENV['PRODUCTION_FEDORA'] %>
+  base_path: /production

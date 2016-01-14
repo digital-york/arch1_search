@@ -36,6 +36,11 @@
   max-width: 200px;
 }
 
+.collections-grid img {
+  width: 100%;
+  max-width: 200px;
+}
+
 .auths-table {
   width: 100% !important;
 }
@@ -46,6 +51,11 @@
 }
 .auths-table a {
   text-decoration: underline;
+}
+
+.plus-minus {
+  background-color: transparent;
+  border-color: transparent;
 }
 
 h1 {

@@ -1,10 +1,40 @@
-# added (ja)
 require 'iiif/presentation'
-require 'faraday'
-require 'faraday_middleware'
+require 'net/http'
 require 'json'
 
 module IiifHelper
+
+  def get_manifest(pid,replace=false)
+    begin
+      register = Register.find(pid)
+
+      if replace == true
+        make_fedora_manifest(register)
+      else
+        if register.manifest.content.nil?
+          make_fedora_manifest(register)
+          register.manifest.content
+        else
+          register.manifest.content
+        end
+      end
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      raise
+    end
+  end
+
+  def make_fedora_manifest(register)
+    begin
+      register.manifest.content = StringIO.new(make_manifest(register.id))
+      register.manifest.mime_type = 'application/json'
+      register.manifest.preflabel = 'IIIF Manifest'
+      register.save
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      raise
+    end
+  end
 
   def make_manifest(pid)
     @query_obj = SolrQuery.new
@@ -12,10 +42,10 @@ module IiifHelper
   end
 
   def manifest(pid)
-    resp = @query_obj.solr_query('id:"' + pid + '"',fl='reg_id_tesim,preflabel_tesim,thumbnail_url',rows=1)['response']['docs']
+    resp = @query_obj.solr_query('id:"' + pid + '"',fl='reg_id_tesim,preflabel_tesim,thumbnail_url_tesim',rows=1)['response']['docs']
 
     seed = {
-        '@id' => 'http://example.com/manifest',
+        '@id' => "http://#{ENV['SERVER']}/iiif/manifest/#{pid}",
         'label' => resp[0]['reg_id_tesim'],
         'description' => resp[0]['preflabel_tesim'],
         'attribution' => 'Made available by the University of York',
@@ -30,57 +60,61 @@ module IiifHelper
   def canvas(pid,manifest)
 
     @query_obj.solr_query('id:"' + pid + '/list_source"',fl='ordered_targets_ssim',rows=1)['response']['docs'][0]['ordered_targets_ssim'].each_with_index do |target, i|
+      puts i
       resp = @query_obj.solr_query('id:"' + target + '"',fl='preflabel_tesim',rows=1)['response']['docs']
-      canvas = IIIF::Presentation::Canvas.new()
-      canvas['@id'] = "http://episcopal.york.ac.uk/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}"
-      image = ''
-      @query_obj.solr_query('hasTarget_ssim:"'+ target + '"',fl='id,file_path_tesim',rows=1,'preflabel_si asc')['response']['docs'].each do |img|
-        image = img['file_path_tesim'].join
-        #if i == 0
-        #get_info_json(image)
-        #end
+        canvas = IIIF::Presentation::Canvas.new()
+        canvas['@id'] = "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}"
+        image = ''
+        canvas.width,canvas.height = get_info_json(get_image(target))
+        canvas.label = resp[0]['preflabel_tesim']
+        canvas['on'] = "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}"
 
-        canvas.width = 3000 # TODO required
-        canvas.height = 4000 # TODO required
+        begin
+          img = IIIF::Presentation::Annotation.new(
+              'resource' => IIIF::Presentation::ImageResource.new(
+                  '@id' => "http://#{ENV['SERVER']}/iiif/#{target}",
+                  'service' => {
+                      '@id' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}",
+                      '@context' => 'http://iiif.io/api/image/2/context.json',
+                      'profile' => 'http://iiif.io/api/image/2/level1.json'
+                  },
+                  'format' => 'image/jp2'
+              )
+          )
+          canvas.images << img
+        rescue
+        end
+        manifest.sequences << canvas
       end
-      canvas.label = resp[0]['preflabel_tesim']
-      canvas['on'] = "http://episcopal.york.ac.uk/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}"
-
-      begin
-        img = IIIF::Presentation::Annotation.new(
-            'resource' => IIIF::Presentation::ImageResource.new(
-                '@id' => "http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?IIIF/#{image}/info.json",
-                'service' => {
-                    '@id' => "http://episcopal.york.ac.uk/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}",
-                    '@context' => 'http://iiif.io/api/image/2/context.json',
-                    'profile' => 'http://iiif.io/api/image/2/level1.json'
-                },
-                'format' => 'image/jp2'
-            )
-        )
-        canvas.images << img
-      rescue
-      end
-      manifest.sequences << canvas
-    end
-    puts manifest.to_json(pretty: true)
-    #manifest
+    manifest
   end
 
   def get_info_json(image)
-
-    conn = Faraday.new(:url => 'http://dlib.york.ac.uk') do |faraday|
-      faraday.request  :url_encoded             # form-encode POST params
-      faraday.response :json, :content_type => 'application/json+ld'
-      faraday.adapter  Faraday.default_adapter  # make requests with Net::HTTP
+    begin
+      res = Net::HTTP.get_response('dlib.york.ac.uk', '/cgi-bin/iipsrv.fcgi?IIIF=' + image + '/info.json')
+      json = JSON.parse res.body
+      return json['width'], json['height']
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      return 100,100
     end
+  end
 
-## GET ##
+  def get_image(target)
+    image = ''
+    SolrQuery.new.solr_query('hasTarget_ssim:"'+ target + '"',fl='id,file_path_tesim',rows=1,'preflabel_si asc')['response']['docs'].each do |img|
+      image = img['file_path_tesim'].join
+    end
+    image
+  end
 
-    response = conn.get '/cgi-bin/iipsrv.fcgi?IIIF=' + image + '/info.json'
-    #response = conn.get
-    puts response.body
-    #puts ActiveSupport::JSON.decode(response.body)
-    #JSON.parse(ActiveSupport::JSON.decode(response.body).gsub('\"', '"'))
+  # Writes error message to the log
+  def log_error(method, file, error)
+    time = ''
+    # Only add time for development log because production already outputs timestamp
+    if Rails.env == 'development'
+      time = Time.now.strftime('[%d/%m/%Y %H:%M:%S] ').to_s
+    end
+    Rails.logger.error "#{time}EXCEPTION IN #{file}, method='#{method}' [#{error}]"
   end
 end

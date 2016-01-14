@@ -48,7 +48,7 @@
                     </li>
                 </ul>
             </li>
-            <li>Browsing of <strong>all</strong> Registers, including zoom-able images for each folio</li>.
+            <li>Browsing of <strong>all</strong> 45 Registers, including zoom-able images for each folio</li>.
             <li>Browsing of people, place and organisation authority files, and subject headings for those Registers
                 that have been indexed.
             </li>
@@ -77,7 +77,7 @@
 
         <h2>Access to the data</h2>
 
-        <p>The project has created some 20,000 high quality images of 45 Archbishops’ Registers. An archival master
+        <p>The project has created some 21,647 high quality images of 45 Archbishops’ Registers. An archival master
             image is stored in our Digital Archive and is not available for download, but dissemination copies are
             available. We use an image viewer called ‘openseadragon’ to provide ‘deep zoom’ access
             online.</p>
@@ -88,7 +88,7 @@
 
         <a id="terms"></a>
 
-        <h3>Term lists, subject headings and authority files</h3>
+        <h2>Term lists, subject headings and authority files</h2>
 
         <p>The project is developing a set of term lists, subject headings and authority files, as detailed below.
             Subject headings and authority files can be browsed in the site itself.</p>
@@ -101,7 +101,7 @@
         </ul>
         <br/>
 
-        <p>In addition, there is a REST API interface for querying. This feature makes use of the
+        <p>In addition, there is a REST API for querying accessing these lists. This feature makes use of the
             <%= link_to 'questioning_authority', 'https://github.com/projecthydra-labs/questioning_authority' %>
             gem from the
             <%= link_to 'Hydra project', 'http://projecthydra.org/' %>
@@ -123,7 +123,7 @@
 
         <a id="vocabs"></a>
 
-        <h3>Available vocabularies</h3>
+        <h2>Available vocabularies</h2>
 
         <table class="vocabs-table">
             <tr>
@@ -158,7 +158,7 @@
                 </td>
                 <td>/search<br/>
                     /show<br/>
-                    /terms
+                    <!-- /terms -->
                 </td>
             </tr>
             <tr>
@@ -181,30 +181,14 @@
 
         <a id="iiif"></a>
 
-        <h3>IIIF Support</h3>
+        <h2>IIIF Support</h2>
 
-        <p><%= link_to 'IIIF', 'http://iiif.io/' %>
-            (International Image Interoperability Framework) is an international initiative to
-            provide “an interoperable technology and community framework for image delivery”. IIIF publish two
-            standards,
-            one for serving images, which allows others applications to make use of images in a standardised way, and
-            another presentation, to enable the standardised description (an IIIF Manifest) of image collections for use
-            in
-            different tools. The project has implemented both standards.</p>
+        <%= render 'iiif/iiif' %>
 
-        <p>For each register we provide an IIIF Manifest. This is a file containing structured (JSON) data compliant
-            with
-            the IIIF Presentation API (version 2) describing the register and its images.</p>
+        <p></p>
+        <p>See a list of available manifests:</p>
 
-        <p>This manifest can be ‘plugged’ into any IIIF compliant viewer. For example the Biblissima Project is a hub
-            for
-            digital humanities projects in France which provides a demonstration version of the Mirador Viewer [link].
-            It is
-            possible to add your own IIIF Manifest to this demo site.</p>
-
-        <ul>
-            <li><%= link_to 'Biblissima Mirador Viewer', 'http://demos.biblissima-condorcet.fr/mirador/#27af4c40-8f6c-4aaf-9911-1a83a3e862e3' %></li>
-        </ul>
+        <ul><li><%= link_to 'Manifests', iiif_index_path %></li></ul>
 
         <a id="tech"></a>
 

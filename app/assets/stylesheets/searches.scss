@@ -85,21 +85,21 @@ ul {
 }
 
 #search_box {
-  width: 612px;
+  width: 85%;
   border-color: black;
-  margin-left: 15px;
   border-radius: 4px;
+  margin-right: 10px;
 }
 
 .go_button {
   background-color: #FFCC00;
   border-color: black;
-  color: black; margin-left: 10px;
+  color: black;
+  width: 10%;
 }
 
 .go_text {
-  padding-left: 10px;
-  padding-right: 10px;
+  text-align: center;
 }
 /***** End of search row *****/
 

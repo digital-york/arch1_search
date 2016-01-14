@@ -2,14 +2,18 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
 
-            <h1>Browse Subjects<span style="float: right">
+            <h1>Subjects<span style="float: right">
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span></h1>
 
-        <table class="vocabs-table auths-table">
             <% @top_level_list.each do |subject| %>
-                <tr style="width: 100%">
-                    <td style="width: 30% !important"><%= link_to subject['label'], searches_path(:search_term => subject['label']) %>
+                <ul class="list-unstyled">
+                    <li>
+                        <% unless subject[:elements].nil? %>
+                            <%= button_tag '', :type => 'button', :class => 'show_hide fa fa-plus plus-minus' %>
+                        <% end %>
+
+                        <%= subject['label'] %>
 
                         <% unless subject['definition'].nil? %>
                             -- <strong>Definition:</strong> <%= subject['definition'] %>
@@ -20,11 +24,8 @@
                                 <%= p %>;&nbsp;
                             <% end %>
                         <% end %>
-                    </td><td>
-                        <% unless subject[:elements].nil? %>
-                            <%= button_tag 'Sub-headings', :type => 'button', :class => 'show_hide' %>
+
                             <ul class="tog" style="display: none">
-                            <br />
                             <% subject[:elements].each do |p| %>
                                 <li><%= link_to p['label'], searches_path(:search_term => p['label']) %>
                                     <% unless p['definition'].nil? %>
@@ -36,12 +37,13 @@
                                             <%= p %>;&nbsp;
                                         <% end %>
                                     <% end %>
+                                    <br />
                                 </li>
-                            <% end %>
+                                <% end %>
                             </ul>
-                        <% end %>
-                    </td>
-                </tr>
+                    <br />
+                    </li>
+                </ul>
             <% end %>
         </table>
 

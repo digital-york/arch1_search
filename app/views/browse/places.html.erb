@@ -2,7 +2,7 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
 
-            <h1>Browse Places<span style="float: right">
+            <h1>Places<span style="float: right">
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span></h1>
 
@@ -23,9 +23,15 @@
         <table class="vocabs-table auths-table">
             <% @search_array.each do |place| %>
                 <tr>
-                    <td><%= link_to place['label'], searches_path(:search_term => place['label']) %></td>
                     <td>
-                        <%= button_tag 'Show | Hide Details', :type => 'button', :class => 'show_hide' %>
+                        <% if place['used'].nil? %>
+                            <%= place['label'] %>
+                        <% else %>
+                            <%= link_to place['label'], searches_path(:search_term => place['label']) %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <%= button_tag 'Show Details', :type => 'button', :class => 'show_hide' %>
                         <div class="tog" style="display: none">
                             <% unless place['place_name'].nil? %>
                                 <br/><strong>Place Name:</strong> <%= place['place_name'] %>
@@ -63,10 +69,12 @@
                                unless place['related_authority'].nil? %>
                                 <br/><strong>Related Authority:</strong> <br />
                                 <% place['related_authority'].each do |p| %>
-                                    <% if p.starts_with? 'http' %>
-                                        <%= link_to p, p %><br />
-                                    <% else %>
-                                        <%= p %>
+                                  <% unless p == 'http://www.hrionline.ac.uk/causepapers/xsd/parish-groups.xsd' %>
+                                        <%  if p.starts_with? 'http' %>
+                                          <%= link_to p, p %><br />
+                                        <% else %>
+                                            <%= p %>
+                                        <% end %>
                                     <% end %>
                                 <% end %>
                             <% end %>
