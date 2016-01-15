@@ -208,11 +208,6 @@ ActiveRecord::Schema.define(version: 20160110000133) do
 
   add_index "db_subjects", ["db_entry_id"], name: "index_db_subjects_on_db_entry_id"
 
-  create_table "iiifs", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "searches", force: :cascade do |t|
     t.text     "query_params"
     t.integer  "user_id"
@@ -222,6 +217,11 @@ ActiveRecord::Schema.define(version: 20160110000133) do
   end
 
   add_index "searches", ["user_id"], name: "index_searches_on_user_id"
+
+  create_table "iiifs", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false
