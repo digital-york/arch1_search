@@ -10,6 +10,7 @@ class SearchesController < ApplicationController
       # These will also be passed back to the view page
       @search_term = params[:search_term]
       @page = params[:page]
+      @register_facet= params[:register_facet]
       @section_type_facet = params[:section_type_facet]
       @subject_facet = params[:subject_facet]
       @person_same_as_facet = params[:person_same_as_facet]
@@ -17,6 +18,7 @@ class SearchesController < ApplicationController
       @date_facet = params[:date_facet]
       @display_type = params[:display_type]
       @number_of_rows = 0
+      @search_type = params[:search_type]
 
       if @display_type == nil
         @display_type = 'full display'
@@ -42,6 +44,7 @@ class SearchesController < ApplicationController
       @place_same_as_facet_array = []
       @subject_facet_array = []
       @date_facet_array = []
+      @register_facet_array = []
 
       # Check if there are less than minimum_search_chars entered into the search box
       # Note that this is for the server-side check and shouldn't happen in normal circumstances because there is a javascript check -->
@@ -70,7 +73,12 @@ class SearchesController < ApplicationController
         end
 
         # Set arrays which display data on the page
-        set_search_result_arrays
+
+        if @search_type == 'subject'
+          set_search_result_arrays(@search_type)
+        else
+          set_search_result_arrays
+        end
 
         # If we come to this page from the 'Search' menu link, make sure to remove the search term otherwise it appears in the search box
         if @search_term == 'NO_SEARCH' then @search_term = '' end
@@ -95,7 +103,12 @@ class SearchesController < ApplicationController
       get_solr_data(@db_entry)
 
       @folio_id = params[:folio_id]
-      @folio_title = params[:folio_title]
+      if params[:folio_title].nil?
+        @folio_title = get_folio_name(params[:folio_id])
+      else
+        @folio_title = params[:folio_title]
+      end
+
 
       # @entry_list is used to get the tabs for the view page
       @entry_list = get_entry_list(@folio_id)

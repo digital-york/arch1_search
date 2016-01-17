@@ -27,6 +27,10 @@ Rails.application.routes.draw do
 
   resources :iiif
 
+  get 'entry/:id' , controller: :entry, action: :show
+
+  resources :entry
+
   get 'browse/index'
   get 'browse/registers'
   get 'browse/people'

@@ -1,5 +1,10 @@
 module RegisterFolioHelper
 
+  # return the number of indexed entries
+  def get_entry_count
+    SolrQuery.new.solr_query('has_model_ssim:Entry')['response']['numFound']
+  end
+
   # get the thumbnail image for the register
   def get_thumb(register)
     begin

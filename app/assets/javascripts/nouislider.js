@@ -267,8 +267,6 @@
 	}
 
 
-// Entry parsing
-
 	function handleEntryPoint ( index, value, that ) {
 
 		var percentage;

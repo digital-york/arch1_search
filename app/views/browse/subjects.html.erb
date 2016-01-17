@@ -27,7 +27,7 @@
 
                             <ul class="tog" style="display: none">
                             <% subject[:elements].each do |p| %>
-                                <li><%= link_to p['label'], searches_path(:search_term => p['label']) %>
+                                <li><%= link_to p['label'], searches_path(:search_term => p['label'], :search_type => 'subject') %>
                                     <% unless p['definition'].nil? %>
                                         -- <strong>Definition:</strong> <%= p['definition'] %>
                                     <% end

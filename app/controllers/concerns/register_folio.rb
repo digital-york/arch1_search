@@ -185,4 +185,10 @@ module RegisterFolio
     raise
   end
 
+  # get folio_id
+  def get_folio(target)
+    folio = SolrQuery.new.solr_query('id:"'+ target + '"',fl='folio_ssim',rows=1,'preflabel_si asc')['response']['docs'][0]['folio_ssim'][0]
+    folio
+  end
+
 end

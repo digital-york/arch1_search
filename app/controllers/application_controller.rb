@@ -6,4 +6,5 @@ class ApplicationController < ActionController::Base
 
   include Solr
   include RegisterFolio
+  include RegisterFolioHelper
 end

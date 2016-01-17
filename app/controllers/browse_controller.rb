@@ -2,7 +2,6 @@
 class BrowseController < ApplicationController
 
   layout 'default_layout'
-  include RegisterFolioHelper
 
   def index
     reset_session_variables
