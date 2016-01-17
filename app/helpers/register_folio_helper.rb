@@ -106,7 +106,7 @@ module RegisterFolioHelper
       # Get the collections so that we can get a list of registers in order
       registers = Hash.new
       q = SolrQuery.new
-      q.solr_query('id:"' + collection + '/list_source"', 'ordered_targets_ssim', 100)['response']['docs'].map.each do |res|
+      q.solr_query('id:"' + collection + '/list_source"', 'ordered_targets_ssim', 2)['response']['docs'].map.each do |res|
         order = res['ordered_targets_ssim']
         order.each do |o|
           q.solr_query('id:"' + o + '"', 'id,preflabel_tesim,reg_id_tesim', 1)['response']['docs'].map.each do |r|

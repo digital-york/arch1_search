@@ -4,7 +4,7 @@ require 'json'
 
 module IiifHelper
 
-  def get_manifest(pid,replace=false)
+  def get_manifest(pid, replace=false)
     begin
       register = Register.find(pid)
 
@@ -12,8 +12,8 @@ module IiifHelper
         make_fedora_manifest(register)
       else
         if register.manifest.content.nil?
-          make_fedora_manifest(register)
-          register.manifest.content
+          make_fedora_manifest(register.id)
+          return register.manifest.content
         else
           register.manifest.content
         end
@@ -24,7 +24,8 @@ module IiifHelper
     end
   end
 
-  def make_fedora_manifest(register)
+  def make_fedora_manifest(register_id)
+    register = Register.find(register_id)
     begin
       register.manifest.content = StringIO.new(make_manifest(register.id))
       register.manifest.mime_type = 'application/json'
@@ -37,55 +38,62 @@ module IiifHelper
   end
 
   def make_manifest(pid)
-    @query_obj = SolrQuery.new
-    canvas(pid,manifest(pid)).to_json(pretty: true)
+    begin
+      canvas(pid, manifest_part(pid)).to_json(pretty: true)
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      raise
+    end
   end
 
-  def manifest(pid)
-    resp = @query_obj.solr_query('id:"' + pid + '"',fl='reg_id_tesim,preflabel_tesim,thumbnail_url_tesim',rows=1)['response']['docs']
+  def manifest_part(pid)
+    begin
+      @query_obj = SolrQuery.new
+      resp = @query_obj.solr_query('id:"' + pid + '"', fl='reg_id_tesim,preflabel_tesim,thumbnail_url_tesim', rows=1)['response']['docs']
 
-    seed = {
-        '@id' => "http://#{ENV['SERVER']}/iiif/manifest/#{pid}",
-        'label' => resp[0]['reg_id_tesim'],
-        'description' => resp[0]['preflabel_tesim'],
-        'attribution' => 'Made available by the University of York',
-        'license' => 'http://creativecommons.org/licenses/by-sa/4.0/',
-        'thumbnail' => resp[0]['thumbnail_url_tesim']
-    }
+      seed = {
+          '@id' => "http://#{ENV['SERVER']}/iiif/manifest/#{pid}",
+          'label' => resp[0]['reg_id_tesim'],
+          'description' => resp[0]['preflabel_tesim'],
+          'attribution' => 'Made available by the University of York',
+          'license' => 'http://creativecommons.org/licenses/by-sa/4.0/',
+          'thumbnail' => resp[0]['thumbnail_url_tesim']
+      }
 
-    manifest = IIIF::Presentation::Manifest.new(seed)
-    manifest
+      manifest = IIIF::Presentation::Manifest.new(seed)
+      manifest
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      raise
+    end
   end
 
-  def canvas(pid,manifest)
+  def do_canvas(pid, manifest)
+    @query_obj.solr_query('id:"' + pid + '/list_source"', fl='ordered_targets_ssim', rows=1)['response']['docs'][0]['ordered_targets_ssim'].each_with_index do |target, i|
+      resp = @query_obj.solr_query('id:"' + target + '"', fl='preflabel_tesim', rows=1)['response']['docs']
+      canvas = IIIF::Presentation::Canvas.new()
+      canvas['@id'] = "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}"
+      canvas.width, canvas.height = get_info_json(get_image(target))
+      canvas.label = resp[0]['preflabel_tesim']
+      canvas['on'] = "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}"
 
-    @query_obj.solr_query('id:"' + pid + '/list_source"',fl='ordered_targets_ssim',rows=1)['response']['docs'][0]['ordered_targets_ssim'].each_with_index do |target, i|
-      puts i
-      resp = @query_obj.solr_query('id:"' + target + '"',fl='preflabel_tesim',rows=1)['response']['docs']
-        canvas = IIIF::Presentation::Canvas.new()
-        canvas['@id'] = "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}"
-        image = ''
-        canvas.width,canvas.height = get_info_json(get_image(target))
-        canvas.label = resp[0]['preflabel_tesim']
-        canvas['on'] = "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}"
-
-        begin
-          img = IIIF::Presentation::Annotation.new(
-              'resource' => IIIF::Presentation::ImageResource.new(
-                  '@id' => "http://#{ENV['SERVER']}/iiif/#{target}",
-                  'service' => {
-                      '@id' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}",
-                      '@context' => 'http://iiif.io/api/image/2/context.json',
-                      'profile' => 'http://iiif.io/api/image/2/level1.json'
-                  },
-                  'format' => 'image/jp2'
-              )
-          )
-          canvas.images << img
-        rescue
-        end
-        manifest.sequences << canvas
+      begin
+        img = IIIF::Presentation::Annotation.new(
+            'resource' => IIIF::Presentation::ImageResource.new(
+                '@id' => "http://#{ENV['SERVER']}/iiif/#{target}",
+                'service' => {
+                    '@id' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}?folio_id=#{target}",
+                    '@context' => 'http://iiif.io/api/image/2/context.json',
+                    'profile' => 'http://iiif.io/api/image/2/level1.json'
+                },
+                'format' => 'image/jp2'
+            )
+        )
+        canvas.images << img
+      rescue
       end
+      manifest.sequences << canvas
+    end
     manifest
   end
 
@@ -96,13 +104,13 @@ module IiifHelper
       return json['width'], json['height']
     rescue => error
       log_error(__method__, __FILE__, error)
-      return 100,100
+      return 100, 100
     end
   end
 
   def get_image(target)
     image = ''
-    SolrQuery.new.solr_query('hasTarget_ssim:"'+ target + '"',fl='id,file_path_tesim',rows=1,'preflabel_si asc')['response']['docs'].each do |img|
+    SolrQuery.new.solr_query('hasTarget_ssim:"'+ target + '"', fl='id,file_path_tesim', rows=1, 'preflabel_si asc')['response']['docs'].each do |img|
       image = img['file_path_tesim'].join
     end
     image

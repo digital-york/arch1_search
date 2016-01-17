@@ -4,7 +4,11 @@ class IiifController < ApplicationController
 
   def index
     # get a list of registers so that we can show the manifest download button for each
-    @manifests = get_registers_in_order
+    @manifests = Hash.new
+    get_collections(nil).each do | coll |
+      puts get_registers_in_order(coll[0])
+      @manifests = get_registers_in_order(coll[0]).merge(@manifests)
+    end
   end
 
   # Support IIIF Image api URI Syntax:
@@ -47,8 +51,6 @@ class IiifController < ApplicationController
         end
       else
         render :json => get_manifest(params[:register_id]), :type => 'application/json'
-       # to download as manifest.json
-       # send_data get_manifest(params[:register_id]), :filename => 'manifest.json', :type => 'application/json'
       end
     rescue => error
       log_error(__method__, __FILE__, error)
