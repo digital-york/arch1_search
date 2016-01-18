@@ -2,89 +2,100 @@
     <div class="col-md-2"></div>
     <div class="col-md-8">
 
-            <h1>Places<span style="float: right">
+        <h1>Places<span style="float: right">
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span></h1>
 
+        <%  @search_hash.each do |key, value| %>
         <p>
-            <% ('a'..'z').to_a.each do |l| %>
-                <% if l != 'z' %>
-                    <%=link_to l.upcase, browse_places_path(:letter => l.upcase) %> |
-                <% else %>
-                    <%=link_to l.upcase, browse_places_path(:letter => l.upcase) %> |
-                    <%=link_to 'All', browse_places_path %>
-                <% end %>
+
+        <% value.sort.to_h.each do |k, v| %>
+                <%= link_to k, browse_places_path(:letter => k) %> |
             <% end %>
+        <% end %>
+        <%= link_to 'All', browse_places_path(:letter => 'all') %>
         </p>
         <% unless session[:letter].nil? %>
-            <p>Searching for terms beginning with <strong><%= session[:letter] %></strong></p>
+            <p>Searching for place names in <strong><%= session[:letter] %></strong></p>
         <% end %>
 
-        <table class="vocabs-table auths-table">
-            <% @search_array.each do |place| %>
-                <tr>
-                    <td>
-                        <% if place['used'].nil? %>
-                            <%= place['label'] %>
-                        <% else %>
-                            <%= link_to place['label'], searches_path(:search_term => place['label']) %>
-                        <% end %>
-                    </td>
-                    <td>
-                        <%= button_tag 'Show Details', :type => 'button', :class => 'show_hide' %>
-                        <div class="tog" style="display: none">
-                            <% unless place['place_name'].nil? %>
-                                <br/><strong>Place Name:</strong> <%= place['place_name'] %>
-                            <% end
-                               unless place['parentADM4'].nil? %>
-                                <br /><strong>Within:</strong> <%= place['parentADM4'] %>
-                            <% end
-                               unless place['parentADM3'].nil? %>
-                                <br /><strong>Within:</strong> <%= place['parentADM3'] %>
-                            <% end
-                               unless place['parentADM2'].nil? %>
-                                <br /><strong>Within:</strong> <%= place['parentADM2'] %>
-                            <% end
-                               unless place['parentADM1'].nil? %>
-                                <br /><strong>Within:</strong> <%= place['parentADM1'] %>
-                            <% end
-                               unless place['countrycode'].nil? %>
-                                <br /><strong>Country:</strong> <%= place['countrycode'] %>
-                            <% end
-                               unless place['featuretype'].nil? %>
-                                <br/><strong>Place Type:</strong>
-                                <% place['featuretype'].each do |p| %>
-                                    <%= p %>;&nbsp;
-                                    <% end %>
-                            <% end
-                               unless place['variants'].nil? %>
-                                <br/><strong>Variants:</strong>
-                                <% place['variants'].each do |p| %>
-                                    <%= p %>;&nbsp;
+        <%
+           @search_hash.each do |key, value| %>
+            <% value.sort.to_h.each do |k, v| %>
+                <% if session[:letter].nil? or session[:letter] == 'all' or session[:letter] == k %>
+                <h2><%= k %> (<%= key %>)</h2>
+
+                <table class="vocabs-table auths-table">
+                    <% v.each do |place| %>
+                        <tr>
+                            <td style="width:25%">
+                                <% if place['used'].nil? %>
+                                    <%= place['place_name'] %>
+                                <% else %>
+                                    <%= link_to place['place_name'], searches_path(:search_term => place['label']) %>
                                 <% end %>
-                            <% end
-                               unless place['note'].nil? %>
-                                <br/><strong>Note:</strong> <%= place['note'] %>
-                            <% end
-                               unless place['related_authority'].nil? %>
-                                <br/><strong>Related Authority:</strong> <br />
-                                <% place['related_authority'].each do |p| %>
-                                  <% unless p == 'http://www.hrionline.ac.uk/causepapers/xsd/parish-groups.xsd' %>
-                                        <%  if p.starts_with? 'http' %>
-                                          <%= link_to p, p %><br />
-                                        <% else %>
-                                            <%= p %>
+                            </td>
+                            <td>
+                                <%= button_tag 'Show Details', :type => 'button', :class => 'show_hide' %>
+                                <div class="tog" style="display: none">
+                                    <% unless place['place_name'].nil? %>
+                                        <br/><strong>Place Name:</strong> <%= place['place_name'] %>
+                                    <% end
+                                       unless place['parentADM4'].nil? %>
+                                        <br/><strong>Within:</strong> <%= place['parentADM4'] %>
+                                    <% end
+                                       unless place['parentADM3'].nil? %>
+                                        <br/><strong>Within:</strong> <%= place['parentADM3'] %>
+                                    <% end
+                                       unless place['parentADM2'].nil? %>
+                                        <br/><strong>Within:</strong> <%= place['parentADM2'] %>
+                                    <% end
+                                       unless place['parentADM1'].nil? %>
+                                        <br/><strong>Within:</strong> <%= place['parentADM1'] %>
+                                    <% end
+                                       unless place['countrycode'].nil? %>
+                                        <br/><strong>Country:</strong> <%= place['countrycode'] %>
+                                    <% end
+                                       unless place['featuretype'].nil? %>
+                                        <br/><strong>Place Type:</strong>
+                                        <% place['featuretype'].each do |p| %>
+                                            <%= p %>;&nbsp;
+                                        <% end %>
+                                    <% end
+                                       unless place['variants'].nil? %>
+                                        <br/><strong>Variants:</strong>
+                                        <% place['variants'].each do |p| %>
+                                            <%= p %>;&nbsp;
+                                        <% end %>
+                                    <% end
+                                       unless place['note'].nil? %>
+                                        <br/><strong>Note:</strong> <%= place['note'] %>
+                                    <% end
+                                       unless place['related_authority'].nil? %>
+                                        <br/><strong>Related Authority:</strong> <br/>
+                                        <% place['related_authority'].each do |p| %>
+                                            <% unless p == 'http://www.hrionline.ac.uk/causepapers/xsd/parish-groups.xsd' %>
+                                                <% if p.starts_with? 'http' %>
+                                                    <%= link_to p, p %><br/>
+                                                <% else %>
+                                                    <%= p %>
+                                                <% end %>
+                                            <% end %>
                                         <% end %>
                                     <% end %>
-                                <% end %>
-                            <% end %>
-                        </div>
-                    </td>
-                    </td>
+                        <% end %>
+                                </div>
+                            </td>
 
-                </tr>
-            <% end %>
-        </table>
+                        </tr>
+
+                    <% end %>
+                </table>
+            <%
+               end
+               end
+            %>
+
 
     </div>
     <div class="col-md-2"></div>

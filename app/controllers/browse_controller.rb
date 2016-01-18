@@ -125,18 +125,44 @@ class BrowseController < ApplicationController
     begin
       reset_session_variables
       @search_array = PlaceTerms.new('subauthority').internal_all
-      # Limit by alphabet
-      unless browse_params['letter'].nil? or browse_params['letter'] =='All' or browse_params['letter'].size() != 1
-        unless browse_params['letter'] =='All'
-          session[:letter] = browse_params['letter']
-        end
-        arr = []
-        @search_array.each do | alpha |
-          if alpha['label'][0].downcase == browse_params['letter'].downcase
-            arr << alpha
+      @search_hash = Hash.new
+
+      @search_array.each do | place |
+
+        if place['countrycode'].nil?
+          if @search_hash[place['parentADM1']].nil?
+            @search_hash[place['parentADM1']] = {place['parentADM2'] => [place] }
+          else
+            if @search_hash[place['parentADM1']][place['parentADM2']].nil?
+              @search_hash[place['parentADM1']][place['parentADM2']] = [place]
+            else
+              arr = @search_hash[place['parentADM1']][place['parentADM2']]
+              arr << place
+              @search_hash[place['parentADM1']][place['parentADM2']] = arr
+            end
+          end
+        else
+          if @search_hash[place['countrycode']].nil?
+            @search_hash[place['countrycode']] = {place['parentADM1'] => [place] }
+          else
+            if @search_hash[place['countrycode']][place['parentADM1']].nil?
+              @search_hash[place['countrycode']][place['parentADM1']] = [place]
+            else
+              arr = @search_hash[place['countrycode']][place['parentADM1']]
+              arr << place
+              @search_hash[place['countrycode']][place['parentADM1']] = arr
+            end
           end
         end
-        @search_array = arr
+      end
+
+      # Limit by adm2
+      unless browse_params['letter'].nil? or browse_params['letter'] =='All'
+        unless browse_params['letter'] =='All'
+          unless @search_hash['England'][browse_params['letter']].nil?
+            session[:letter] = browse_params['letter']
+          end
+        end
       end
     rescue => error
       log_error(__method__, __FILE__, error)

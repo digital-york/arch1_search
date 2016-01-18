@@ -42,7 +42,7 @@ class PlaceTerms
   # Reformats the data received from the service
   def parse_authority_response(response)
     response['response']['docs'].map do |result|
-      geo = TermsHelper::Geo.new
+      #geo = TermsHelper::Geo.new
       #al = geo.adminlevel(result['parentADM1_tesim'].first,result['parentADM2_tesim'].first)
       { 'id' => result['id'],
         #'label' => "#{result['preflabel_tesim'].first} (#{al})",
