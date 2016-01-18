@@ -68,7 +68,7 @@ module IiifHelper
     end
   end
 
-  def do_canvas(pid, manifest)
+  def canvas(pid, manifest)
     @query_obj.solr_query('id:"' + pid + '/list_source"', fl='ordered_targets_ssim', rows=1)['response']['docs'][0]['ordered_targets_ssim'].each_with_index do |target, i|
       resp = @query_obj.solr_query('id:"' + target + '"', fl='preflabel_tesim', rows=1)['response']['docs']
       canvas = IIIF::Presentation::Canvas.new()
