@@ -583,6 +583,8 @@ module Solr
       is_match = false
 
       if input_array != nil
+
+        # Iterate over the input array and add columns between elements
         input_array.each do |t|
           if t.match(/#{@match_term}/i)
             is_match = true
@@ -614,7 +616,6 @@ module Solr
 
     return str
   end
-
 
   # This method gets all the solr data from an entry into a db_entry database object
   # We did this because getting the data using activeFedora is too slow

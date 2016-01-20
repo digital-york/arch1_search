@@ -38,8 +38,8 @@ module RegisterFolioHelper
       @query_obj = SolrQuery.new
       # get the file paths from the register
       get_order(reg).each do |target|
-        @query_obj.solr_query('hasTarget_ssim:' + target, 'file_path_tesim', 1, 'preflable_si asc')['response']['docs'][0]['file_path_tesim']
-        tile_sources << "http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{@query_obj.solr_query('hasTarget_ssim:' + target, 'file_path_tesim', 1, 'preflabel_si asc')['response']['docs'][0]['file_path_tesim'][0]}.dzi"
+        @query_obj.solr_query('hasTarget_ssim:' + target, 'file_path_tesim', 1, 'preflabel_si asc')['response']['docs'][0]['file_path_tesim']
+        tile_sources << "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{@query_obj.solr_query('hasTarget_ssim:' + target, 'file_path_tesim', 1, 'preflabel_si asc')['response']['docs'][0]['file_path_tesim'][0]}.dzi"
       end
       tile_sources
     rescue => error
