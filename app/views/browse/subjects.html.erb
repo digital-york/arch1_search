@@ -12,8 +12,11 @@
                         <% unless subject[:elements].nil? %>
                             <%= button_tag '', :type => 'button', :class => 'show_hide fa fa-plus plus-minus' %>
                         <% end %>
-
-                        <%= subject['label'] %>
+                        <% if subject['used'].nil? %>
+                            <%= subject['label'] %>
+                        <% else %>
+                            <%= link_to subject['label'], searches_path(:search_term => subject['label'], :search_type => 'subject') %>
+                        <% end %>
 
                         <% unless subject['definition'].nil? %>
                             -- <strong>Definition:</strong> <%= subject['definition'] %>
@@ -27,7 +30,13 @@
 
                             <ul class="tog" style="display: none">
                             <% subject[:elements].each do |p| %>
-                                <li><%= link_to p['label'], searches_path(:search_term => p['label'], :search_type => 'subject') %>
+                                <li>
+                                    <% if p['used'].nil? %>
+                                        <%= p['label'] %>
+                                    <% else %>
+                                        <%= link_to p['label'], searches_path(:search_term => p['label'], :search_type => 'subject') %>
+                                    <% end %>
+
                                     <% unless p['definition'].nil? %>
                                         -- <strong>Definition:</strong> <%= p['definition'] %>
                                     <% end
