@@ -12,11 +12,7 @@
                         <% unless subject[:elements].nil? %>
                             <%= button_tag '', :type => 'button', :class => 'show_hide fa fa-plus plus-minus' %>
                         <% end %>
-                        <% if subject['used'].nil? %>
-                            <%= subject['label'] %>
-                        <% else %>
-                            <%= link_to subject['label'], searches_path(:search_term => subject['label'], :search_type => 'subject') %>
-                        <% end %>
+                        <%= subject['label'] %>
 
                         <% unless subject['definition'].nil? %>
                             -- <strong>Definition:</strong> <%= subject['definition'] %>

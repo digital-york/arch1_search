@@ -46,7 +46,7 @@ class PersonTerms
         'label' => result['preflabel_tesim'].join,
         'family' => if result['family_tesim'] then result['family_tesim'].join end,
         'pre_title' => if result['pre_title'] then result['pre_title'].join end,
-        'given' => if result['given_tesim'] then result['given_tesim'].join end,
+        'given' => if result['given_name_tesim'] then result['given_name_tesim'].join end,
         'dates' => if result['dates_tesim'] then result['dates_tesim'].join end,
         'epithet' => if result['epithet_tesim'] then result['epithet_tesim'].join end,
         'post_title' => if result['post_preflabel_tesim'] then result['post_preflabel_tesim'].join end,
