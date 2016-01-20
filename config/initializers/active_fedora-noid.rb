@@ -6,7 +6,7 @@ ActiveFedora::Noid.configure do |config|
   # config.template = 'test:.zd'
   # config.template = 'yorkabp:.zd'
   # 30/9/2015 - agreed to use default noids
-  config.statefile = 'config/noid-minter-state'
+  config.statefile = ENV['NOID_PATH'] + 'noid-minter-state'
 end
 
 ActiveFedora::Base.translate_uri_to_id = ActiveFedora::Noid.config.translate_uri_to_id
