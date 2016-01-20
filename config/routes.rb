@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   mount Qa::Engine => '/qa'
 
-
   get 'searches/index'
   get 'searches/show'
   get 'home_page/index'

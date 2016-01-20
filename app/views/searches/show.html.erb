@@ -494,7 +494,7 @@
                 <% end %>
 
             </table>
-            <p id="citation">Citation: Entry <%= @db_entry.entry_no %>, <i><%= @folio_title %></i>
+            <p id="citation"><span style="font-weight: bold">Citation:</span> <br /> Entry <%= @db_entry.entry_no %>, <i><%= @folio_title %></i>
                 <<%= link_to 'http://' + ENV['SERVER'] + '/entry/' + @db_entry.entry_id, entry_path(@db_entry.entry_id) %>>
                 [<%= Time.now.strftime("Accessed: %d %b %Y") %>]</p>
         </div>
