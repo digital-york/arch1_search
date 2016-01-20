@@ -12,17 +12,13 @@ class TermsBase
   end
 
   def all
-    begin
       # 'Languages' are sorted by id so that 'Latin' is first
       sort_order = 'preflabel_si asc'
       if terms_list == 'languages'
         sort_order = 'id asc'
       end
       parse_authority_response(SolrQuery.new.solr_query(q='inScheme_ssim:"' + terms_id + '"', fl='id,preflabel_tesim,definition_tesim,broader_tesim', rows=1000, sort=sort_order))
-    rescue => error
-      log_error(__method__, __FILE__, error)
-      raise
-    end
+
   end
 
   def find id
@@ -140,7 +136,7 @@ class TermsBase
       if result['broader_tesim']
         broader = result['broader_tesim'].join.split('/')
         hash['broader_id'] = broader[broader.length-1]
-        hash['broader_label'] = find_value_string(broader[broader.length-1]).join
+        hash['broader_label'] = find_value_string(broader[broader.length-1])
       end
 
 
@@ -179,16 +175,6 @@ class TermsBase
     end
 
     str
-  end
-
-  # Writes error message to the log
-  def log_error(method, file, error)
-    time = ''
-    # Only add time for development log because production already outputs timestamp
-    if Rails.env == 'development'
-      time = Time.now.strftime('[%d/%m/%Y %H:%M:%S] ').to_s
-    end
-    logger.error "#{time}EXCEPTION IN #{file}, method='#{method}' [#{error}]"
   end
 
 end

@@ -97,4 +97,5 @@ module Terms
       'section_types'
     end
   end
+
 end

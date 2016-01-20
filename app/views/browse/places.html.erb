@@ -6,14 +6,16 @@
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span></h1>
 
-        <%  @search_hash.each do |key, value| %>
         <p>
-
-        <% value.sort.to_h.each do |k, v| %>
-                <%= link_to k, browse_places_path(:letter => k) %> |
+        <%  @search_hash.each do |key, value| %>
+            <% value.sort.to_h.each do |k, v| %>
+                    <% unless k.nil? %>
+                        <%= link_to k, browse_places_path(:letter => k) %> |
+                    <% end %>
+                <% end %>
             <% end %>
-        <% end %>
-        <%= link_to 'All', browse_places_path(:letter => 'all') %>
+            <%= link_to 'All', browse_places_path(:letter => 'all') %>
+
         </p>
         <% unless session[:letter].nil? %>
             <p>Searching for place names in <strong><%= session[:letter] %></strong></p>

@@ -2,7 +2,8 @@
 development:
   #url: http://localhost:8983/solr/development
   url: http://127.0.0.1:8983/solr/development
+  #url: http://opal.york.ac.uk:8983/solr/production
 test:
   url: http://localhost:8983/solr/test
 production:
-  url: http://localhost:8983/solr/production
+  url: http://opal.york.ac.uk:8983/solr/production
