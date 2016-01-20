@@ -57,7 +57,7 @@ module IiifHelper
           'description' => resp[0]['preflabel_tesim'],
           'attribution' => 'Made available by the University of York',
           'license' => 'http://creativecommons.org/licenses/by-sa/4.0/',
-          'thumbnail' => resp[0]['thumbnail_url_tesim']
+          'thumbnail' => 'http:' + resp[0]['thumbnail_url_tesim']
       }
 
       manifest = IIIF::Presentation::Manifest.new(seed)
