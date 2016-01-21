@@ -24,7 +24,7 @@ module Solr
       # if the search has come from the subjects browse, limit to searching for the subject
       if sub == 'subject'
 
-        q = "has_model_ssim:Entry AND subject_search:#{@search_term.downcase}"
+        q = 'has_model_ssim:Entry AND subject_search:"' + @search_term.downcase + '"'
 
         SolrQuery.new.solr_query(q, 'id', 1000)['response']['docs'].map do |result|
           entry_id_set << result['id']
