@@ -76,7 +76,15 @@ class BrowseController < ApplicationController
   def people
     begin
       reset_session_variables
-      @search_array = PersonTerms.new('subauthority').internal_all
+      # Show all or only indexed
+      if browse_params['all'].nil? or browse_params['all'] == 'no'
+        session[:all] = 'no'
+        @search_array = PersonTerms.new('subauthority').internal_all_used
+      elsif browse_params['all'] == 'yes'
+        session[:all] = browse_params['all']
+        @search_array = PersonTerms.new('subauthority').internal_all
+      end
+
       # Limit by alphabet
       unless browse_params['letter'].nil? or browse_params['letter'] =='All' or browse_params['letter'].size() != 1
         unless browse_params['letter'] =='All'
@@ -100,7 +108,15 @@ class BrowseController < ApplicationController
   def groups
     begin
       reset_session_variables
-      @search_array = GroupTerms.new('subauthority').internal_all
+      # Show all or only indexed
+      if browse_params['all'].nil? or browse_params['all'] == 'no'
+        session[:all] = 'no'
+        @search_array = GroupTerms.new('subauthority').internal_all_used
+      elsif browse_params['all'] == 'yes'
+        session[:all] = browse_params['all']
+        @search_array = GroupTerms.new('subauthority').internal_all
+      end
+
       # Limit by alphabet
       unless browse_params['letter'].nil? or browse_params['letter'] =='All' or browse_params['letter'].size() != 1
         unless browse_params['letter'] =='All'
@@ -124,7 +140,14 @@ class BrowseController < ApplicationController
   def places
     begin
       reset_session_variables
-      @search_array = PlaceTerms.new('subauthority').internal_all
+      # Show all or only indexed
+      if browse_params['all'].nil? or browse_params['all'] == 'no'
+        session[:all] = 'no'
+        @search_array = PlaceTerms.new('subauthority').internal_all_used
+      elsif browse_params['all'] == 'yes'
+        session[:all] = browse_params['all']
+        @search_array = PlaceTerms.new('subauthority').internal_all
+      end
       @search_hash = Hash.new
 
       @search_array.each do | place |
@@ -164,6 +187,7 @@ class BrowseController < ApplicationController
           end
         end
       end
+
     rescue => error
       log_error(__method__, __FILE__, error)
       raise
@@ -174,7 +198,14 @@ class BrowseController < ApplicationController
   def subjects
     begin
       # Get the top-level list (this is a hash which contains the 2nd level and 3rd level lists)
-      @top_level_list = SubjectTerms.new('subauthority').get_subject_list_top_level
+      if browse_params['all'].nil? or browse_params['all'] == 'no'
+        session[:all] = 'no'
+        @top_level_list = SubjectTerms.new('subauthority').get_subject_list_top_level_used
+      elsif browse_params['all'] == 'yes'
+        session[:all] = browse_params['all']
+        @top_level_list = SubjectTerms.new('subauthority').get_subject_list_top_level
+      end
+
     rescue => error
       log_error(__method__, __FILE__, error)
       raise
@@ -192,6 +223,7 @@ class BrowseController < ApplicationController
     session[:alt] = nil
     session[:entries_exist] = nil
     session[:letter] = nil
+    session[:all] = nil
   end
 
   #whitelist params
@@ -201,7 +233,7 @@ class BrowseController < ApplicationController
   # permit list between create and update. Also, you can specialize
   # this method with per-user checking of permissible attributes.
   def browse_params
-    params.permit(:letter, :collection, :register_id, :set_folio,:folio, :folio_id,:entry_no)
+    params.permit(:letter, :collection, :register_id, :set_folio,:folio, :folio_id,:entry_no, :all)
   end
 
 end

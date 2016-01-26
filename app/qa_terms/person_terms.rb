@@ -24,6 +24,11 @@ class PersonTerms
     parse_authority_response(SolrQuery.new.solr_query(q='inScheme_ssim:"' + terms_id + '"',fl='',rows=5000,sort=sort_order))
   end
 
+  def internal_all_used
+    sort_order = 'preflabel_si asc'
+    parse_authority_response(SolrQuery.new.solr_query(q='inScheme_ssim:"' + terms_id + '" AND used_tesim:used',fl='',rows=5000,sort=sort_order))
+  end
+
   def find id
     parse_authority_response(SolrQuery.new.solr_query(q='inScheme_ssim:"' + terms_id + '" AND id:"' + id + '"','',1))
   end

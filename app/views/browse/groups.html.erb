@@ -8,6 +8,15 @@
             </span>
         </h1>
         <p>
+            <% if session[:all].nil? or session[:all] == 'no' %>
+            <p>Viewing only indexed Relgious Houses, Groups and Organisations:
+                <%= link_to 'View all Relgious Houses, Groups and Organisations', browse_groups_path(:letter => session[:letter], :all => 'yes') %></p>
+        <% elsif session[:all] == 'yes' %>
+            <p>Viewing all Relgious Houses, Groups and Organisationss:
+                <%= link_to 'View only Relgious Houses, Groups and Organisations', browse_groups_path(:letter => session[:letter]) %></p>
+        <% end %>
+        </p>
+        <p>
         <% ('a'..'z').to_a.each do |l| %>
           <% if l != 'z' %>
                 <%=link_to l.upcase, browse_groups_path(:letter => l.upcase) %> |

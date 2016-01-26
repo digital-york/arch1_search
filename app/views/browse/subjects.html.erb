@@ -5,6 +5,15 @@
             <h1>Subjects<span style="float: right">
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span></h1>
+        <p>
+            <% if session[:all].nil? or session[:all] == 'no' %>
+            <p>Viewing only indexed subjects:
+                <%= link_to 'View all subjects', browse_subjects_path(:letter => session[:letter], :all => 'yes') %></p>
+        <% elsif session[:all] == 'yes' %>
+            <p>Viewing all subjects:
+                <%= link_to 'View only indexed subjects', browse_subjects_path(:letter => session[:letter]) %></p>
+        <% end %>
+        </p>
 
             <% @top_level_list.each do |subject| %>
                 <ul class="list-unstyled">

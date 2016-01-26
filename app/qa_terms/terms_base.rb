@@ -100,6 +100,43 @@ class TermsBase
     top_level_list
   end
 
+  # returns only those subjects which have been used
+  def get_subject_list_top_level_used
+
+    top_level_list = parse_authority_response(SolrQuery.new.solr_query(q='istopconcept_tesim:true', fl='id,preflabel_tesim,altlabel_tesim,definition_tesim', rows=1000, sort='preflabel_si asc'))
+
+    top_level_list.each do |t1|
+
+      id = t1['id']
+
+      second_level_list = parse_authority_response(SolrQuery.new.solr_query(q='broader_tesim:' + id + ' AND used_tesim:used', fl='id,preflabel_tesim,altlabel_tesim,definition_tesim,used_tesim', rows=1000, sort='preflabel_si asc'))
+      t1[:elements] = second_level_list
+
+      # we don't currently have any third level terms
+      # second_level_list.each_with_index do |t2, index|
+      #   id2 = t2['id']
+      #   third_level_list = parse_authority_response(SolrQuery.new.solr_query(q='broader_tesim:' + id2, fl='id,preflabel_tesim,altlabel_tesim,definition_tesim,used_tesim', rows=1000, sort='preflabel_si asc'))
+      #   t2[:elements] = third_level_list
+      # end
+    end
+
+    delete_list = []
+
+    # find out which top level headings have no used elements
+    top_level_list.each do |t1|
+      if t1[:elements] == [] or t1[:elements].nil?
+        delete_list << t1
+      end
+    end
+
+    # delete top level headings with no used elements
+    delete_list.each do |delete|
+      top_level_list.delete(delete)
+    end
+
+    top_level_list
+  end
+
   def get_subject_list_second_level(id)
 
     top_level_list = parse_authority_response(SolrQuery.new.solr_query(q='istopconcept_tesim:true AND id:' + id, fl='id,preflabel_tesim,altlabel_tesim,definition_tesim,used_tesim', rows=1000, sort='preflabel_si asc'))

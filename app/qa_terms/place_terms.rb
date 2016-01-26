@@ -25,6 +25,11 @@ class PlaceTerms
     parse_authority_response(SolrQuery.new.solr_query(q='inScheme_ssim:"' + terms_id + '"',fl='',rows=5000,sort=sort_order))
   end
 
+  def internal_all_used
+    sort_order = 'preflabel_si asc'
+    parse_authority_response(SolrQuery.new.solr_query(q='inScheme_ssim:"' + terms_id + '" AND used_tesim:used',fl='',rows=5000,sort=sort_order))
+  end
+
   def find id
     parse_authority_response(SolrQuery.new.solr_query(q='inScheme_ssim:"' + terms_id + '" AND id:"' + id + '"','',1))
   end
@@ -41,6 +46,7 @@ class PlaceTerms
 
   # Reformats the data received from the service
   def parse_authority_response(response)
+    puts response
     response['response']['docs'].map do |result|
       #geo = TermsHelper::Geo.new
       #al = geo.adminlevel(result['parentADM1_tesim'].first,result['parentADM2_tesim'].first)

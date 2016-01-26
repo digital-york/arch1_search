@@ -5,6 +5,15 @@
             <h1>People <span style="float: right">
                 <%= link_to '', browse_path, class: 'fa fa-chevron-circle-left fa-2x' %>
             </span></h1>
+        <p>
+            <% if session[:all].nil? or session[:all] == 'no' %>
+            <p>Viewing only indexed people:
+                <%= link_to 'View all people', browse_people_path(:letter => session[:letter], :all => 'yes') %></p>
+        <% elsif session[:all] == 'yes' %>
+            <p>Viewing all people:
+                <%= link_to 'View only indexed people', browse_people_path(:letter => session[:letter]) %></p>
+        <% end %>
+        </p>
 
         <p>
             <% ('a'..'z').to_a.each do |l| %>
