@@ -536,7 +536,7 @@ module Solr
 
   end
 
-  # This method uses the entry_id to get the title of the search result, i.e. 'Entry, Folio (Register)' and folio_id
+  # This method uses the entry_id to get the title of the search result, i.e. 'Register Folio Entry' and folio_id
   def get_entry_and_folio_details(entry_id)
 
     begin
@@ -559,12 +559,12 @@ module Solr
           register = preflabel.split(' ')[0].to_s
           folio = preflabel.sub(register, '')
           # Add the title and folio_id to the array instance
-          @element_array << 'Entry ' + entry_no + ', ' + folio + " (Register " + register + ")"
+          @element_array << 'Register ' + register + ' ' + folio + ' entry ' + entry_no
         else
           preflabel_array = preflabel.split(' ')
           register = "#{preflabel_array[0]} #{preflabel_array[1]} #{preflabel_array[2]}"
           folio = preflabel.sub(register, '')
-          @element_array << 'Entry ' + entry_no + ', ' + folio + " (" + register + ")"
+          @element_array << 'Register ' + register + ' ' + folio + ' entry ' + entry_no
         end
         @element_array << folio_id
       end
