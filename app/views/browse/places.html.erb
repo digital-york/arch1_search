@@ -18,17 +18,21 @@
 
             <% @search_hash.each do |key, value| %>
 
-                <%= link_to 'Yorkshire', browse_places_path(:letter => 'Yorkshire', :all => session['all']) %> |
-                <%= link_to 'East Riding of Yorkshire', browse_places_path(:letter => 'East Riding of Yorkshire', :all => session[:all]) %>
-                |
-                <%= link_to 'North Riding of Yorkshire', browse_places_path(:letter => 'North Riding of Yorkshire', :all => session[:all]) %>
-                |
-                <%= link_to 'West Riding of Yorkshire', browse_places_path(:letter => 'West Riding of Yorkshire', :all => session[:all]) %>
-                <br/><br/>Everywhere else:
+                <% unless key != 'England' %>
 
-                <% value.sort.to_h.each do |k, v| %>
-                    <% unless k.nil? || k == 'East Riding of Yorkshire' || k == 'North Riding of Yorkshire' || k == 'West Riding of Yorkshire' || k == 'Yorkshire' %>
-                        <%= link_to k, browse_places_path(:letter => k, :all => session[:all]) %> |
+                    <%= link_to 'Yorkshire', browse_places_path(:letter => 'Yorkshire', :all => session['all']) %> |
+                    <%= link_to 'East Riding of Yorkshire', browse_places_path(:letter => 'East Riding of Yorkshire', :all => session[:all]) %>
+                    |
+                    <%= link_to 'North Riding of Yorkshire', browse_places_path(:letter => 'North Riding of Yorkshire', :all => session[:all]) %>
+                    |
+                    <%= link_to 'West Riding of Yorkshire', browse_places_path(:letter => 'West Riding of Yorkshire', :all => session[:all]) %>
+
+                    <br/><br/>Everywhere else:
+
+                    <% value.sort.to_h.each do |k, v| %>
+                        <% unless k.nil? || k == 'East Riding of Yorkshire' || k == 'North Riding of Yorkshire' || k == 'West Riding of Yorkshire' || k == 'Yorkshire' %>
+                            <%= link_to k, browse_places_path(:letter => k, :all => session[:all]) %> |
+                        <% end %>
                     <% end %>
                 <% end %>
             <% end %>
@@ -44,23 +48,36 @@
            @search_hash.each do |key, value| %>
 
             <% value_sorted = value %>
-            <%
-               wr = value['West Riding of Yorkshire']
-               nr = value['North Riding of Yorkshire']
-               er = value['East Riding of Yorkshire']
-               y = value['Yorkshire']
-            %>
-            <% value_sorted.delete('West Riding of Yorkshire')
-               value_sorted.delete('East Riding of Yorkshire')
-               value_sorted.delete('North Riding of Yorkshire')
-               value_sorted.delete('Yorkshire')
+            <% unless value['North Riding of Yorkshire'].nil?
+                 nr = value['North Riding of Yorkshire']
+               end
+               unless value['West Riding of Yorkshire'].nil?
+                 wr = value['West Riding of Yorkshire']
+                 value_sorted.delete('West Riding of Yorkshire')
+               end
+               unless value['North Riding of Yorkshire'].nil?
+                 er = value['East Riding of Yorkshire']
+                 value_sorted.delete('East Riding of Yorkshire')
+               end
+               unless value['Yorkshire'].nil?
+                 y = value['Yorkshire']
+                 value_sorted.delete('Yorkshire')
+               end
             %>
 
             <% value_sorted_arr = value_sorted.to_a
-               value_sorted_arr.insert(0, ['West Riding of Yorkshire', wr])
-               value_sorted_arr.insert(0, ['North Riding of Yorkshire', nr])
-               value_sorted_arr.insert(0, ['East Riding of Yorkshire', er])
-               value_sorted_arr.insert(0, ['Yorkshire', y])
+               unless wr.nil?
+                 value_sorted_arr.insert(0, ['West Riding of Yorkshire', wr])
+               end
+               unless nr.nil?
+                 value_sorted_arr.insert(0, ['North Riding of Yorkshire', nr])
+               end
+               unless er.nil?
+                 value_sorted_arr.insert(0, ['East Riding of Yorkshire', er])
+               end
+               unless y.nil?
+                 value_sorted_arr.insert(0, ['Yorkshire', y])
+               end
             %>
 
             <% value_sorted_arr.to_h.to_h.each do |k, v| %>
