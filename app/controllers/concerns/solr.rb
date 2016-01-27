@@ -21,15 +21,16 @@ module Solr
 
       entry_id_set = Set.new
 
+      query = SolrQuery.new
+
       # if the search has come from the subjects browse, limit to searching for the subject
       if sub == 'subject'
 
         q = 'has_model_ssim:Entry AND subject_search:"' + @search_term.downcase + '"'
-
-        SolrQuery.new.solr_query(q, 'id', 1000)['response']['docs'].map do |result|
-          entry_id_set << result['id']
+        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
+        unless num == 0
+          entry_id_set.merge(query.solr_query(q, 'id', num)['response']['docs'].map{ |e| e['id'] })
         end
-
       else
 
         # Replace all spaces in a searh term with asterisks
@@ -37,18 +38,19 @@ module Solr
 
         # Get the matching entry ids (from the entries)
         q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
-
-        SolrQuery.new.solr_query(q, "id", 1000, nil, 0)['response']['docs'].map do |result|
-          entry_id_set << result['id']
+        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
+        unless num == 0
+          entry_id_set.merge(query.solr_query(q, 'id', num)['response']['docs'].map{ |e| e['id'] })
         end
 
         # Get the matching entry ids (from the people)
         q = "has_model_ssim:RelatedAgent AND (person_same_as_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
-        SolrQuery.new.solr_query(q, "relatedAgentFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
-          result['relatedAgentFor_ssim'].each do |related_agent|
-            # Check that the relatedAgentFor_ssim is an Entry (as can be a RelatedAgent)
-            SolrQuery.new.solr_query("id:#{related_agent}", "has_model_ssim", 1000, nil, 0)['response']['docs'].map do |result2|
-              if result2['has_model_ssim'].join == 'Entry'
+        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
+        unless num == 0
+          query.solr_query(q, "relatedAgentFor_ssim", num)['response']['docs'].map do |result|
+            result['relatedAgentFor_ssim'].each do |related_agent|
+              # Check that the relatedAgentFor_ssim is an Entry (as can be a RelatedAgent)
+              query.solr_query("id:#{related_agent} AND has_model_ssim:Entry", 10)['response']['docs'].map do |result2|
                 entry_id_set << related_agent
               end
             end
@@ -57,13 +59,13 @@ module Solr
 
         # Get the matching entry ids (from the places)
         q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_same_as_search:*#{search_term2}*)"
-
-        SolrQuery.new.solr_query(q, "relatedPlaceFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
-          result['relatedPlaceFor_ssim'].each do |related_place|
-            # Check that the relatedPlaceFor_ssim is an Entry (as can be a RelatedPlace)
-            SolrQuery.new.solr_query("id:#{related_place}", "has_model_ssim", 1000, nil, 0)['response']['docs'].map do |result2|
-              if result2['has_model_ssim'].join == 'Entry'
-                entry_id_set << related_place
+        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
+        unless num == 0
+          query.solr_query(q, "relatedPlaceFor_ssim", num)['response']['docs'].map do |result|
+            result['relatedPlaceFor_ssim'].each do |related_place|
+              # Check that the relatedPlaceFor_ssim is an Entry (as can be a RelatedPlace)
+              query.solr_query("id:#{related_place} AND has_model_ssim:Entry", 1)['response']['docs'].map do |result2|
+                  entry_id_set << related_place
               end
             end
           end
@@ -71,11 +73,11 @@ module Solr
 
         # Get the matching entry ids (from the entry dates)
         q = "has_model_ssim:EntryDate AND (date_note_tesim:*#{search_term2}*"
-
-        SolrQuery.new.solr_query(q, "entryDateFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
-          result['entryDateFor_ssim'].each do |entry_date|
-            SolrQuery.new.solr_query("id:#{entry_date}", "has_model_ssim", 1000, nil, 0)['response']['docs'].map do |result2|
-              if result2['has_model_ssim'].join == 'Entry'
+        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
+        unless num == 0
+          query.solr_query(q, "entryDateFor_ssim", num, nil, 0)['response']['docs'].map do |result|
+            result['entryDateFor_ssim'].each do |entry_date|
+              query.solr_query("id:#{entry_date} AND has_model_ssim:Entry", 1)['response']['docs'].map do |result2|
                 entry_id_set << entry_date
               end
             end
@@ -84,15 +86,15 @@ module Solr
 
         # Get the matching entry ids (from the single dates)
         q = "has_model_ssim:SingleDate AND (date_tesim:*#{search_term2}*"
-
-        # get the matching entry date ids
-        SolrQuery.new.solr_query(q, "dateFor_ssim", 1000, nil, 0)['response']['docs'].map do |res|
-          res['dateFor_ssim'].each do |single_date|
-            # from the entry dates, get the entry ids
-            SolrQuery.new.solr_query("id:#{single_date}", "entryDateFor_ssim", 1000, nil, 0)['response']['docs'].map do |result|
-              result['entryDateFor_ssim'].each do |entry_date|
-                SolrQuery.new.solr_query("id:#{entry_date}", "has_model_ssim", 1000, nil, 0)['response']['docs'].map do |result2|
-                  if result2['has_model_ssim'].join == 'Entry'
+        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
+        unless num == 0
+          # get the matching entry date ids
+          query.solr_query(q, "dateFor_ssim", num)['response']['docs'].map do |res|
+            res['dateFor_ssim'].each do |single_date|
+              # from the entry dates, get the entry ids
+              query.solr_query("id:#{single_date}", "entryDateFor_ssim", num)['response']['docs'].map do |result|
+                result['entryDateFor_ssim'].each do |entry_date|
+                  query.solr_query("id:#{entry_date} AND has_model_ssim:Entry", 1, nil, 0)['response']['docs'].map do |result2|
                     entry_id_set << entry_date
                   end
                 end
@@ -103,10 +105,10 @@ module Solr
 
         # # Get the matching entry ids (from the registers)
         # q = "has_model_ssim:Folio AND preflabel_tesim:*#{search_term2}*"
-        # SolrQuery.new.solr_query(q, 'id', 1000)['response']['docs'].map do |res|
+        # query.solr_query(q, 'id', 1000)['response']['docs'].map do |res|
         #   res.each do |folio|
         #     # from the entry dates, get the entry ids
-        #     SolrQuery.new.solr_query("folio_ssim:#{folio}", "id", 1000, nil, 0)['response']['docs'].map do |result|
+        #     query.solr_query("folio_ssim:#{folio}", "id", 1000, nil, 0)['response']['docs'].map do |result|
         #       entry_id_set << result['id']
         #     end
         #   end
@@ -126,7 +128,7 @@ module Solr
 
         is_valid = true
 
-        SolrQuery.new.solr_query("id:#{entry_id}", "section_type_new_tesim, subject_new_tesim", 1000, nil, 0)['response']['docs'].map do |result|
+        query.solr_query("id:#{entry_id}", "section_type_new_tesim, subject_new_tesim", entry_id_set.size)['response']['docs'].map do |result|
 
           # SECTION_TYPE FACET
           # Add all the section types to a local array
@@ -139,7 +141,7 @@ module Solr
           end
 
           # If a section_type_facet has been chosen and there isn't a match
-          # # for this entry, the document isn't valid
+          # for this entry, the document isn't valid
           # If there is a match, the document is valid and the facet becomes the one chosen by the user
           if @section_type_facet != nil and @section_type_facet != ''
             if !local_section_type_word_array.include? @section_type_facet
@@ -165,7 +167,7 @@ module Solr
           end
 
           # PERSON_SAME_AS FACET
-          SolrQuery.new.solr_query("relatedAgentFor_ssim:#{entry_id}", "person_same_as_new_tesim", 1000, nil, 0)['response']['docs'].map do |result|
+          query.solr_query("relatedAgentFor_ssim:#{entry_id}", "person_same_as_new_tesim", entry_id_set.size)['response']['docs'].map do |result|
             if result['person_same_as_new_tesim'] != nil
               result['person_same_as_new_tesim'].each do |person_same_as|
                 local_person_same_as_word_array << person_same_as
@@ -182,7 +184,7 @@ module Solr
           end
 
           # PLACE_SAME_AS FACET
-          SolrQuery.new.solr_query("relatedPlaceFor_ssim:#{entry_id}", "place_same_as_new_tesim", 1000, nil, 0)['response']['docs'].map do |result|
+          query.solr_query("relatedPlaceFor_ssim:#{entry_id}", "place_same_as_new_tesim", entry_id_set.size)['response']['docs'].map do |result|
             if result['place_same_as_new_tesim'] != nil
               result['place_same_as_new_tesim'].each do |place_same_as_tesim|
                 local_place_same_as_word_array << place_same_as_tesim
@@ -199,8 +201,8 @@ module Solr
           end
 
           # DATES FACET
-          SolrQuery.new.solr_query("entryDateFor_ssim:#{entry_id}", "id", 1000, nil, 0)['response']['docs'].map do |res|
-            SolrQuery.new.solr_query("dateFor_ssim:#{res['id']}", "date_tesim", 1000, nil, 0)['response']['docs'].map do |result|
+          query.solr_query("entryDateFor_ssim:#{entry_id}", "id", entry_id_set.size)['response']['docs'].map do |res|
+            query.solr_query("dateFor_ssim:#{res['id']}", "date_tesim", entry_id_set.size)['response']['docs'].map do |result|
               if result['date_tesim'] != nil
                 result['date_tesim'].each do |date_tesim|
                   # get year only
@@ -229,8 +231,8 @@ module Solr
           end
 
           # REGISTERS FACET
-          SolrQuery.new.solr_query("id:#{entry_id}", "folio_ssim", 1000)['response']['docs'].map do |res|
-            SolrQuery.new.solr_query("id:#{res['folio_ssim'].join}", 'preflabel_tesim', 1)['response']['docs'].map do |result|
+          query.solr_query("id:#{entry_id}", "folio_ssim", entry_id_set.size, 'preflabel_si asc')['response']['docs'].map do |res|
+            query.solr_query("id:#{res['folio_ssim'].join}", 'preflabel_tesim', 1)['response']['docs'].map do |result|
               unless result['preflabel_tesim'].nil?
                 result['preflabel_tesim'].each do |reg|
                   # get reference
@@ -320,7 +322,7 @@ module Solr
 
         fl = "entry_type_new_tesim, section_type_new_tesim, summary_tesim, marginalia_tesim, language_new_tesim, subject_new_tesim, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
 
-        SolrQuery.new.solr_query(q, fl, 1)['response']['docs'].map do |result|
+        query.solr_query(q, fl, 1)['response']['docs'].map do |result|
 
           # Display all the text if not 'matched records'
           @match_term = @search_term
@@ -369,7 +371,7 @@ module Solr
       date_role_string = ''
       date_note_string = ''
 
-      SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
+      SolrQuery.new.solr_query(q, fl, 1000)['response']['docs'].map do |result|
         date_role_string = date_role_string + get_place_or_person_string(result['date_role_new_tesim'], date_role_string)
         date_note_string = date_note_string + get_place_or_person_string(result['date_note_tesim'], date_note_string)
       end
@@ -396,7 +398,7 @@ module Solr
           q = "dateFor_ssim:#{entry_id2} AND (date_certainty_tesim:*#{search_term2}* AND date_tesim:*#{search_term2}* AND date_certainty_tesim:*#{search_term2}*)"
         end
         fl = 'id, date_tesim,date_type_tesim, date_certainty_tesim'
-        SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
+        SolrQuery.new.solr_query(q, fl, 1000)['response']['docs'].map do |result|
           if result['date_type_tesim'].join == 'single'
             date_string = date_string + get_place_or_person_string(result['date_tesim'], date_string)
             date_certainty_string = date_certainty_string + get_place_or_person_string(result['date_certainty_tesim'], date_certainty_string)
@@ -440,7 +442,7 @@ module Solr
       place_note_string = ''
       place_same_as_string = ''
 
-      SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
+      SolrQuery.new.solr_query(q, fl, 1000)['response']['docs'].map do |result|
         place_as_written_string = place_as_written_string + get_place_or_person_string(result['place_as_written_tesim'], place_as_written_string)
         place_role_string = place_role_string + get_place_or_person_string(result['place_role_new_tesim'], place_role_string)
         place_type_string = place_type_string + get_place_or_person_string(result['place_type_new_tesim'], place_type_string)
@@ -481,7 +483,7 @@ module Solr
       person_related_place_string = ''
       person_related_person_string = ''
 
-      SolrQuery.new.solr_query(q, fl, 10000)['response']['docs'].map do |result|
+      SolrQuery.new.solr_query(q, fl, 1000)['response']['docs'].map do |result|
         person_as_written_string = person_as_written_string + get_place_or_person_string(result['person_as_written_tesim'], person_as_written_string)
         person_role_string = person_role_string + get_place_or_person_string(result['person_role_new_tesim'], person_role_string)
         person_descriptor_string = person_descriptor_string + get_place_or_person_string(result['person_descriptor_new_tesim'], person_descriptor_string)
@@ -974,7 +976,7 @@ module Solr
 
       entry_list = []
 
-      SolrQuery.new.solr_query("folio_ssim:#{folio_id}", 'id, entry_no_tesim', 10000, 'entry_no_si asc')['response']['docs'].map do |result|
+      SolrQuery.new.solr_query("folio_ssim:#{folio_id}", 'id, entry_no_tesim', 1800, 'entry_no_si asc')['response']['docs'].map do |result|
         element_list = []
         id = result['id']
         entry_no = result['entry_no_tesim'].join

@@ -6,7 +6,6 @@ class IiifController < ApplicationController
     # get a list of registers so that we can show the manifest download button for each
     @manifests = Hash.new
     get_collections(nil).each do | coll |
-      puts get_registers_in_order(coll[0])
       @manifests = get_registers_in_order(coll[0]).merge(@manifests)
     end
   end
