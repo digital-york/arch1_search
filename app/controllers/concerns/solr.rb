@@ -33,7 +33,7 @@ module Solr
         end
       else
 
-        # Replace all spaces in a searh term with asterisks
+        # Replace all spaces in a search term with asterisks
         search_term2 = @search_term.downcase.gsub(/ /, '*')
 
         # Get the matching entry ids (from the entries)
@@ -46,11 +46,12 @@ module Solr
         # Get the matching entry ids (from the people)
         q = "has_model_ssim:RelatedAgent AND (person_same_as_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
         num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
+        puts num
         unless num == 0
           query.solr_query(q, "relatedAgentFor_ssim", num)['response']['docs'].map do |result|
             result['relatedAgentFor_ssim'].each do |related_agent|
               # Check that the relatedAgentFor_ssim is an Entry (as can be a RelatedAgent)
-              query.solr_query("id:#{related_agent} AND has_model_ssim:Entry", 10)['response']['docs'].map do |result2|
+              query.solr_query("id:#{related_agent} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
                 entry_id_set << related_agent
               end
             end
@@ -64,7 +65,7 @@ module Solr
           query.solr_query(q, "relatedPlaceFor_ssim", num)['response']['docs'].map do |result|
             result['relatedPlaceFor_ssim'].each do |related_place|
               # Check that the relatedPlaceFor_ssim is an Entry (as can be a RelatedPlace)
-              query.solr_query("id:#{related_place} AND has_model_ssim:Entry", 1)['response']['docs'].map do |result2|
+              query.solr_query("id:#{related_place} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
                   entry_id_set << related_place
               end
             end
@@ -77,7 +78,7 @@ module Solr
         unless num == 0
           query.solr_query(q, "entryDateFor_ssim", num, nil, 0)['response']['docs'].map do |result|
             result['entryDateFor_ssim'].each do |entry_date|
-              query.solr_query("id:#{entry_date} AND has_model_ssim:Entry", 1)['response']['docs'].map do |result2|
+              query.solr_query("id:#{entry_date} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
                 entry_id_set << entry_date
               end
             end
@@ -94,7 +95,7 @@ module Solr
               # from the entry dates, get the entry ids
               query.solr_query("id:#{single_date}", "entryDateFor_ssim", num)['response']['docs'].map do |result|
                 result['entryDateFor_ssim'].each do |entry_date|
-                  query.solr_query("id:#{entry_date} AND has_model_ssim:Entry", 1, nil, 0)['response']['docs'].map do |result2|
+                  query.solr_query("id:#{entry_date} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
                     entry_id_set << entry_date
                   end
                 end
