@@ -36,7 +36,7 @@
                         <% if person['used'].nil? %>
                             <%= person['label'] %>
                         <% else %>
-                            <%= link_to person['label'], searches_path(:search_term => person['label']) %>
+                            <%= link_to person['label'], searches_path(:search_term => person['label'], :search_type => 'person') %>
                     <% end %>
                     </td>
                     <td>

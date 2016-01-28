@@ -31,6 +31,34 @@ module Solr
         unless num == 0
           entry_id_set.merge(query.solr_query(q, 'id', num)['response']['docs'].map{ |e| e['id'] })
         end
+      elsif sub == 'group' or sub == 'person'
+        # Get the matching entry ids (from the people)
+        q = 'has_model_ssim:RelatedAgent AND person_same_as_search:"' + @search_term.downcase + '"'
+        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
+        unless num == 0
+          query.solr_query(q, "relatedAgentFor_ssim", num)['response']['docs'].map do |result|
+            result['relatedAgentFor_ssim'].each do |related_agent|
+              # Check that the relatedAgentFor_ssim is an Entry (as can be a RelatedAgent)
+              query.solr_query("id:#{related_agent} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
+                entry_id_set << related_agent
+              end
+            end
+          end
+        end
+      elsif sub == 'place'
+        # Get the matching entry ids (from the places)
+        q = 'has_model_ssim:RelatedPlace AND place_same_as_search:"' + @search_term.downcase + '"'
+        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
+        unless num == 0
+          query.solr_query(q, "relatedPlaceFor_ssim", num)['response']['docs'].map do |result|
+            result['relatedPlaceFor_ssim'].each do |related_place|
+              # Check that the relatedPlaceFor_ssim is an Entry (as can be a RelatedPlace)
+              query.solr_query("id:#{related_place} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
+                entry_id_set << related_place
+              end
+            end
+          end
+        end
       else
 
         # Replace all spaces in a search term with asterisks

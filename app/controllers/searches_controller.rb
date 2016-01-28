@@ -74,7 +74,8 @@ class SearchesController < ApplicationController
 
         # Set arrays which display data on the page
         # TODO only bring back the specified no of results, using offsets, eg. page num and num of results
-        if @search_type == 'subject'
+
+        if @search_type == 'subject' or @search_type == 'group' or @search_type == 'person' or @search_type == 'place'
           set_search_result_arrays(@search_type)
         else
           set_search_result_arrays
