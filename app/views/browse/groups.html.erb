@@ -37,7 +37,7 @@
                         <% if group['used'].nil? %>
                             <%= group['label'] %>
                         <% else %>
-                            <%= link_to group['label'], searches_path(:search_term => group['label']) %>
+                            <%= link_to group['label'], searches_path(:search_term => group['label'], :search_type => 'group') %>
                         <% end %>
                     </td>
                     <td>
