@@ -117,10 +117,13 @@ module Solr
       end
 
       puts 'start facets'
-      Time.now.strftime('[%d/%m/%Y %H:%M:%S] ').to_s
+      puts Time.now.strftime('[%d/%m/%Y %H:%M:%S] ').to_s
+
+      puts entry_id_set.size
 
       # this is doing 1600 queries x 8 or more
-
+      # can't do a single query - query too large
+      # would batches work?
 
       # Now we have all the entry ids iterate through and get the facets
       entry_id_set.each do |entry_id|
@@ -134,7 +137,7 @@ module Solr
 
         is_valid = true
 
-        query.solr_query("id:#{entry_id}", "section_type_new_tesim, subject_new_tesim", entry_id_set.size)['response']['docs'].map do |result|
+        query.solr_query("id:#{entry_id}", "section_type_new_tesim, subject_new_tesim", 10)['response']['docs'].map do |result|
 
           # SECTION_TYPE FACET
           # Add all the section types to a local array
@@ -173,7 +176,7 @@ module Solr
           end
 
           # PERSON_SAME_AS FACET
-          query.solr_query("relatedAgentFor_ssim:#{entry_id}", "person_same_as_new_tesim", entry_id_set.size)['response']['docs'].map do |result|
+          query.solr_query("relatedAgentFor_ssim:#{entry_id}", "person_same_as_new_tesim", 10)['response']['docs'].map do |result|
             if result['person_same_as_new_tesim'] != nil
               result['person_same_as_new_tesim'].each do |person_same_as|
                 local_person_same_as_word_array << person_same_as
@@ -190,7 +193,7 @@ module Solr
           end
 
           # PLACE_SAME_AS FACET
-          query.solr_query("relatedPlaceFor_ssim:#{entry_id}", "place_same_as_new_tesim", entry_id_set.size)['response']['docs'].map do |result|
+          query.solr_query("relatedPlaceFor_ssim:#{entry_id}", "place_same_as_new_tesim", 10)['response']['docs'].map do |result|
             if result['place_same_as_new_tesim'] != nil
               result['place_same_as_new_tesim'].each do |place_same_as_tesim|
                 local_place_same_as_word_array << place_same_as_tesim
@@ -207,8 +210,8 @@ module Solr
           end
 
           # DATES FACET
-          query.solr_query("entryDateFor_ssim:#{entry_id}", "id", entry_id_set.size)['response']['docs'].map do |res|
-            query.solr_query("dateFor_ssim:#{res['id']}", "date_tesim", entry_id_set.size)['response']['docs'].map do |result|
+          query.solr_query("entryDateFor_ssim:#{entry_id}", "id", 10)['response']['docs'].map do |res|
+            query.solr_query("dateFor_ssim:#{res['id']}", "date_tesim", 10)['response']['docs'].map do |result|
               if result['date_tesim'] != nil
                 result['date_tesim'].each do |date_tesim|
                   # get year only
@@ -237,7 +240,7 @@ module Solr
           end
 
           # REGISTERS FACET
-          query.solr_query("id:#{entry_id}", "folio_ssim", entry_id_set.size, 'preflabel_si asc')['response']['docs'].map do |res|
+          query.solr_query("id:#{entry_id}", "folio_ssim", 10, 'preflabel_si asc')['response']['docs'].map do |res|
             query.solr_query("id:#{res['folio_ssim'].join}", 'preflabel_tesim', 1)['response']['docs'].map do |result|
               unless result['preflabel_tesim'].nil?
                 result['preflabel_tesim'].each do |reg|
@@ -278,7 +281,7 @@ module Solr
       end
 
       puts 'end facets'
-      Time.now.strftime('[%d/%m/%Y %H:%M:%S] ').to_s
+      puts Time.now.strftime('[%d/%m/%Y %H:%M:%S] ').to_s
 
       # Sort the word arrays and create a hash with the facets and facet counts
       if section_type_word_array != nil
