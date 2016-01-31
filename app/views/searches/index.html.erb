@@ -16,9 +16,9 @@
                 <div id="facet-panel-collapse" class="collapse in panel-group">
 
                     <%# Register Facet %>
-                    <div class="panel panel-default facet_limit blacklight-language_facet ">
+                    <div class="panel panel-default facet_limit blacklight-format ">
 
-                        <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#language_facet" aria-expanded="false">
+                        <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format" aria-expanded="false">
                             <h5 class="panel-title facet-field-heading">
                                 <a data-no-turbolink="true" href="#">Register</a>
                             </h5>
@@ -32,7 +32,21 @@
                       <span class="facet-label
                         <% if register_name == @register_facet then %>highlight_red
                         <% end %>">
-                        <%= link_to register_name, searches_path(:page => 1, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :search_type => @search_type, :register_facet => register_name, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_same_as_facet => @person_same_as_facet, :place_same_as_facet => @place_same_as_facet, :date_facet => @date_facet), :class => 'facet_select' %></a>
+                        <%= link_to register_name,
+                                    searches_path(
+                                            :page => 1,
+                                            :rows_per_page => @rows_per_page,
+                                            :display_type => @display_type,
+                                            :search_term => @search_term,
+                                            :search_type => @search_type,
+                                            :register_facet => register_name,
+                                            :section_type_facet => @section_type_facet,
+                                            :subject_facet => @subject_facet,
+                                            :person_same_as_facet => @person_same_as_facet,
+                                            :place_same_as_facet => @place_same_as_facet,
+                                            :date_facet => @date_facet),
+                                    :class => 'facet_select' %>
+                          </a>
                       </span>
                                             <span class="facet-count"><%= register_count %></span>
                                         </li>
@@ -43,15 +57,15 @@
                     </div>
 
                     <%# Section Type Facet %>
-                    <div class="panel panel-default facet_limit blacklight-format ">
+                    <div class="panel panel-default facet_limit blacklight-format3 ">
 
-                        <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format" aria-expanded="false">
+                        <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-format3" aria-expanded="false">
                             <h5 class="panel-title facet-field-heading">
                                 <a data-no-turbolink="true" href="#">Section Type</a>
                             </h5>
                         </div>
 
-                        <div id="facet-format" class="panel-collapse facet-content collapse in" aria-expanded="false">
+                        <div id="facet-format3" class="panel-collapse facet-content collapse in" aria-expanded="false">
                             <div class="panel-body">
                                 <ul class="facet-values list-unstyled">
                                     <% @section_type_facet_hash.each do |section_type_name, section_type_count| %>
@@ -59,7 +73,21 @@
                       <span class="facet-label
                         <% if section_type_name == @section_type_facet then %>highlight_red
                         <% end %>">
-                        <%= link_to section_type_name, searches_path(:page => 1, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :search_type => @search_type, :section_type_facet => section_type_name, :subject_facet => @subject_facet, :person_same_as_facet => @person_same_as_facet, :place_same_as_facet => @place_same_as_facet, :date_facet => @date_facet), :class => 'facet_select' %></a>
+                        <%= link_to section_type_name,
+                                    searches_path(
+                                            :page => 1,
+                                            :rows_per_page => @rows_per_page,
+                                            :display_type => @display_type,
+                                            :search_term => @search_term,
+                                            :search_type => @search_type,
+                                            :register_facet => @register_facet,
+                                            :section_type_facet => section_type_name,
+                                            :subject_facet => @subject_facet,
+                                            :person_same_as_facet => @person_same_as_facet,
+                                            :place_same_as_facet => @place_same_as_facet,
+                                            :date_facet => @date_facet),
+                                    :class => 'facet_select' %>
+                          </a>
                       </span>
                                             <span class="facet-count"><%= section_type_count %></span>
                                         </li>
@@ -86,7 +114,21 @@
                     <span class="facet-label
                       <% if subject_name == @subject_facet then %>highlight_red
                       <% end %>">
-                        <%= link_to subject_name, searches_path(:page => 1, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :search_type => @search_type, :section_type_facet => @section_type_facet, :subject_facet => subject_name, :person_same_as_facet => @person_same_as_facet, :place_same_as_facet => @place_same_as_facet, :date_facet => @date_facet), :class => 'facet_select' %></a>
+                        <%= link_to subject_name,
+                                    searches_path(
+                                            :page => 1,
+                                            :rows_per_page => @rows_per_page,
+                                            :display_type => @display_type,
+                                            :search_term => @search_term,
+                                            :search_type => @search_type,
+                                            :register_facet => @register_facet,
+                                            :section_type_facet => @section_type_facet,
+                                            :subject_facet => subject_name,
+                                            :person_same_as_facet => @person_same_as_facet,
+                                            :place_same_as_facet => @place_same_as_facet,
+                                            :date_facet => @date_facet),
+                                    :class => 'facet_select' %>
+                        </a>
                     </span>
                                             <span class="facet-count"><%= subject_count %></span>
                                         </li>
@@ -113,7 +155,21 @@
                       <span class="facet-label
                         <% if place_same_as_name == @place_same_as_facet then %>highlight_red
                         <% end %>">
-                        <%= link_to place_same_as_name, searches_path(:page => 1, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :search_type => @search_type, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_same_as_facet => @person_same_as_facet, :place_same_as_facet => place_same_as_name, :date_facet => @date_facet), :class => 'facet_select' %></a>
+                        <%= link_to place_same_as_name,
+                                    searches_path(
+                                            :page => 1,
+                                            :rows_per_page => @rows_per_page,
+                                            :display_type => @display_type,
+                                            :search_term => @search_term,
+                                            :search_type => @search_type,
+                                            :register_facet => @register_facet,
+                                            :section_type_facet => @section_type_facet,
+                                            :subject_facet => @subject_facet,
+                                            :person_same_as_facet => @person_same_as_facet,
+                                            :place_same_as_facet => place_same_as_name,
+                                            :date_facet => @date_facet),
+                                    :class => 'facet_select' %>
+                          </a>
                       </span>
                                             <span class="facet-count"><%= place_count %></span>
                                         </li>
@@ -140,8 +196,22 @@
                   <span class="facet-label
                     <% if person_same_as_name == @person_same_as_facet then %>highlight_red
                     <% end %>">
-                    <%= link_to person_same_as_name, searches_path(:page => 1, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :search_type => @search_type, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_same_as_facet => person_same_as_name, :place_same_as_facet => @place_same_as_facet, :date_facet => @date_facet), :class => 'facet_select' %></a>
-                  </span>
+                    <%= link_to person_same_as_name,
+                                searches_path(
+                                        :page => 1,
+                                        :rows_per_page => @rows_per_page,
+                                        :display_type => @display_type,
+                                        :search_term => @search_term,
+                                        :search_type => @search_type,
+                                        :register_facet => @register_facet,
+                                        :section_type_facet => @section_type_facet,
+                                        :subject_facet => @subject_facet,
+                                        :person_same_as_facet => person_same_as_name,
+                                        :place_same_as_facet => @place_same_as_facet,
+                                        :date_facet => @date_facet),
+                                :class => 'facet_select' %>
+                      </a>
+                      </span>
                                             <span class="facet-count"><%= person_same_as_count %></span>
                                         </li>
                                     <% end %>
@@ -163,12 +233,26 @@
                         <div id="facet-example_query_facet_field" class="panel-collapse facet-content collapse in">
                             <div class="panel-body">
                                 <ul class="facet-values list-unstyled">
-                                    <% @date_facet_hash.each do |date, date_count| %>
+                                    <% @date_facet_hash.each do |date_name, date_count| %>
                                         <li>
                       <span class="facet-label
-                        <% if date == @date_facet then %>highlight_red
+                        <% if date_name == @date_facet then %>highlight_red
                         <% end %>">
-                        <%= link_to date, searches_path(:page => 1, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_term => @search_term, :search_type => @search_type, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_same_as_facet => @person_same_as_name, :place_same_as_facet => @place_same_as_facet, :date_facet => date), :class => 'facet_select' %></a>
+                        <%= link_to date_name,
+                                    searches_path(
+                                            :page => 1,
+                                            :rows_per_page => @rows_per_page,
+                                            :display_type => @display_type,
+                                            :search_term => @search_term,
+                                            :search_type => @search_type,
+                                            :register_facet => @register_facet,
+                                            :section_type_facet => @section_type_facet,
+                                            :subject_facet => @subject_facet,
+                                            :person_same_as_facet => @person_same_as_facet,
+                                            :place_same_as_facet => @place_same_as_facet,
+                                            :date_facet => date_name),
+                                    :class => 'facet_select' %>
+                          </a>
                       </span>
                                             <span class="facet-count"><%= date_count %></span>
                                         </li>
@@ -245,13 +329,16 @@
                             <%= select_tag 'display_type', options_for_select(['full display', 'summary', 'matched records'], @display_type), :class => 'form-control', :onchange => 'this.form.submit()' %>
                         </div>
 
+                        <!-- hiding for now as only one option
                         <div style="float: left; margin-left: 25px;  padding-top: 8px">
                             Sort by:
                         </div>
 
+
                         <div style="float: left; margin-left: 6px">
                             <%= select_tag 'sort_by', options_for_select(['relevance'], @sort_by), :class => 'form-control', :onchange => 'this.form.submit()' %>
                         </div>
+                        -->
 
                         <%# Hidden fields for when the form is submitted via the 'records per page' or 'sort by' javascript %>
                         <%= hidden_field_tag(:search_term, @search_term) %>
@@ -289,32 +376,222 @@
         <% if @error != true and @number_of_rows > 0 %>
 
             <hr style="margin: 25px 0px 20px 0px; padding: 0px; text-align: left; width: 80%"/>
-
             <%# Display facet choices %>
             <% if (@register_facet != nil and @register_facet != '') or (@section_type_facet != nil and @section_type_facet != '') or (@subject_facet != nil and @subject_facet != '') or (@person_same_as_facet != nil and @person_same_as_facet != '') or (@place_same_as_facet != nil and @place_same_as_facet != '') or (@date_facet != nil and @date_facet != '') %>
                 <div id="facets_bar">
-
                     <% if @register_facet != nil and @register_facet != '' %>
-                        <span class="highlight_facet"><%= @register_facet %>&nbsp;&nbsp;<a href="<%= searches_path %>?search_term=<%= @search_term %>&amp;search_type=<%= @search_type %>&amp;page=<%= @page %>&amp;rows_per_page=<%= @rows_per_page %>&amp;display_type=<%= @display_type %>&amp;register_facet=&amp;section_type_facet=<%= @section_type_facet %>&amp;subject_facet=<%= @subject_facet %>&amp;person_same_as_facet=<%= @person_same_as_facet %>&amp;place_same_as_facet=<%= @place_same_as_facet %>&amp;date_facet=<%= @date_facet %>"><span class="fa fa-times fa-1x"></span></a></span>
+                        <span class="highlight_facet">
+                            <%= @register_facet %>&nbsp;&nbsp;
+                            <%
+                               search_string = ''
+                               unless @search_type.nil? then
+                                 search_string += "&amp;search_type=#{@search_type}"
+                               end
+                               search_string += "&amp;rows_per_page=#{@rows_per_page}"
+                               unless @page.nil? then
+                                 search_string += "&amp;page=#{@page}"
+                               end
+                               search_string += "&amp;display_type=#{@display_type}"
+                               unless @section_type_facet.nil? then
+                                 search_string += "&amp;section_type_facet=#{@section_type_facet}"
+                               end
+                               unless @subject_facet.nil? then
+                                 search_string += "&amp;subject_facet=#{@subject_facet}"
+                               end
+                               unless @person_same_as_facet.nil? then
+                                 search_string += "&amp;person_same_as_facet=#{@person_same_as_facet}"
+                               end
+                               unless @place_same_as_facet.nil? then
+                                 search_string += "&amp;place_same_as_facet=#{@place_same_as_facet}"
+                               end
+                               unless @date_facet.nil? then
+                                 search_string += "&amp;date_facet=#{@date_facet}"
+                               end
+                            %>
+
+                            <a href="<%= searches_path %>?search_term=<%= @search_term %><%= search_string %>">
+                                <span class="fa fa-times fa-1x"></span>
+                            </a>
+                        </span>
                     <% end %>
 
                     <% if @section_type_facet != nil and @section_type_facet != '' %>
-                        <span class="highlight_facet"><%= @section_type_facet %>&nbsp;&nbsp;<a href="<%= searches_path %>?search_term=<%= @search_term %>&amp;search_type=<%= @search_type %>&amp;page=<%= @page %>&amp;rows_per_page=<%= @rows_per_page %>&amp;display_type=<%= @display_type %>&amp;register_facet=<%= @register_facet %>&amp;section_type_facet=&amp;subject_facet=<%= @subject_facet %>&amp;person_same_as_facet=<%= @person_same_as_facet %>&amp;place_same_as_facet=<%= @place_same_as_facet %>&amp;date_facet=<%= @date_facet %>"><span class="fa fa-times fa-1x"></span></a></span>
+                        <span class="highlight_facet">
+                            <%= @section_type_facet %>&nbsp;&nbsp;
+                            <%
+                               search_string = ''
+                              unless @search_type.nil? then
+                                search_string += "&amp;search_type=#{@search_type}"
+                              end
+                              search_string += "&amp;rows_per_page=#{@rows_per_page}"
+                              unless @page.nil? then
+                                search_string += "&amp;page=#{@page}"
+                              end
+                              search_string += "&amp;display_type=#{@display_type}"
+                               unless @register_facet.nil? then
+                                 search_string += "&amp;register_facet=#{@register_facet}"
+                               end
+                               unless @subject_facet.nil? then
+                                 search_string += "&amp;subject_facet=#{@subject_facet}"
+                               end
+                               unless @person_same_as_facet.nil? then
+                                 search_string += "&amp;person_same_as_facet=#{@person_same_as_facet}"
+                               end
+                               unless @place_same_as_facet.nil? then
+                                 search_string += "&amp;place_same_as_facet=#{@place_same_as_facet}"
+                               end
+                               unless @date_facet.nil? then
+                                 search_string += "&amp;date_facet=#{@date_facet}"
+                               end
+                            %>
+
+                            <a href="<%= searches_path %>?search_term=<%= @search_term %><%= search_string %>">
+                                <span class="fa fa-times fa-1x"></span>
+                            </a>
+                        </span>
                     <% end %>
 
                     <% if @subject_facet != nil and @subject_facet != '' %>
-                        <span class="highlight_facet"><%= @subject_facet %>&nbsp;&nbsp;<a href="<%= searches_path %>?search_term=<%= @search_term %>&amp;search_type=subject&amp;page=<%= @page %>&amp;rows_per_page=<%= @rows_per_page %>&amp;display_type=<%= @display_type %>&amp;register_facet=<%= @register_facet %>&amp;section_type_facet=<%= @section_type_facet %>&amp;subject_facet=&amp;person_same_as_facet=<%= @person_same_as_facet %>&amp;place_same_as_facet=<%= @place_same_as_facet %>&amp;date_facet=<%= @date_facet %>"><span class="fa fa-times fa-1x"></span></a></span>
+                        <span class="highlight_facet">
+                            <%= @subject_facet %>&nbsp;&nbsp;
+                            <%
+                               search_string = ''
+                               unless @search_type.nil? then
+                                 search_string += "&amp;search_type=#{@search_type}"
+                               end
+                               search_string += "&amp;rows_per_page=#{@rows_per_page}"
+                               unless @page.nil? then
+                                 search_string += "&amp;page=#{@page}"
+                               end
+                               search_string += "&amp;display_type=#{@display_type}"
+                               unless @register_facet.nil? then
+                                 search_string += "&amp;register_facet=#{@register_facet}"
+                               end
+                               unless @section_type_facet.nil? then
+                                 search_string += "&amp;section_type_facet=#{@section_type_facet}"
+                               end
+                               unless @person_same_as_facet.nil? then
+                                 search_string += "&amp;person_same_as_facet=#{@person_same_as_facet}"
+                               end
+                               unless @place_same_as_facet.nil? then
+                                 search_string += "&amp;place_same_as_facet=#{@place_same_as_facet}"
+                               end
+                               unless @date_facet.nil? then
+                                 search_string += "&amp;date_facet=#{@date_facet}"
+                               end
+                            %>
+
+                            <a href="<%= searches_path %>?search_term=<%= @search_term %><%= search_string %>">
+                                <span class="fa fa-times fa-1x"></span>
+                            </a>
+                        </span>
                     <% end %>
 
                     <% if @person_same_as_facet != nil and @person_same_as_facet != '' %>
-                        <span class="highlight_facet"><%= @person_same_as_facet %>&nbsp;&nbsp;<a href="<%= searches_path %>?search_term=<%= @search_term %>&amp;search_type=<%= @search_type %>&amp;page=<%= @page %>&amp;rows_per_page=<%= @rows_per_page %>&amp;display_type=<%= @display_type %>&amp;register_facet=<%= @register_facet %>&amp;section_type_facet=<%= @section_type_facet %>&amp;subject_facet=<%= @subject_facet %>&amp;person_same_as_facet=&amp;place_same_as_facet=<%= @place_same_as_facet %>&amp;date_facet=<%= @date_facet %>"><span class="fa fa-times fa-1x"></span></a></span>
+                        <span class="highlight_facet">
+                            <%= @person_same_as_facet %>&nbsp;&nbsp;
+                            <%
+                               search_string = ''
+                               unless @search_type.nil? then
+                                 search_string += "&amp;search_type=#{@search_type}"
+                               end
+                               search_string += "&amp;rows_per_page=#{@rows_per_page}"
+                               unless @page.nil? then
+                                 search_string += "&amp;page=#{@page}"
+                               end
+                               search_string += "&amp;display_type=#{@display_type}"
+                               unless @register_facet.nil? then
+                                 search_string += "&amp;register_facet=#{@register_facet}"
+                               end
+                               unless @section_type_facet.nil? then
+                                 search_string += "&amp;section_type_facet=#{@section_type_facet}"
+                               end
+                               unless @subject_facet.nil? then
+                                 search_string += "&amp;subject_facet=#{@subject_facet}"
+                               end
+                               unless @place_same_as_facet.nil? then
+                                 search_string += "&amp;place_same_as_facet=#{@place_same_as_facet}"
+                               end
+                               unless @date_facet.nil? then
+                                 search_string += "&amp;date_facet=#{@date_facet}"
+                               end
+                            %>
+
+                            <a href="<%= searches_path %>?search_term=<%= @search_term %><%= search_string %>">
+                                <span class="fa fa-times fa-1x"></span>
+                            </a>
+                        </span>
                     <% end %>
 
                     <% if @place_same_as_facet != nil and @place_same_as_facet != '' %>
-                        <span class="highlight_facet"><%= @place_same_as_facet %>&nbsp;&nbsp;<a href="<%= searches_path %>?search_term=<%= @search_term %>&amp;search_type=<%= @search_type %>&amp;page=<%= @page %>&amp;rows_per_page=<%= @rows_per_page %>&amp;display_type=<%= @display_type %>&amp;register_facet=<%= @register_facet %>&amp;section_type_facet=<%= @section_type_facet %>&amp;subject_facet=<%= @subject_facet %>&amp;person_same_as_facet=<%= @person_same_as_facet %>&amp;place_same_as_facet=&amp;date_facet=<%= @date_facet %>"><span class="fa fa-times fa-1x"></span></a></span>
+                        <span class="highlight_facet">
+                            <%= @place_same_as_facet %>&nbsp;&nbsp;
+                            <%
+                               search_string = ''
+                               unless @search_type.nil? then
+                                 search_string += "&amp;search_type=#{@search_type}"
+                               end
+                               search_string += "&amp;rows_per_page=#{@rows_per_page}"
+                               unless @page.nil? then
+                                 search_string += "&amp;page=#{@page}"
+                               end
+                               search_string += "&amp;display_type=#{@display_type}"
+                               unless @register_facet.nil? then
+                                 search_string += "&amp;register_facet=#{@register_facet}"
+                               end
+                               unless @section_type_facet.nil? then
+                                 search_string += "&amp;section_type_facet=#{@section_type_facet}"
+                               end
+                               unless @subject_facet.nil? then
+                                 search_string += "&amp;subject_facet=#{@subject_facet}"
+                               end
+                               unless @person_same_as_facet.nil? then
+                                 search_string += "&amp;person_same_as_facet=#{@person_same_as_facet}"
+                               end
+                               unless @date_facet.nil? then
+                                 search_string += "&amp;date_facet=#{@date_facet}"
+                               end
+                            %>
+
+                            <a href="<%= searches_path %>?search_term=<%= @search_term %><%= search_string %>">
+                                <span class="fa fa-times fa-1x"></span>
+                            </a>
+                        </span>
                     <% end %>
                     <% if @date_facet != nil and @date_facet != '' %>
-                        <span class="highlight_facet"><%= @date_facet %>&nbsp;&nbsp;<a href="<%= searches_path %>?search_term=<%= @search_term %>&amp;search_type=<%= @search_type %>&amp;page=<%= @page %>&amp;rows_per_page=<%= @rows_per_page %>&amp;display_type=<%= @display_type %>&amp;register_facet=<%= @register_facet %>&amp;section_type_facet=<%= @section_type_facet %>&amp;subject_facet=<%= @subject_facet %>&amp;person_same_as_facet=<%= @person_same_as_facet %>&amp;place_same_as_facet=<%= @place_same_as_facet %>&amp;date_facet="><span class="fa fa-times fa-1x"></span></a></span>
+                        <span class="highlight_facet">
+                            <%= @date_facet %>&nbsp;&nbsp;
+                            <%
+                               search_string = ''
+                               unless @search_type.nil? then
+                                 search_string += "&amp;search_type=#{@search_type}"
+                               end
+                               search_string += "&amp;rows_per_page=#{@rows_per_page}"
+                               unless @page.nil? then
+                                 search_string += "&amp;page=#{@page}"
+                               end
+                               search_string += "&amp;display_type=#{@display_type}"
+                               unless @register_facet.nil? then
+                                 search_string += "&amp;register_facet=#{@register_facet}"
+                               end
+                               unless @section_type_facet.nil? then
+                                 search_string += "&amp;section_type_facet=#{@section_type_facet}"
+                               end
+                               unless @subject_facet.nil? then
+                                 search_string += "&amp;subject_facet=#{@subject_facet}"
+                               end
+                               unless @person_same_as_facet.nil? then
+                                 search_string += "&amp;person_same_as_facet=#{@person_same_as_facet}"
+                               end
+                               unless @place_same_as_facet.nil? then
+                                 search_string += "&amp;place_same_as_facet=#{@place_same_as_facet}"
+                               end
+                            %>
+
+                            <a href="<%= searches_path %>?search_term=<%= @search_term %><%= search_string %>">
+                                <span class="fa fa-times fa-1x"></span>
+                            </a>
+                        </span>
                     <% end %>
                 </div>
             <% end %>

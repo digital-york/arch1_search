@@ -8,11 +8,7 @@ class SolrQuery
 
   CONN = RSolr.connect :url => SOLR[Rails.env]['url']
 
-  def solr_query(q, fl='id', rows=0, sort='', start=0,facet=false,limit=nil,f_sort=nil,field=nil)
-    puts field
-    puts limit
-    puts f_sort
-
+  def solr_query(q, fl='id', rows=0, sort='', start=0,facet=false,limit=nil,f_sort=nil,field=nil, fq=nil)
     CONN.get 'select', :params => {
                          :q=>q,
                          :fl=>fl,
@@ -22,7 +18,8 @@ class SolrQuery
                          :facet=>facet,
                          'facet.limit'=>limit,
                          'facet.sort'=>f_sort,
-                         'facet.field'=>field
+                         'facet.field'=>field, #supply a string or an array
+                        :fq=>fq #supply a string or an array
                      }
   end
 

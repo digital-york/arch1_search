@@ -12,338 +12,130 @@ module Solr
       @date_facet_hash = Hash.new 0
       @register_facet_hash = Hash.new 0
 
-      section_type_word_array = []
-      subject_word_array = []
-      person_same_as_word_array = []
-      place_same_as_word_array = []
-      date_word_array = []
-      register_word_array = []
-
       entry_id_set = Set.new
 
       query = SolrQuery.new
+      @query = SolrQuery.new
 
-      # if the search has come from the subjects browse, limit to searching for the subject
-      if sub == 'subject'
+      # Replace all spaces in a search term with asterisks
+      search_term2 = @search_term.downcase.gsub(/ /, '*')
 
-        q = 'has_model_ssim:Entry AND subject_search:"' + @search_term.downcase + '"'
-        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
-        unless num == 0
-          entry_id_set.merge(query.solr_query(q, 'id', num)['response']['docs'].map{ |e| e['id'] })
-        end
-      elsif sub == 'group' or sub == 'person'
-        # Get the matching entry ids (from the people)
-        q = 'has_model_ssim:RelatedAgent AND person_same_as_search:"' + @search_term.downcase + '"'
-        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
-        unless num == 0
-          query.solr_query(q, "relatedAgentFor_ssim", num)['response']['docs'].map do |result|
-            result['relatedAgentFor_ssim'].each do |related_agent|
-              # Check that the relatedAgentFor_ssim is an Entry (as can be a RelatedAgent)
-              query.solr_query("id:#{related_agent} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
-                entry_id_set << related_agent
-              end
-            end
-          end
-        end
-      elsif sub == 'place'
-        # Get the matching entry ids (from the places)
-        q = 'has_model_ssim:RelatedPlace AND place_same_as_search:"' + @search_term.downcase + '"'
-        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
-        unless num == 0
-          query.solr_query(q, "relatedPlaceFor_ssim", num)['response']['docs'].map do |result|
-            result['relatedPlaceFor_ssim'].each do |related_place|
-              # Check that the relatedPlaceFor_ssim is an Entry (as can be a RelatedPlace)
-              query.solr_query("id:#{related_place} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
-                entry_id_set << related_place
-              end
-            end
-          end
-        end
-      else
-
-        # Replace all spaces in a search term with asterisks
-        search_term2 = @search_term.downcase.gsub(/ /, '*')
-
-        # Get the matching entry ids (from the entries)
-        q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
-        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
-        unless num == 0
-          entry_id_set.merge(query.solr_query(q, 'id', num)['response']['docs'].map{ |e| e['id'] })
-        end
-
-        # Get the matching entry ids (from the people)
-        q = "has_model_ssim:RelatedAgent AND (person_same_as_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
-        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
-        unless num == 0
-          query.solr_query(q, "relatedAgentFor_ssim", num)['response']['docs'].map do |result|
-            result['relatedAgentFor_ssim'].each do |related_agent|
-              # Check that the relatedAgentFor_ssim is an Entry (as can be a RelatedAgent)
-              query.solr_query("id:#{related_agent} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
-                entry_id_set << related_agent
-              end
-            end
-          end
-        end
-
-        # Get the matching entry ids (from the places)
-        q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_same_as_search:*#{search_term2}*)"
-        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
-        unless num == 0
-          query.solr_query(q, "relatedPlaceFor_ssim", num)['response']['docs'].map do |result|
-            result['relatedPlaceFor_ssim'].each do |related_place|
-              # Check that the relatedPlaceFor_ssim is an Entry (as can be a RelatedPlace)
-              query.solr_query("id:#{related_place} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
-                entry_id_set << related_place
-              end
-            end
-          end
-        end
-
-        # Get the matching entry ids (from the entry dates)
-        q = "has_model_ssim:EntryDate AND (date_note_tesim:*#{search_term2}*"
-        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
-        unless num == 0
-          query.solr_query(q, "entryDateFor_ssim", num, nil, 0)['response']['docs'].map do |result|
-            result['entryDateFor_ssim'].each do |entry_date|
-              query.solr_query("id:#{entry_date} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
-                entry_id_set << entry_date
-              end
-            end
-          end
-        end
-
-        # Get the matching entry ids (from the single dates)
-        q = "has_model_ssim:SingleDate AND (date_tesim:*#{search_term2}*"
-        num = query.solr_query(q, 'id', 0)['response']['numFound'].to_i
-        unless num == 0
-          # get the matching entry date ids
-          query.solr_query(q, "dateFor_ssim", num)['response']['docs'].map do |res|
-            res['dateFor_ssim'].each do |single_date|
-              # from the entry dates, get the entry ids
-              query.solr_query("id:#{single_date}", "entryDateFor_ssim", num)['response']['docs'].map do |result|
-                result['entryDateFor_ssim'].each do |entry_date|
-                  query.solr_query("id:#{entry_date} AND has_model_ssim:Entry",'id',1)['response']['docs'].map do |result2|
-                    entry_id_set << entry_date
-                  end
-                end
-              end
-            end
-          end
-        end
-
-        # # Get the matching entry ids (from the registers)
-        # q = "has_model_ssim:Folio AND preflabel_tesim:*#{search_term2}*"
-        # query.solr_query(q, 'id', 1000)['response']['docs'].map do |res|
-        #   res.each do |folio|
-        #     # from the entry dates, get the entry ids
-        #     query.solr_query("folio_ssim:#{folio}", "id", 1000, nil, 0)['response']['docs'].map do |result|
-        #       entry_id_set << result['id']
-        #     end
-        #   end
-        # end
-
-      end
-
-      puts 'start facets'
-      Time.now.strftime('[%d/%m/%Y %H:%M:%S] ').to_s
-
-      # this is doing 1600 queries x 8 or more
-
-
-      # Now we have all the entry ids iterate through and get the facets
-      entry_id_set.each do |entry_id|
-
-        local_section_type_word_array = []
-        local_subject_word_array = []
-        local_person_same_as_word_array = []
-        local_place_same_as_word_array = []
-        local_date_word_array = []
-        local_register_word_array = []
-
-        is_valid = true
-
-        query.solr_query("id:#{entry_id}", "section_type_new_tesim, subject_new_tesim", entry_id_set.size)['response']['docs'].map do |result|
-
-          # SECTION_TYPE FACET
-          # Add all the section types to a local array
-          # This local array is added to the facet array later on but only if this document is valid,
-          # i.e. includes the facets chosen by the user
-          if result['section_type_new_tesim'] != nil
-            result['section_type_new_tesim'].each do |section_type|
-              local_section_type_word_array << section_type
-            end
-          end
-
-          # If a section_type_facet has been chosen and there isn't a match
-          # for this entry, the document isn't valid
-          # If there is a match, the document is valid and the facet becomes the one chosen by the user
-          if @section_type_facet != nil and @section_type_facet != ''
-            if !local_section_type_word_array.include? @section_type_facet
-              is_valid = false
-            else
-              local_section_type_word_array = [@section_type_facet]
-            end
-          end
-
-          # SUBJECT FACET
-          if result['subject_new_tesim'] != nil
-            result['subject_new_tesim'].each do |subject|
-              local_subject_word_array << subject
-            end
-          end
-
-          if @subject_facet != nil and @subject_facet != ''
-            if !local_subject_word_array.include? @subject_facet
-              is_valid = false
-            else
-              local_subject_word_array = [@subject_facet]
-            end
-          end
-
-          # PERSON_SAME_AS FACET
-          query.solr_query("relatedAgentFor_ssim:#{entry_id}", "person_same_as_new_tesim", entry_id_set.size)['response']['docs'].map do |result|
-            if result['person_same_as_new_tesim'] != nil
-              result['person_same_as_new_tesim'].each do |person_same_as|
-                local_person_same_as_word_array << person_same_as
-              end
-            end
-          end
-
-          if @person_same_as_facet != nil and @person_same_as_facet != ''
-            if !local_person_same_as_word_array.include? @person_same_as_facet
-              is_valid = false
-            else
-              local_person_same_as_word_array = [@person_same_as_facet]
-            end
-          end
-
-          # PLACE_SAME_AS FACET
-          query.solr_query("relatedPlaceFor_ssim:#{entry_id}", "place_same_as_new_tesim", entry_id_set.size)['response']['docs'].map do |result|
-            if result['place_same_as_new_tesim'] != nil
-              result['place_same_as_new_tesim'].each do |place_same_as_tesim|
-                local_place_same_as_word_array << place_same_as_tesim
-              end
-            end
-          end
-
-          if @place_same_as_facet != nil and @place_same_as_facet != ''
-            if !local_place_same_as_word_array.include? @place_same_as_facet
-              is_valid = false
-            else
-              local_place_same_as_word_array = [@place_same_as_facet]
-            end
-          end
-
-          # DATES FACET
-          query.solr_query("entryDateFor_ssim:#{entry_id}", "id", entry_id_set.size)['response']['docs'].map do |res|
-            query.solr_query("dateFor_ssim:#{res['id']}", "date_tesim", entry_id_set.size)['response']['docs'].map do |result|
-              if result['date_tesim'] != nil
-                result['date_tesim'].each do |date_tesim|
-                  # get year only
-                  date = date_tesim.gsub('[', '').gsub(']', '')
-                  begin
-                    # get the first four chars; if these are a valid number over 1000 add them
-                    if date == 'undated'
-                      local_date_word_array << date
-                    elsif date[0..3].to_i >= 1000
-                      local_date_word_array << date[0..3]
-                    end
-                  rescue
-                    # if the value isn't a number, skip
-                  end
-                end
-              end
-            end
-          end
-
-          if @date_facet != nil and @date_facet != ''
-            if !local_date_word_array.include? @date_facet
-              is_valid = false
-            else
-              local_date_word_array = [@date_facet]
-            end
-          end
-
-          # REGISTERS FACET
-          query.solr_query("id:#{entry_id}", "folio_ssim", entry_id_set.size, 'preflabel_si asc')['response']['docs'].map do |res|
-            query.solr_query("id:#{res['folio_ssim'].join}", 'preflabel_tesim', 1)['response']['docs'].map do |result|
-              unless result['preflabel_tesim'].nil?
-                result['preflabel_tesim'].each do |reg|
-                  # get reference
-                  register = reg.split(' ')
-                  if register[0] == 'Abp' and register[1] == 'Reg'
-                    register_id = "Register #{register[2]}"
-                  else
-                    register_id = "#{register[0]} #{register[1]} #{register[2]}"
-                  end
-                  local_register_word_array << register_id
-                end
-              end
-            end
-          end
-
-          if @register_facet != nil and @register_facet != ''
-            if !local_register_word_array.include? @register_facet
-              is_valid = false
-            else
-              local_register_word_array = [@register_facet]
-            end
-          end
-
-        end
-
-
-        if is_valid == true
-          section_type_word_array.concat local_section_type_word_array
-          subject_word_array.concat local_subject_word_array
-          person_same_as_word_array.concat local_person_same_as_word_array
-          place_same_as_word_array.concat local_place_same_as_word_array
-          date_word_array.concat local_date_word_array
-          register_word_array.concat local_register_word_array
+      # ENTRIES: Get the matching entry ids and facets
+      if sub != 'group' or sub != 'person'or sub != 'place'
+        # if the search has come from the subjects browse, limit to searching for the subject
+        if sub == 'subject'
+          q = 'has_model_ssim:Entry AND subject_search:"' + @search_term.downcase + '"'
         else
-          entry_id_set.delete(entry_id)
+          q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
+        end
+        fq = filter_query
+        facets = facet_fields
+        num = count_query(q)
+        unless num == 0
+          q_result = query.solr_query(q, 'id', num, nil, 0, true, -1, 'index', facets, fq)
+          facet_hash(q_result)
+          entry_id_set.merge(q_result['response']['docs'].map { |e| e['id'] })
         end
       end
 
-      puts 'end facets'
-      Time.now.strftime('[%d/%m/%Y %H:%M:%S] ').to_s
+      # Filter query for the entry (section types and subject facets), used when looping through the entries
+      fq_entry = filter_query
 
-      # Sort the word arrays and create a hash with the facets and facet counts
-      if section_type_word_array != nil
-        section_type_word_array.sort.each do |word|
-          @section_type_facet_hash[word] += 1
+      # PEOPLE/GROUPS: Get the matching entry ids and facets
+      if sub != 'subject'or sub != 'place'
+        # if the search has come from the people or group browse, limit to searching for group or person
+        if sub == 'group' or sub == 'person'
+          q = 'has_model_ssim:RelatedAgent AND person_same_as_search:"' + @search_term.downcase + '"'
+        else
+          q = "has_model_ssim:RelatedAgent AND (person_same_as_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
+        end
+        facets = facet_fields
+        num = count_query(q)
+        unless num == 0
+          q_result = query.solr_query(q, 'relatedAgentFor_ssim', num)
+          q_result['response']['docs'].map do |result|
+            result['relatedAgentFor_ssim'].each do |relatedagent|
+              q_result2 = query.solr_query("id:#{relatedagent}", 'id,has_model_ssim', 1, nil, 0, true, -1, 'index', facets, fq_entry)
+              # if we want to be sure about the model, do this, but if we are sure entry is always first, don't bother
+              q_result2['response']['docs'].map do |entry|
+                unless q_result2['response']['numFound'] == 0
+                  unless entry_id_set.include? q_result2['response']['docs'][0]['id']
+                    add_facet_to_hash(q_result2)
+                  end
+                  entry_id_set << q_result2['response']['docs'][0]['id']
+                end
+              end
+            end
+          end
         end
       end
 
-      if subject_word_array != nil
-        subject_word_array.sort.each do |word|
-          @subject_facet_hash[word] += 1
+      # PLACE: Get the matching entry ids and facets
+      if sub != 'group' or sub != 'person' or sub != 'subject'
+        # if the search has come from the places browse, limit to searching for places
+        if sub == 'place'
+          q = 'has_model_ssim:RelatedPlace AND place_same_as_search:"' + @search_term.downcase + '"'
+          puts q
+        else
+          q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_as_written_search:*#{search_term2}*)"
+        end
+        facets = facet_fields
+        num = count_query(q)
+        unless num == 0
+          q_result = query.solr_query(q, 'relatedPlaceFor_ssim', num)
+          # The Entry id is ALWAYS first, so just take the first one
+          q_result['response']['docs'].map do |result|
+            q_result2 = query.solr_query("id:#{result['relatedPlaceFor_ssim'][0]}", 'id', 1, nil, 0, true, -1, 'index', facets, fq_entry)
+            unless q_result2['response']['numFound'] == 0
+              unless entry_id_set.include? q_result2['response']['docs'][0]['id']
+                add_facet_to_hash(q_result2)
+              end
+              entry_id_set << q_result2['response']['docs'][0]['id']
+            end
+          end
         end
       end
 
-      if person_same_as_word_array != nil
-        person_same_as_word_array.sort.each do |word|
-          @person_same_as_facet_hash[word] += 1
+      # ENTRY DATES: Get the matching entry ids (no facets needed for entry dates)
+      if sub != 'group' or sub != 'person' or sub != 'subject' or sub != 'place'
+        q = "has_model_ssim:EntryDate AND (date_note_tesim:*#{search_term2}*"
+        num = count_query(q)
+        unless num == 0
+          q_result = query.solr_query(q, 'entryDateFor_ssim', num)
+          entry_id_set.merge(q_result['response']['docs'].map { |e| e['entryDateFor_ssim'] })
         end
       end
 
-      if place_same_as_word_array != nil
-        place_same_as_word_array.sort.each do |word|
-          @place_same_as_facet_hash[word] += 1
+      # SINGLE DATES: Get the matching entry ids and facets
+      q = "has_model_ssim:SingleDate AND (date_tesim:*#{search_term2}*"
+      facets = facet_fields
+      num = count_query(q)
+      unless num == 0
+        q_result = query.solr_query(q, 'dateFor_ssim', num)
+        q_result['response']['docs'].map do |res|
+          res['dateFor_ssim'].each do |single_date|
+            # from the entry dates, get the entry ids
+            query.solr_query("id:#{single_date}", "entryDateFor_ssim", num)['response']['docs'].map do |result|
+              q_result2 = query.solr_query("id:#{result['entryDateFor_ssim'][0]}", 'id', 1, nil, 0, true, -1, 'index', facets, fq_entry)
+              unless q_result2['response']['numFound'] == 0
+                unless entry_id_set.include? result['entryDateFor_ssim']
+                  #add facets
+                  add_facet_to_hash(q_result2)
+                end
+                entry_id_set << q_result2['response']['docs'][0]['id']
+              end
+            end
+          end
         end
       end
 
-      if date_word_array != nil
-        date_word_array.sort.each do |word|
-          @date_facet_hash[word] += 1
-        end
-      end
-
-      if register_word_array != nil
-        register_word_array.sort.each do |word|
-          @register_facet_hash[word] += 1
-        end
-      end
+      #Sort all of the hashes
+      @section_type_facet_hash = @section_type_facet_hash.sort.to_h
+      @person_same_as_facet_hash = @person_same_as_facet_hash.sort.to_h
+      @place_same_as_facet_hash = @place_same_as_facet_hash.sort.to_h
+      @subject_facet_hash = @subject_facet_hash.sort.to_h
+      @date_facet_hash = @date_facet_hash.sort.to_h
+      @register_facet_hash = @register_facet_hash.sort.to_h
 
       # This variable is used on the display page
       @number_of_rows = entry_id_set.size
@@ -386,6 +178,7 @@ module Solr
           @partial_list_array << @element_array
         end
       end
+
 
     rescue => error
       log_error(__method__, __FILE__, error)
@@ -436,15 +229,20 @@ module Solr
         end
         fl = 'id, date_tesim,date_type_tesim, date_certainty_tesim'
         SolrQuery.new.solr_query(q, fl, 1000)['response']['docs'].map do |result|
-          if result['date_type_tesim'].join == 'single'
+          if result['date_type_tesim'] != nil
+            if result['date_type_tesim'].join == 'single'
+              date_string = date_string + get_place_or_person_string(result['date_tesim'], date_string)
+              date_certainty_string = date_certainty_string + get_place_or_person_string(result['date_certainty_tesim'], date_certainty_string)
+            elsif result['date_type_tesim'].join == 'start'
+              date_start_string = date_start_string + get_place_or_person_string(result['date_tesim'], date_start_string)
+              date_certainty_start_string = date_certainty_start_string + get_place_or_person_string(result['date_certainty_tesim'], date_certainty_start_string)
+            elsif result['date_type_tesim'].join == 'end'
+              date_end_string = date_end_string + get_place_or_person_string(result['date_tesim'], date_end_string)
+              date_certainty_end_string = date_certainty_end_string + get_place_or_person_string(result['date_certainty_tesim'], date_certainty_end_string)
+            end
+          else
             date_string = date_string + get_place_or_person_string(result['date_tesim'], date_string)
             date_certainty_string = date_certainty_string + get_place_or_person_string(result['date_certainty_tesim'], date_certainty_string)
-          elsif result['date_type_tesim'].join == 'start'
-            date_start_string = date_start_string + get_place_or_person_string(result['date_tesim'], date_start_string)
-            date_certainty_start_string = date_certainty_start_string + get_place_or_person_string(result['date_certainty_tesim'], date_certainty_start_string)
-          elsif result['date_type_tesim'].join == 'end'
-            date_end_string = date_end_string + get_place_or_person_string(result['date_tesim'], date_end_string)
-            date_certainty_end_string = date_certainty_end_string + get_place_or_person_string(result['date_certainty_tesim'], date_certainty_end_string)
           end
         end
       end
@@ -1031,6 +829,132 @@ module Solr
 
   end
 
+  # return the numRecords from a solr query
+  def count_query(query)
+    @query.solr_query(query, 'id', 0)['response']['numFound'].to_i
+  end
+
+  # return the facet fields
+  def facet_fields
+    ['section_type_facet_ssim', 'subject_facet_ssim', 'entry_person_same_as_facet_ssim', 'entry_place_same_as_facet_ssim', 'entry_date_facet_ssim','entry_register_facet_ssim']
+  end
+
+  # build the filter query for solr
+  def filter_query
+    fq = Array.new
+        unless @section_type_facet.nil?
+          fq << "section_type_new_tesim:\"#{@section_type_facet}\""
+        end
+        unless @subject_facet.nil?
+          fq << "subject_new_tesim:\"#{@subject_facet}\""
+        end
+        unless @register_facet.nil?
+          fq << "entry_register_facet_ssim:\"#{@register_facet}\""
+        end
+        unless @person_same_as_facet.nil?
+          fq << "entry_person_same_as_facet_ssim:\"#{@person_same_as_facet}\""
+        end
+        unless @place_same_as_facet.nil?
+          fq << "entry_place_same_as_facet_ssim:\"#{@place_same_as_facet}\""
+        end
+        unless @date_facet.nil?
+          fq << "entry_date_facet_ssim:\"#{@date_facet}\""
+        end
+    if fq.empty?
+      fq = nil
+    end
+    fq
+  end
+
+  def facet_hash(solr_result)
+    unless solr_result['facet_counts']['facet_fields']['subject_facet_ssim'].nil?
+      @subject_facet_hash = Hash[*solr_result['facet_counts']['facet_fields']['subject_facet_ssim'].flatten(1)]
+    end
+    unless solr_result['facet_counts']['facet_fields']['section_type_facet_ssim'].nil?
+      @section_type_facet_hash = Hash[*solr_result['facet_counts']['facet_fields']['section_type_facet_ssim'].flatten(1)]
+    end
+    unless solr_result['facet_counts']['facet_fields']['entry_person_same_as_facet_ssim'].nil?
+      @person_same_as_facet_hash = Hash[*solr_result['facet_counts']['facet_fields']['entry_person_same_as_facet_ssim'].flatten(1)]
+    end
+    unless solr_result['facet_counts']['facet_fields']['entry_place_same_as_facet_ssim'].nil?
+      @place_same_as_facet_hash = Hash[*solr_result['facet_counts']['facet_fields']['entry_place_same_as_facet_ssim'].flatten(1)]
+    end
+    unless solr_result['facet_counts']['facet_fields']['entry_date_facet_ssim'].nil?
+      @date_facet_hash = Hash[*solr_result['facet_counts']['facet_fields']['entry_date_facet_ssim'].flatten(1)]
+    end
+    unless solr_result['facet_counts']['facet_fields']['entry_register_facet_ssim'].nil?
+      @register_facet_hash = Hash[*solr_result['facet_counts']['facet_fields']['entry_register_facet_ssim'].flatten(1)]
+    end
+  end
+
+  def add_facet_to_hash(solr_result)
+    unless solr_result['facet_counts']['facet_fields']['subject_facet_ssim'].nil?
+      solr_result['facet_counts']['facet_fields']['subject_facet_ssim'].each_with_index do |st, index|
+        if index.even? == true
+          if @subject_facet_hash[st]
+            @subject_facet_hash[st] += solr_result['facet_counts']['facet_fields']['subject_facet_ssim'][index+1]
+          else
+            @subject_facet_hash[st] = solr_result['facet_counts']['facet_fields']['subject_facet_ssim'][index+1]
+          end
+        end
+      end
+    end
+    unless solr_result['facet_counts']['facet_fields']['section_type_facet_ssim'].nil?
+      solr_result['facet_counts']['facet_fields']['section_type_facet_ssim'].each_with_index do |st, index|
+        if index.even? == true
+          if @section_type_facet_hash[st]
+            @section_type_facet_hash[st] += solr_result['facet_counts']['facet_fields']['section_type_facet_ssim'][index+1]
+          else
+            @section_type_facet_hash[st] = solr_result['facet_counts']['facet_fields']['section_type_facet_ssim'][index+1]
+          end
+        end
+      end
+    end
+    unless solr_result['facet_counts']['facet_fields']['entry_person_same_as_facet_ssim'].nil?
+      solr_result['facet_counts']['facet_fields']['entry_person_same_as_facet_ssim'].each_with_index do |st, index|
+        if index.even? == true
+          if @person_same_as_facet_hash[st]
+            @person_same_as_facet_hash[st] += solr_result['facet_counts']['facet_fields']['entry_person_same_as_facet_ssim'][index+1]
+          else
+            @person_same_as_facet_hash[st] = solr_result['facet_counts']['facet_fields']['entry_person_same_as_facet_ssim'][index+1]
+          end
+        end
+      end
+    end
+    unless solr_result['facet_counts']['facet_fields']['entry_place_same_as_facet_ssim'].nil?
+      solr_result['facet_counts']['facet_fields']['entry_place_same_as_facet_ssim'].each_with_index do |st, index|
+        if index.even? == true
+          if @place_same_as_facet_hash[st]
+            @place_same_as_facet_hash[st] += solr_result['facet_counts']['facet_fields']['entry_place_same_as_facet_ssim'][index+1]
+          else
+            @place_same_as_facet_hash[st] = solr_result['facet_counts']['facet_fields']['entry_place_same_as_facet_ssim'][index+1]
+          end
+        end
+      end
+    end
+    unless solr_result['facet_counts']['facet_fields']['entry_date_facet_ssim'].nil?
+      solr_result['facet_counts']['facet_fields']['entry_date_facet_ssim'].each_with_index do |st, index|
+        if index.even? == true
+          if @date_facet_hash[st]
+            @date_facet_hash[st] += solr_result['facet_counts']['facet_fields']['entry_date_facet_ssim'][index+1]
+          else
+            @date_facet_hash[st] = solr_result['facet_counts']['facet_fields']['entry_date_facet_ssim'][index+1]
+          end
+        end
+      end
+    end
+    unless solr_result['facet_counts']['facet_fields']['entry_register_facet_ssim'].nil?
+      solr_result['facet_counts']['facet_fields']['entry_register_facet_ssim'].each_with_index do |st, index|
+        if index.even? == true
+          if @register_facet_hash[st]
+            @register_facet_hash[st] += solr_result['facet_counts']['facet_fields']['entry_register_facet_ssim'][index+1]
+          else
+            @register_facet_hash[st] = solr_result['facet_counts']['facet_fields']['entry_register_facet_ssim'][index+1]
+          end
+        end
+      end
+    end
+  end
 end
 
 # Writes error message to the log
