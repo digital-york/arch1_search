@@ -21,6 +21,8 @@ module Solr
       # Replace all spaces in a search term with asterisks
       search_term2 = @search_term.downcase.gsub(/ /, '*')
 
+      puts entry_id_set.length
+
       # ENTRIES: Get the matching entry ids and facets
       if sub != 'group' or sub != 'person'or sub != 'place'
         # if the search has come from the subjects browse, limit to searching for the subject
@@ -43,7 +45,7 @@ module Solr
       fq_entry = filter_query
 
       # PEOPLE/GROUPS: Get the matching entry ids and facets
-      if sub != 'subject'or sub != 'place'
+      if sub != 'subject'and sub != 'place'
         # if the search has come from the people or group browse, limit to searching for group or person
         if sub == 'group' or sub == 'person'
           q = 'has_model_ssim:RelatedAgent AND person_same_as_search:"' + @search_term.downcase + '"'
@@ -56,13 +58,15 @@ module Solr
           q_result['response']['docs'].map do |result|
             result['relatedAgentFor_ssim'].each do |relatedagent|
               q_result2 = query.solr_query("id:#{relatedagent}", 'id,has_model_ssim', 1, nil, 0, true, -1, 'index', facets, fq_entry)
-              # if we want to be sure about the model, do this, but if we are sure entry is always first, don't bother
               q_result2['response']['docs'].map do |entry|
                 unless q_result2['response']['numFound'] == 0
-                  unless entry_id_set.include? q_result2['response']['docs'][0]['id']
-                    add_facet_to_hash(q_result2)
+                  # Check that the model is Entry
+                  unless entry['has_model_ssim'] != ['Entry']
+                    unless entry_id_set.include? entry['id']
+                      add_facet_to_hash(q_result2)
+                    end
+                    entry_id_set << entry['id']
                   end
-                  entry_id_set << q_result2['response']['docs'][0]['id']
                 end
               end
             end
@@ -71,7 +75,7 @@ module Solr
       end
 
       # PLACE: Get the matching entry ids and facets
-      if sub != 'group' or sub != 'person' or sub != 'subject'
+      if sub != 'group' and sub != 'person' and sub != 'subject'
         # if the search has come from the places browse, limit to searching for places
         if sub == 'place'
           q = 'has_model_ssim:RelatedPlace AND place_same_as_search:"' + @search_term.downcase + '"'
@@ -82,43 +86,47 @@ module Solr
         num = count_query(q)
         unless num == 0
           q_result = query.solr_query(q, 'relatedPlaceFor_ssim', num)
-          # The Entry id is ALWAYS first, so just take the first one
           q_result['response']['docs'].map do |result|
-            q_result2 = query.solr_query("id:#{result['relatedPlaceFor_ssim'][0]}", 'id', 1, nil, 0, true, -1, 'index', facets, fq_entry)
-            unless q_result2['response']['numFound'] == 0
-              unless entry_id_set.include? q_result2['response']['docs'][0]['id']
-                add_facet_to_hash(q_result2)
+            q_result2 = query.solr_query("id:#{result['relatedPlaceFor_ssim'][0]}", 'id,has_model_ssim', 1, nil, 0, true, -1, 'index', facets, fq_entry)
+            q_result2['response']['docs'].map do |entry|
+              unless q_result2['response']['numFound'] == 0
+                # Check that the model is Entry
+                unless entry['has_model_ssim'] != ['Entry']
+                  unless entry_id_set.include? entry['id']
+                    add_facet_to_hash(q_result2)
+                  end
+                  entry_id_set << entry['id']
+                end
               end
-              entry_id_set << q_result2['response']['docs'][0]['id']
             end
           end
         end
       end
 
       # SINGLE DATES: Get the matching entry ids and facets
-      q = "has_model_ssim:SingleDate AND date_tesim:*#{search_term2}*"
-      facets = facet_fields
-      num = count_query(q)
-      unless num == 0
-        q_result = query.solr_query(q, 'dateFor_ssim', num)
-        q_result['response']['docs'].map do |res|
-          res['dateFor_ssim'].each do |single_date|
-            # from the entry dates, get the entry ids
-            query.solr_query("id:#{single_date}", "entryDateFor_ssim", num)['response']['docs'].map do |result|
-              q_result2 = query.solr_query("id:#{result['entryDateFor_ssim'][0]}", 'id', 1, nil, 0, true, -1, 'index', facets,fq_entry)
-              unless q_result2['response']['numFound'] == 0
-                unless entry_id_set.include? q_result2['response']['docs'][0]['id']
-                  #add facets
-                  add_facet_to_hash(q_result2)
+      if sub != 'group' and sub != 'person' and sub != 'subject' and sub != 'place'
+        q = "has_model_ssim:SingleDate AND date_tesim:*#{search_term2}*"
+        facets = facet_fields
+        num = count_query(q)
+        unless num == 0
+          q_result = query.solr_query(q, 'dateFor_ssim', num)
+          q_result['response']['docs'].map do |res|
+            res['dateFor_ssim'].each do |single_date|
+              # from the entry dates, get the entry ids
+              query.solr_query("id:#{single_date}", "entryDateFor_ssim", num)['response']['docs'].map do |result|
+                q_result2 = query.solr_query("id:#{result['entryDateFor_ssim'][0]}", 'id', 1, nil, 0, true, -1, 'index', facets,fq_entry)
+                unless q_result2['response']['numFound'] == 0
+                  unless entry_id_set.include? q_result2['response']['docs'][0]['id']
+                    #add facets
+                    add_facet_to_hash(q_result2)
+                  end
+                  entry_id_set << q_result2['response']['docs'][0]['id']
                 end
-                entry_id_set << q_result2['response']['docs'][0]['id']
               end
             end
           end
-        end
 
         # ENTRY DATES: Get the matching entry ids (no facets needed for entry dates)
-        if sub != 'group' or sub != 'person' or sub != 'subject' or sub != 'place'
           q = "has_model_ssim:EntryDate AND (date_note_tesim:*#{search_term2}*"
           num = count_query(q)
           unless num == 0
@@ -176,7 +184,6 @@ module Solr
         end
       end
 
-
     rescue => error
       log_error(__method__, __FILE__, error)
       raise
@@ -215,6 +222,7 @@ module Solr
             date_array << result2
           end
           tmp_array << get_date_string(date_role_string,date_note_string,date_array)
+          if tmp_array[0] == '' then tmp_array = [] end
         end
       else
         q = "entryDateFor_ssim:#{entry_id}"
@@ -256,24 +264,24 @@ module Solr
     begin
     date_string = ''
     unless date_role_string.nil? or date_role_string == ['unknown']
-      date_string += "#{get_element(date_role_string).capitalize}: "
+      date_string += "#{get_element(date_role_string,true).capitalize}: "
     end
     unless date_array.nil? or date_array == []
       date_array.each do | result |
         if result['date_type_tesim'] != nil
           if result['date_type_tesim'].join == 'single'
-            date_string += get_element(result['date_tesim'])
-            date_string += " (#{get_element(result['date_certainty_tesim'])})"
+            date_string += get_element(result['date_tesim'],true)
+            date_string += " (#{get_element(result['date_certainty_tesim'],true)})"
           elsif result['date_type_tesim'].join == 'start'
             date_string += get_element(result['date_tesim'])
-            date_string += " (#{get_element(result['date_certainty_tesim'])}) - "
+            date_string += " (#{get_element(result['date_certainty_tesim'],true)}) - "
           elsif result['date_type_tesim'].join == 'end'
             date_string += get_element(result['date_tesim'])
-            date_string += " (#{get_element(result['date_certainty_tesim'])})"
+            date_string += " (#{get_element(result['date_certainty_tesim'],true)})"
           end
         else
-          date_string += get_element(result['date_tesim'])
-          date_string += " (#{get_element(result['date_certainty_tesim'])})"
+          date_string += get_element(result['date_tesim'],true)
+          date_string += " (#{get_element(result['date_certainty_tesim'],true)})"
         end
       end
     end
@@ -281,7 +289,11 @@ module Solr
       unless date_string.end_with? ': '
         date_string += '; Note: '
       end
-      date_string += "#{get_element(date_note_string).capitalize}"
+      date_string += "#{get_element(date_note_string,true).capitalize}"
+    end
+    # This should only happen with matched records, where there is only a role; we do not want to show this
+    if date_string.end_with? ': '
+      date_string = ''
     end
     date_string
     rescue => error
@@ -354,7 +366,7 @@ module Solr
       # Put testator at beginning
       temp_array.each_with_index do |a,index|
         if a.start_with? 'Testator'
-          #remove from current and insert at beginning
+          # Remove testators from current position and insert at beginning
           temp_array.insert(0,temp_array.delete_at(index))
         end
       end
@@ -384,33 +396,33 @@ module Solr
     unless person_role_string.nil?
       if person_role_string == ['unknown']
         unless person_note_string.nil? and person_note_string.include? 'Role: '
-          person_string += "#{get_element(person_note_string).gsub('Role: ','').capitalize}: "
+          person_string += "#{get_element(person_note_string,true).gsub('Role: ','').capitalize}: "
         end
       else
-        person_string += "#{get_element(person_role_string).capitalize}: "
+        person_string += "#{get_element(person_role_string,true).capitalize}: "
       end
     end
     if person_same_as_string.nil?
       unless person_as_written_string.nil?
-        person_string += get_element(person_as_written_string)
+        person_string += get_element(person_as_written_string,true)
       end
       unless person_descriptor_string.nil? or person_descriptor_string == ['unknown']
-        person_string += " (#{get_element(person_descriptor_string)})"
+        person_string += " (#{get_element(person_descriptor_string,true)})"
       end
     else
       person_string += get_element(person_same_as_string)
       unless person_descriptor_string.nil? or person_descriptor_string == ['unknown']
-        person_string += " (#{get_element(person_descriptor_string)})"
+        person_string += " (#{get_element(person_descriptor_string,true)})"
       end
       unless person_as_written_string.nil?
-        person_string += "; written as #{get_element(person_as_written_string)}"
+        person_string += "; written as #{get_element(person_as_written_string,true)}"
       end
     end
     unless person_related_place_string.nil?
-      person_string += "; related places: #{get_element(person_related_place_string)}"
+      person_string += "; related places: #{get_element(person_related_place_string,true)}"
     end
     unless person_related_person_string.nil?
-      person_string += "; related people: #{get_element(person_related_person_string)}"
+      person_string += "; related people: #{get_element(person_related_person_string,true)}"
     end
     person_string
   end
@@ -424,22 +436,22 @@ module Solr
   )
     place_string = ''
     unless place_role_string.nil? or place_role_string == ['unknown']
-      place_string += "#{get_element(place_role_string).capitalize}: "
+      place_string += "#{get_element(place_role_string,true).capitalize}: "
     end
     if place_same_as_string.nil?
       unless place_as_written_string.nil?
-        place_string += get_element(place_as_written_string)
+        place_string += get_element(place_as_written_string,true)
       end
       unless place_type_string.nil? or place_type_string == ['unknown']
-        place_string += " (#{get_element(place_type_string)})"
+        place_string += " (#{get_element(place_type_string,true)})"
       end
     else
       place_string += get_element(place_same_as_string)
       unless place_type_string.nil? or place_type_string == ['unknown']
-        place_string += " (#{get_element(place_type_string)})"
+        place_string += " (#{get_element(place_type_string,true)})"
       end
       unless place_as_written_string.nil?
-        place_string += "; written as #{get_element(place_as_written_string)}"
+        place_string += "; written as #{get_element(place_as_written_string,true)}"
       end
     end
     place_string
@@ -453,7 +465,6 @@ module Solr
 
       # Get the entry_no and folio_id for the entry_id
       SolrQuery.new.solr_query('id:' + entry_id, 'entry_no_tesim, entry_folio_facet_ssim, folio_ssim', 1)['response']['docs'].map do |result|
-
         @element_array << "#{result['entry_folio_facet_ssim'].join} entry #{result['entry_no_tesim'].join}"
         @element_array << result['folio_ssim'].join
 
@@ -468,7 +479,7 @@ module Solr
 
   # Helper method to check if terms match the search term and if so, whether to put a comma in front of it
   # i.e. this is required if it is not the first term in the string
-  def get_element(input_array)
+  def get_element(input_array,return_string=nil)
 
     begin
 
@@ -496,7 +507,7 @@ module Solr
           str = str.gsub(/#{temp}/i) do |term|
             "<span class=\'highlight_text\'>#{term}</span>"
           end
-        elsif is_match == false and @search_term != ''
+        elsif is_match == false and @search_term != '' and return_string.nil?
           str = ''
         end
 
