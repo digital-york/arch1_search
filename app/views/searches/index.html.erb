@@ -596,6 +596,8 @@
                 </div>
             <% end %>
 
+            <div style="clear: both;"></div>
+
             <%# Display search results %>
             <% @partial_list_array.each_with_index do |t, index| %>
 
@@ -612,27 +614,9 @@
                    note = t[9]
                    editorial_note = t[10]
                    is_referenced_by = t[11]
-                   place_as_written = t[12]
-                   place_role = t[13]
-                   place_type = t[14]
-                   place_note = t[15]
-                   place_same_as = t[16]
-                   person_as_written = t[17]
-                   person_role = t[18]
-                   person_descriptor = t[19]
-                   person_descriptor_as_written = t[20]
-                   person_note = t[21]
-                   person_same_as = t[22]
-                   person_related_place = t[23]
-                   person_related_person = t[24]
-                   date_role = t[25]
-                   date_note = t[26]
-                   date = t[27]
-                   date_certainty = t[28]
-                   date_start = t[29]
-                   date_certainty_start = t[30]
-                   date_end = t[31]
-                   date_certainty_end = t[32]
+                   place = t[12]
+                   person = t[13]
+                   dates = t[14]
                 %>
 
                 <div style="padding-bottom: 15px">
@@ -684,7 +668,7 @@
 
                                 <% if subject != '' %>
                                     <tr>
-                                        <th>Subject:</th>
+                                        <th>Subjects:</th>
                                         <td>
                                             <%= subject.html_safe %>
                                         </td>
@@ -707,150 +691,47 @@
 
                                 <% if is_referenced_by != '' %>
                                     <tr>
-                                        <th>Is Referenced By:</th>
+                                        <th>References:</th>
                                         <td><%= is_referenced_by.html_safe %></td>
                                     </tr>
                                 <% end %>
 
-                                <% if place_as_written != '' %>
+                                <% if dates != [] %>
                                     <tr>
-                                        <th>Place As Written:</th>
-                                        <td><%= place_as_written.html_safe %></td>
+                                        <th style="vertical-align: top">Dates:</th>
+                                        <td>
+                                            <% dates.each do | date | %>
+                                                <%= date.html_safe %>
+                                                <br />
+                                            <% end %>
+                                        </td>
                                     </tr>
                                 <% end %>
-
-                                <% if place_same_as != '' %>
-                                    <tr>
-                                        <th>Place Name Authority:</th>
-                                        <td><%= place_same_as.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if place_role != '' %>
-                                    <tr>
-                                        <th>Place Role:</th>
-                                        <td><%= place_role.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if place_type != '' %>
-                                    <tr>
-                                        <th>Place Type:</th>
-                                        <td><%= place_type.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if place_note != '' %>
-                                    <tr>
-                                        <th>Place Note:</th>
-                                        <td><%= place_note.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if person_as_written != '' %>
-                                    <tr>
-                                        <th>Person As Written:</th>
-                                        <td><%= person_as_written.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if person_same_as != '' %>
-                                    <tr>
-                                        <th>Person Name Authority:</th>
-                                        <td><%= person_same_as.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if person_role != '' %>
-                                    <tr>
-                                        <th>Person Role:</th>
-                                        <td><%= person_role.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if person_descriptor != '' %>
-                                    <tr>
-                                        <th>Person Descriptor:</th>
-                                        <td><%= person_descriptor.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if person_descriptor_as_written != '' %>
-                                    <tr>
-                                        <th>Person Descriptor As Written:</th>
-                                        <td><%= person_descriptor_as_written.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if person_note != '' %>
-                                    <tr>
-                                        <th>Person Note:</th>
-                                        <td><%= person_note.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if person_related_place != '' %>
-                                    <tr>
-                                        <th>Related Place:</th>
-                                        <td><%= person_related_place.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if person_related_person != '' %>
-                                    <tr>
-                                        <th>Related Person:</th>
-                                        <td><%= person_related_person.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
-                                <% if date != '' %>
-                                    <tr>
-                                        <th>Date:</th>
-                                        <% if date == 'undated' %>
-                                            <td>undated</td>
-                                        <% else %>
-                                            <td><%= date.gsub('0000', 'year-unknown').html_safe %>
-                                                <% if date_certainty != '' %>
-                                                    <%= ' (' + date_certainty.html_safe + ')' %>
-                                                <% end %>
-                                            </td>
-                                        <% end %>
-                                    </tr>
-                                <% end %>
-                                <% if date_start != '' %>
-                                    <tr>
-                                        <th>Date:</th>
-                                        <% if date_start == 'undated' %>
-                                            <td>undated</td>
-                                        <% else %>
-                                            <td><%= date_start.gsub('0000', 'year-unknown').html_safe %>
-                                                <% if date_certainty_start != '' %>
-                                                    <%= ' (' + date_certainty_start.html_safe + ')' %>
-                                                <% end %>
-                                                <% unless date_end == '' %>
-                                                    <%= ' - '.html_safe + date_end.gsub('0000', 'year-unknown').html_safe %>
-                                                    <% if date_certainty_end != '' %>
-                                                        <%= ' ('.html_safe + date_certainty_end.html_safe + ')'.html_safe %>
-                                                    <% end %>
-                                                <% end %>
-                                            </td>
-                                        <% end %>
-                                    </tr>
-                                <% end %>
-                                <% if date_role != '' %>
-                                    <tr>
-                                        <th>Date Role:</th>
-                                        <td><%= date_role.html_safe %></td>
-                                    </tr>
-                                <% end %>
-                                <% if date_note != '' %>
-                                    <tr>
-                                        <th>Date note:</th>
-                                        <td><%= date_note.html_safe %></td>
-                                    </tr>
-                                <% end %>
-
                             <% end %>
+
+                            <% if person != [] %>
+                                    <tr>
+                                        <th style="vertical-align: top">People and Groups:</th>
+                                        <td>
+                                            <% person.each do | person_group | %>
+                                            <%= person_group.html_safe %>
+                                            <br />
+                                            <% end %>
+                                        </td>
+                                    </tr>
+                                <% end %>
+
+                                <% if place != [] %>
+                                    <tr>
+                                        <th style="vertical-align: top">Places:</th>
+                                        <td>
+                                            <% place.each do | p | %>
+                                                <%= p.html_safe %>
+                                                <br />
+                                            <% end %>
+                                        </td>
+                                    </tr>
+                                <% end %>
 
                         </table>
                     </div>

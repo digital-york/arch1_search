@@ -73,8 +73,6 @@ class SearchesController < ApplicationController
         end
 
         # Set arrays which display data on the page
-        # TODO only bring back the specified no of results, using offsets, eg. page num and num of results
-
         if @search_type == 'subject' or @search_type == 'group' or @search_type == 'person' or @search_type == 'place'
           set_search_result_arrays(@search_type)
         else
@@ -105,7 +103,7 @@ class SearchesController < ApplicationController
 
       @folio_id = params[:folio_id]
       if params[:folio_title].nil?
-        @folio_title = get_folio_name(params[:folio_id])
+        @folio_title = get_folio_title(params[:entry_id])
       else
         @folio_title = params[:folio_title]
       end

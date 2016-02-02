@@ -66,23 +66,12 @@ module RegisterFolioHelper
     end
   end
 
-  def get_folio_name(fol)
+  # Get the 'title' of the folio from the entry
+  def get_folio_title(entry)
     begin
       @query_obj = SolrQuery.new
       # get the file paths from the register
-      reg = @query_obj.solr_query('id:' + fol, 'preflabel_tesim', 1, 'preflabel_si asc')['response']['docs'][0]['preflabel_tesim'][0]
-      register = reg.split(' ')
-      if register[0] == 'Abp' and register[1] == 'Reg'
-        register_id = "Register #{register[2]}"
-        i = 3
-        while i < register.size
-          register_id = "#{register_id} #{register[i]}"
-          i = i + 1
-        end
-      else
-        register_id = "#{register[0]} #{register[1]} #{register[2]}"
-      end
-      register_id
+      @query_obj.solr_query('id:' + entry, 'entry_folio_facet_ssim', 1)['response']['docs'][0]['entry_folio_facet_ssim'][0]
 
     rescue => error
       log_error(__method__, __FILE__, error)

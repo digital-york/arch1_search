@@ -76,8 +76,9 @@
 
                     <%= text_field_tag 'search_term', @search_term, :class => 'form-control', :id => 'search_box', :placeholder => 'Search the registers...' %>
 
-                    <button type="submit" class="btn go_button">
-                        <span class="go_text">Go</span>
+                    <button type="submit" class="btn go_button" id="spin-me">
+                        <i class="fa fa-refresh fa-spin fa-2x" style="display: none"></i>
+                        <span class="go_text" style="display: inherit">Go</span>
                     </button>
                 </div>
                 <div class="col-md-3"></div>
