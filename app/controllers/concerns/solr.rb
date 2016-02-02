@@ -17,14 +17,13 @@ module Solr
 
       query = SolrQuery.new
       @query = SolrQuery.new
+      @display = []
 
       # Replace all spaces in a search term with asterisks
       search_term2 = @search_term.downcase.gsub(/ /, '*')
 
-      puts entry_id_set.length
-
       # ENTRIES: Get the matching entry ids and facets
-      if sub != 'group' or sub != 'person'or sub != 'place'
+      if sub != 'group' and sub != 'person' and sub != 'place'
         # if the search has come from the subjects browse, limit to searching for the subject
         if sub == 'subject'
           q = 'has_model_ssim:Entry AND subject_search:"' + @search_term.downcase + '"'
@@ -35,6 +34,7 @@ module Solr
         facets = facet_fields
         num = count_query(q)
         unless num == 0
+          @display << 'entry'
           q_result = query.solr_query(q, 'id', num, nil, 0, true, -1, 'index', facets, fq)
           facet_hash(q_result)
           entry_id_set.merge(q_result['response']['docs'].map { |e| e['id'] })
@@ -54,6 +54,7 @@ module Solr
         end
         num = count_query(q)
         unless num == 0
+          @display << 'agent'
           q_result = query.solr_query(q, 'relatedAgentFor_ssim', num)
           q_result['response']['docs'].map do |result|
             result['relatedAgentFor_ssim'].each do |relatedagent|
@@ -85,6 +86,7 @@ module Solr
         facets = facet_fields
         num = count_query(q)
         unless num == 0
+          @display << 'place'
           q_result = query.solr_query(q, 'relatedPlaceFor_ssim', num)
           q_result['response']['docs'].map do |result|
             q_result2 = query.solr_query("id:#{result['relatedPlaceFor_ssim'][0]}", 'id,has_model_ssim', 1, nil, 0, true, -1, 'index', facets, fq_entry)
@@ -109,6 +111,7 @@ module Solr
         facets = facet_fields
         num = count_query(q)
         unless num == 0
+          @display << 'date'
           q_result = query.solr_query(q, 'dateFor_ssim', num)
           q_result['response']['docs'].map do |res|
             res['dateFor_ssim'].each do |single_date|
@@ -130,6 +133,7 @@ module Solr
           q = "has_model_ssim:EntryDate AND (date_note_tesim:*#{search_term2}*"
           num = count_query(q)
           unless num == 0
+            @display << 'date'
             q_result = query.solr_query(q, 'entryDateFor_ssim', num, nil, 0, nil, nil, nil, nil, fq_entry)
             entry_id_set.merge(q_result['response']['docs'].map { |e| e['entryDateFor_ssim'][0] })
           end
@@ -180,7 +184,7 @@ module Solr
           get_places(entry_id, search_term2)
           get_people(entry_id, search_term2)
           get_dates(entry_id, search_term2)
-          @partial_list_array << @element_array
+                    @partial_list_array << @element_array
         end
       end
 
@@ -221,7 +225,11 @@ module Solr
           query.solr_query(q, fl_single,num)['response']['docs'].map do |result2|
             date_array << result2
           end
-          tmp_array << get_date_string(date_role_string,date_note_string,date_array)
+          # If 'matched records' is selected, get the places, agents and dates if search results have been found above
+          date_string = get_date_string(date_role_string,date_note_string,date_array)
+          if date_string.include? 'span'
+              tmp_array << date_string
+          end
           if tmp_array[0] == '' then tmp_array = [] end
         end
       else
@@ -245,7 +253,6 @@ module Solr
           tmp_array << get_date_string(date_role_string,date_note_string,date_array)
         end
       end
-
       @element_array << tmp_array
 
     rescue => error
@@ -322,7 +329,12 @@ module Solr
         result['place_type_facet_ssim'],
         result['place_same_as_facet_ssim']
         )
-        temp_array << place_string
+        # If 'matched records' is selected, get the places, agents and dates if search results have been found above
+        if @display_type == 'matched records'
+          if place_string.include? 'span'
+            temp_array << place_string
+          end
+        end
       end
 
       @element_array << temp_array
@@ -358,7 +370,12 @@ module Solr
             result['person_related_person_tesim'],
             result['person_note_tesim']
         )
-        temp_array << person_string
+        # If 'matched records' is selected, get the places, agents and dates if search results have been found above
+        if @display_type == 'matched records'
+          if person_string.include? 'span'
+            temp_array << person_string
+          end
+        end
       end
 
       temp_array = temp_array.sort
@@ -370,7 +387,6 @@ module Solr
           temp_array.insert(0,temp_array.delete_at(index))
         end
       end
-
       @element_array << temp_array
 
     rescue => error
@@ -406,12 +422,16 @@ module Solr
       unless person_as_written_string.nil?
         person_string += get_element(person_as_written_string,true)
       end
-      unless person_descriptor_string.nil? or person_descriptor_string == ['unknown']
-        person_string += " (#{get_element(person_descriptor_string,true)})"
+      unless person_descriptor_string.nil?
+        if person_string == '' or person_string.end_with? ': '
+          person_string += "#{get_element(person_descriptor_string,true).capitalize}"
+        else
+          person_string += " (#{get_element(person_descriptor_string,true)})"
+        end
       end
     else
-      person_string += get_element(person_same_as_string)
-      unless person_descriptor_string.nil? or person_descriptor_string == ['unknown']
+      person_string += get_element(person_same_as_string,true)
+      unless person_descriptor_string.nil?
         person_string += " (#{get_element(person_descriptor_string,true)})"
       end
       unless person_as_written_string.nil?
@@ -507,10 +527,11 @@ module Solr
           str = str.gsub(/#{temp}/i) do |term|
             "<span class=\'highlight_text\'>#{term}</span>"
           end
-        elsif is_match == false and @search_term != '' and return_string.nil?
-          str = ''
+        elsif is_match == false and @search_term != ''
+          if return_string.nil?
+            str = ''
+          end
         end
-
       end
 
     rescue => error
