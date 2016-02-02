@@ -14,10 +14,10 @@ module Solr
       @register_facet_hash = Hash.new 0
 
       entry_id_set = Set.new
+      facets = facet_fields
 
       query = SolrQuery.new
       @query = SolrQuery.new
-      @display = []
 
       # Replace all spaces in a search term with asterisks
       search_term2 = @search_term.downcase.gsub(/ /, '*')
@@ -31,10 +31,8 @@ module Solr
           q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
         end
         fq = filter_query
-        facets = facet_fields
         num = count_query(q)
         unless num == 0
-          @display << 'entry'
           q_result = query.solr_query(q, 'id', num, nil, 0, true, -1, 'index', facets, fq)
           facet_hash(q_result)
           entry_id_set.merge(q_result['response']['docs'].map { |e| e['id'] })
@@ -54,7 +52,6 @@ module Solr
         end
         num = count_query(q)
         unless num == 0
-          @display << 'agent'
           q_result = query.solr_query(q, 'relatedAgentFor_ssim', num)
           q_result['response']['docs'].map do |result|
             result['relatedAgentFor_ssim'].each do |relatedagent|
@@ -86,7 +83,6 @@ module Solr
         facets = facet_fields
         num = count_query(q)
         unless num == 0
-          @display << 'place'
           q_result = query.solr_query(q, 'relatedPlaceFor_ssim', num)
           q_result['response']['docs'].map do |result|
             q_result2 = query.solr_query("id:#{result['relatedPlaceFor_ssim'][0]}", 'id,has_model_ssim', 1, nil, 0, true, -1, 'index', facets, fq_entry)
@@ -111,7 +107,6 @@ module Solr
         facets = facet_fields
         num = count_query(q)
         unless num == 0
-          @display << 'date'
           q_result = query.solr_query(q, 'dateFor_ssim', num)
           q_result['response']['docs'].map do |res|
             res['dateFor_ssim'].each do |single_date|
@@ -133,7 +128,6 @@ module Solr
           q = "has_model_ssim:EntryDate AND (date_note_tesim:*#{search_term2}*"
           num = count_query(q)
           unless num == 0
-            @display << 'date'
             q_result = query.solr_query(q, 'entryDateFor_ssim', num, nil, 0, nil, nil, nil, nil, fq_entry)
             entry_id_set.merge(q_result['response']['docs'].map { |e| e['entryDateFor_ssim'][0] })
           end
@@ -184,7 +178,7 @@ module Solr
           get_places(entry_id, search_term2)
           get_people(entry_id, search_term2)
           get_dates(entry_id, search_term2)
-                    @partial_list_array << @element_array
+          @partial_list_array << @element_array
         end
       end
 
@@ -334,6 +328,8 @@ module Solr
           if place_string.include? 'span'
             temp_array << place_string
           end
+        else
+          temp_array << place_string
         end
       end
 
@@ -375,6 +371,8 @@ module Solr
           if person_string.include? 'span'
             temp_array << person_string
           end
+        else
+          temp_array << person_string
         end
       end
 
