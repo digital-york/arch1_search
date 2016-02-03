@@ -50,14 +50,13 @@ module IiifHelper
     begin
       @query_obj = SolrQuery.new
       resp = @query_obj.solr_query('id:"' + pid + '"', fl='reg_id_tesim,preflabel_tesim,thumbnail_url_tesim', rows=1)['response']['docs']
-
       seed = {
           '@id' => "http://#{ENV['SERVER']}/iiif/manifest/#{pid}",
-          'label' => resp[0]['reg_id_tesim'],
-          'description' => resp[0]['preflabel_tesim'],
+          'label' => resp[0]['reg_id_tesim'][0],
+          'description' => resp[0]['preflabel_tesim'][0],
           'attribution' => 'Made available by the University of York',
           'license' => 'http://creativecommons.org/licenses/by-sa/4.0/',
-          'thumbnail' => 'http:' + resp[0]['thumbnail_url_tesim']
+          'thumbnail' => 'http:' + resp[0]['thumbnail_url_tesim'][0]
       }
 
       manifest = IIIF::Presentation::Manifest.new(seed)
