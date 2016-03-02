@@ -94,7 +94,7 @@ module IiifHelper
       @query_obj = SolrQuery.new
       resp = @query_obj.solr_query('id:"' + pid + '"', fl='reg_id_tesim,preflabel_tesim,thumbnail_url_tesim', rows=1)['response']['docs']
       seed = {
-          '@id' => "http://#{ENV['SERVER']}/iiif/manifest/#{pid}",
+          '@id' => "#{ENV['SERVER']}/iiif/manifest/#{pid}",
           'label' => resp[0]['reg_id_tesim'][0],
           'description' => resp[0]['preflabel_tesim'][0],
           'attribution' => 'Made available by the University of York',
@@ -112,7 +112,7 @@ module IiifHelper
 
   def sequence_and_canvases(pid, manifest)
     seed = {
-        '@id' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}",
+        '@id' => "#{ENV['SERVER']}/browse/registers?register_id=#{pid}",
         'label' => 'Ordered Sequence',
         'viewingDirection'=> 'left-to-right',
         'viewingHint' => 'paged'
@@ -137,7 +137,7 @@ module IiifHelper
     else
       fol_num = "&folio=#{i + 1}"
     end
-    canvas['@id'] = "http://#{ENV['SERVER']}/iiif/canvas/#{pid}"
+    canvas['@id'] = "#{ENV['SERVER']}/iiif/canvas/#{pid}"
     width, height = get_info_json(get_image(pid))
     canvas.width, canvas.height = width, height
     canvas.label = resp[0]['preflabel_tesim'].join
@@ -145,9 +145,9 @@ module IiifHelper
     begin
       img = IIIF::Presentation::Annotation.new(
           'resource' => IIIF::Presentation::ImageResource.new(
-              '@id' => "http://#{ENV['SERVER']}/iiif/#{pid}/full/full/0/default.jpg",
+              '@id' => "#{ENV['SERVER']}/iiif/#{pid}/full/full/0/default.jpg",
               'service' => {
-                  '@id' => "http://#{ENV['SERVER']}/iiif/#{pid}",
+                  '@id' => "#{ENV['SERVER']}/iiif/#{pid}",
                   '@context' => 'http://iiif.io/api/image/2/context.json',
                   'profile' => 'http://iiif.io/api/image/2/level1.json'
               },
@@ -155,7 +155,7 @@ module IiifHelper
               'height' => height,
               'format' => 'image/jpeg'
           ),
-          'on' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}#{fol_num}&folio_id=#{pid}"
+          'on' => "#{ENV['SERVER']}/browse/registers?register_id=#{pid}#{fol_num}&folio_id=#{pid}"
       )
       canvas.images << img
       canvas
