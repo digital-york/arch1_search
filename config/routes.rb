@@ -21,6 +21,8 @@ Rails.application.routes.draw do
   get 'iiif/:id/info.json' , controller: :iiif, action: :show
   get 'iiif/manifest/:register_id' , controller: :iiif, action: :manifest
   get 'iiif/manifest' => 'iiif#manifest'
+  get 'iiif/canvas/:folio_id' , controller: :iiif, action: :canvas
+  get 'iiif/canvas' => 'iiif#canvas'
   get 'iiif/download/:folio_id' , controller: :iiif, action: :download
   get 'iiif/download' => 'iiif#download'
 

@@ -46,6 +46,49 @@ module IiifHelper
     end
   end
 
+  def get_canvas(pid, replace=false)
+    begin
+      folio = Folio.find(pid)
+
+      if replace == true
+        make_fedora_canvas(pid)
+      else
+        if folio.canvas.content.nil?
+          make_fedora_canvas(folio.id)
+          return folio.canvas.content
+        else
+          folio.canvas.content
+        end
+      end
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      raise
+    end
+  end
+
+  def make_fedora_canvas(folio_id)
+    @query_obj = SolrQuery.new
+    folio = Folio.find(folio_id)
+    begin
+      folio.canvas.content = StringIO.new(make_canvas(folio.id))
+      folio.canvas.mime_type = 'application/json'
+      folio.canvas.preflabel = 'IIIF Canvas'
+      folio.save
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      raise
+    end
+  end
+
+  def make_canvas(pid)
+    begin
+      canvas_builder(pid,nil).to_json(pretty: true)
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      raise
+    end
+  end
+
   def manifest_part(pid)
     begin
       @query_obj = SolrQuery.new
@@ -78,37 +121,47 @@ module IiifHelper
     sequence = IIIF::Presentation::Sequence.new(seed)
 
     @query_obj.solr_query('id:"' + pid + '/list_source"', fl='ordered_targets_ssim', rows=1)['response']['docs'][0]['ordered_targets_ssim'].each_with_index do |target, i|
-      resp = @query_obj.solr_query('id:"' + target + '"', fl='preflabel_tesim', rows=1)['response']['docs']
-      canvas = IIIF::Presentation::Canvas.new()
-      canvas['@id'] = "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}&folio_id=#{target}"
-      width, height = get_info_json(get_image(target))
-      canvas.width, canvas.height = width, height
-      canvas.label = resp[0]['preflabel_tesim'].join
-
-
-      begin
-        img = IIIF::Presentation::Annotation.new(
-            'resource' => IIIF::Presentation::ImageResource.new(
-                '@id' => "http://#{ENV['SERVER']}/iiif/#{target}/full/full/0/default.jpg",
-                'service' => {
-                    '@id' => "http://#{ENV['SERVER']}/iiif/#{target}",
-                    '@context' => 'http://iiif.io/api/image/2/context.json',
-                    'profile' => 'http://iiif.io/api/image/2/level1.json'
-                },
-                'width' => width,
-                'height' => height,
-                'format' => 'image/jpeg'
-            ),
-            'on' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}&folio_id=#{target}"
-        )
-        canvas.images << img
-      rescue => error
-        log_error(__method__, __FILE__, error)
-      end
-      sequence.canvases << canvas
+      sequence.canvases << canvas_builder(target,i)
     end
     manifest.sequences << sequence
     manifest
+  end
+
+  def canvas_builder(pid,i)
+
+    resp = @query_obj.solr_query('id:"' + pid + '"', fl='preflabel_tesim,isPartOf_ssim', rows=1)['response']['docs']
+    canvas = IIIF::Presentation::Canvas.new()
+    if i.nil?
+      targets = @query_obj.solr_query('id:"' + resp[0]['isPartOf_ssim'].join + '/list_source"', fl='ordered_targets_ssim', rows=1)['response']['docs'][0]['ordered_targets_ssim']
+      fol_num = "&folio=#{targets.find_index(pid) + 1}"
+    else
+      fol_num = "&folio=#{i + 1}"
+    end
+    canvas['@id'] = "http://#{ENV['SERVER']}/iiif/canvas/#{pid}"
+    width, height = get_info_json(get_image(pid))
+    canvas.width, canvas.height = width, height
+    canvas.label = resp[0]['preflabel_tesim'].join
+
+    begin
+      img = IIIF::Presentation::Annotation.new(
+          'resource' => IIIF::Presentation::ImageResource.new(
+              '@id' => "http://#{ENV['SERVER']}/iiif/#{pid}/full/full/0/default.jpg",
+              'service' => {
+                  '@id' => "http://#{ENV['SERVER']}/iiif/#{pid}",
+                  '@context' => 'http://iiif.io/api/image/2/context.json',
+                  'profile' => 'http://iiif.io/api/image/2/level1.json'
+              },
+              'width' => width,
+              'height' => height,
+              'format' => 'image/jpeg'
+          ),
+          'on' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}#{fol_num}&folio_id=#{pid}"
+      )
+      canvas.images << img
+      canvas
+    rescue => error
+      log_error(__method__, __FILE__, error)
+    end
   end
 
   def get_info_json(image)

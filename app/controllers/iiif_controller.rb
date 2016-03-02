@@ -60,6 +60,26 @@ class IiifController < ApplicationController
     end
   end
 
+  # iiif/canvas
+  def canvas
+    begin
+      if params[:folio_id].nil? or params[:folio_id] == ''
+        respond_to do |format|
+          format.html { render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
+          format.any { head :not_found }
+        end
+      else
+        render :json => get_canvas(params[:folio_id]), :type => 'application/json'
+      end
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      respond_to do |format|
+        format.html { render :file => "#{Rails.root}/public/404", :layout => false, :status => :not_found }
+        format.any { head :not_found }
+      end
+    end
+  end
+
   # iiif/download
   def download
     begin
