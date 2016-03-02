@@ -9,7 +9,7 @@ module IiifHelper
       register = Register.find(pid)
 
       if replace == true
-        make_fedora_manifest(register)
+        make_fedora_manifest(pid)
       else
         if register.manifest.content.nil?
           make_fedora_manifest(register.id)
@@ -39,7 +39,7 @@ module IiifHelper
 
   def make_manifest(pid)
     begin
-      canvas(pid, manifest_part(pid)).to_json(pretty: true)
+      sequence_and_canvases(pid, manifest_part(pid)).to_json(pretty: true)
     rescue => error
       log_error(__method__, __FILE__, error)
       raise
@@ -67,7 +67,16 @@ module IiifHelper
     end
   end
 
-  def canvas(pid, manifest)
+  def sequence_and_canvases(pid, manifest)
+    seed = {
+        '@id' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}",
+        'label' => 'Ordered Sequence',
+        'viewingDirection'=> 'left-to-right',
+        'viewingHint' => 'paged'
+    }
+
+    sequence = IIIF::Presentation::Sequence.new(seed)
+
     @query_obj.solr_query('id:"' + pid + '/list_source"', fl='ordered_targets_ssim', rows=1)['response']['docs'][0]['ordered_targets_ssim'].each_with_index do |target, i|
       resp = @query_obj.solr_query('id:"' + target + '"', fl='preflabel_tesim', rows=1)['response']['docs']
       canvas = IIIF::Presentation::Canvas.new()
@@ -89,10 +98,12 @@ module IiifHelper
             )
         )
         canvas.images << img
-      rescue
+      rescue => error
+        log_error(__method__, __FILE__, error)
       end
-      manifest.sequences << canvas
+      sequence.canvases << canvas
     end
+    manifest.sequences << sequence
     manifest
   end
 
