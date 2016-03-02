@@ -81,7 +81,8 @@ module IiifHelper
       resp = @query_obj.solr_query('id:"' + target + '"', fl='preflabel_tesim', rows=1)['response']['docs']
       canvas = IIIF::Presentation::Canvas.new()
       canvas['@id'] = "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}&folio_id=#{target}"
-      canvas.width, canvas.height = get_info_json(get_image(target))
+      width, height = get_info_json(get_image(target))
+      canvas.width, canvas.height = width, height
       canvas.label = resp[0]['preflabel_tesim'].join
 
 
@@ -94,6 +95,8 @@ module IiifHelper
                     '@context' => 'http://iiif.io/api/image/2/context.json',
                     'profile' => 'http://iiif.io/api/image/2/level1.json'
                 },
+                'width' => width,
+                'height' => height,
                 'format' => 'image/jp2'
             ),
             'on' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}&folio_id=#{target}"
