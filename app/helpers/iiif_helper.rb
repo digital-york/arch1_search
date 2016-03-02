@@ -89,9 +89,9 @@ module IiifHelper
       begin
         img = IIIF::Presentation::Annotation.new(
             'resource' => IIIF::Presentation::ImageResource.new(
-                '@id' => "http://#{ENV['SERVER']}/iiif/#{target}",
+                '@id' => "http://#{ENV['SERVER']}/iiif/#{target}/full/full/0/default.jpg",
                 'service' => {
-                    '@id' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}&folio_id=#{target}",
+                    '@id' => "http://#{ENV['SERVER']}/iiif/#{target}",
                     '@context' => 'http://iiif.io/api/image/2/context.json',
                     'profile' => 'http://iiif.io/api/image/2/level1.json'
                 },
