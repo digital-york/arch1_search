@@ -97,7 +97,7 @@ module IiifHelper
                 },
                 'width' => width,
                 'height' => height,
-                'format' => 'image/jp2'
+                'format' => 'image/jpeg'
             ),
             'on' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}&folio_id=#{target}"
         )
