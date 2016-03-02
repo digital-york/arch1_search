@@ -56,6 +56,48 @@
                         </div>
                     </div>
 
+                    <%# Dates Facet %>
+                    <div class="panel panel-default facet_limit blacklight-example_query_facet_field ">
+
+                        <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-example_query_facet_field">
+                            <h5 class="panel-title facet-field-heading">
+
+                                <a data-no-turbolink="true" href="#">Date</a>
+                            </h5>
+                        </div>
+
+                        <div id="facet-example_query_facet_field" class="panel-collapse facet-content collapse in">
+                            <div class="panel-body">
+                                <ul class="facet-values list-unstyled">
+                                    <% @date_facet_hash.each do |date_name, date_count| %>
+                                        <li>
+                      <span class="facet-label
+                        <% if date_name == @date_facet then %>highlight_red
+                        <% end %>">
+                        <%= link_to date_name,
+                                    searches_path(
+                                            :page => 1,
+                                            :rows_per_page => @rows_per_page,
+                                            :display_type => @display_type,
+                                            :search_term => @search_term,
+                                            :search_type => @search_type,
+                                            :register_facet => @register_facet,
+                                            :section_type_facet => @section_type_facet,
+                                            :subject_facet => @subject_facet,
+                                            :person_same_as_facet => @person_same_as_facet,
+                                            :place_same_as_facet => @place_same_as_facet,
+                                            :date_facet => date_name),
+                                    :class => 'facet_select' %>
+                          </a>
+                      </span>
+                                            <span class="facet-count"><%= date_count %></span>
+                                        </li>
+                                    <% end %>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
                     <%# Section Type Facet %>
                     <div class="panel panel-default facet_limit blacklight-format3 ">
 
@@ -220,47 +262,7 @@
                         </div>
                     </div>
 
-                    <%# Dates Facet %>
-                    <div class="panel panel-default facet_limit blacklight-example_query_facet_field ">
 
-                        <div class="collapse-toggle panel-heading" data-toggle="collapse" data-target="#facet-example_query_facet_field">
-                            <h5 class="panel-title facet-field-heading">
-
-                                <a data-no-turbolink="true" href="#">Date</a>
-                            </h5>
-                        </div>
-
-                        <div id="facet-example_query_facet_field" class="panel-collapse facet-content collapse in">
-                            <div class="panel-body">
-                                <ul class="facet-values list-unstyled">
-                                    <% @date_facet_hash.each do |date_name, date_count| %>
-                                        <li>
-                      <span class="facet-label
-                        <% if date_name == @date_facet then %>highlight_red
-                        <% end %>">
-                        <%= link_to date_name,
-                                    searches_path(
-                                            :page => 1,
-                                            :rows_per_page => @rows_per_page,
-                                            :display_type => @display_type,
-                                            :search_term => @search_term,
-                                            :search_type => @search_type,
-                                            :register_facet => @register_facet,
-                                            :section_type_facet => @section_type_facet,
-                                            :subject_facet => @subject_facet,
-                                            :person_same_as_facet => @person_same_as_facet,
-                                            :place_same_as_facet => @place_same_as_facet,
-                                            :date_facet => date_name),
-                                    :class => 'facet_select' %>
-                          </a>
-                      </span>
-                                            <span class="facet-count"><%= date_count %></span>
-                                        </li>
-                                    <% end %>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
             </div>
@@ -420,14 +422,14 @@
                             <%= @section_type_facet %>&nbsp;&nbsp;
                             <%
                                search_string = ''
-                              unless @search_type.nil? then
-                                search_string += "&amp;search_type=#{@search_type}"
-                              end
-                              search_string += "&amp;rows_per_page=#{@rows_per_page}"
-                              unless @page.nil? then
-                                search_string += "&amp;page=#{@page}"
-                              end
-                              search_string += "&amp;display_type=#{@display_type}"
+                               unless @search_type.nil? then
+                                 search_string += "&amp;search_type=#{@search_type}"
+                               end
+                               search_string += "&amp;rows_per_page=#{@rows_per_page}"
+                               unless @page.nil? then
+                                 search_string += "&amp;page=#{@page}"
+                               end
+                               search_string += "&amp;display_type=#{@display_type}"
                                unless @register_facet.nil? then
                                  search_string += "&amp;register_facet=#{@register_facet}"
                                end
@@ -700,9 +702,9 @@
                                     <tr>
                                         <th style="vertical-align: top">Dates:</th>
                                         <td>
-                                            <% dates.each do | date | %>
+                                            <% dates.each do |date| %>
                                                 <%= date.html_safe %>
-                                                <br />
+                                                <br/>
                                             <% end %>
                                         </td>
                                     </tr>
@@ -710,28 +712,28 @@
                             <% end %>
 
                             <% if person != [] %>
-                                    <tr>
-                                        <th style="vertical-align: top">People and Groups:</th>
-                                        <td>
-                                            <% person.each do | person_group | %>
+                                <tr>
+                                    <th style="vertical-align: top">People and Groups:</th>
+                                    <td>
+                                        <% person.each do |person_group| %>
                                             <%= person_group.html_safe %>
-                                            <br />
-                                            <% end %>
-                                        </td>
-                                    </tr>
-                                <% end %>
+                                            <br/>
+                                        <% end %>
+                                    </td>
+                                </tr>
+                            <% end %>
 
-                                <% if place != [] %>
-                                    <tr>
-                                        <th style="vertical-align: top">Places:</th>
-                                        <td>
-                                            <% place.each do | p | %>
-                                                <%= p.html_safe %>
-                                                <br />
-                                            <% end %>
-                                        </td>
-                                    </tr>
-                                <% end %>
+                            <% if place != [] %>
+                                <tr>
+                                    <th style="vertical-align: top">Places:</th>
+                                    <td>
+                                        <% place.each do |p| %>
+                                            <%= p.html_safe %>
+                                            <br/>
+                                        <% end %>
+                                    </td>
+                                </tr>
+                            <% end %>
 
                         </table>
                     </div>
