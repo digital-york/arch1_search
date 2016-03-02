@@ -83,7 +83,7 @@ module IiifHelper
       canvas['@id'] = "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}&folio_id=#{target}"
       canvas.width, canvas.height = get_info_json(get_image(target))
       canvas.label = resp[0]['preflabel_tesim']
-      canvas['on'] = "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}&folio_id=#{target}"
+
 
       begin
         img = IIIF::Presentation::Annotation.new(
@@ -95,7 +95,8 @@ module IiifHelper
                     'profile' => 'http://iiif.io/api/image/2/level1.json'
                 },
                 'format' => 'image/jp2'
-            )
+            ),
+            'on' => "http://#{ENV['SERVER']}/browse/registers?register_id=#{pid}&folio=#{i + 1}&folio_id=#{target}"
         )
         canvas.images << img
       rescue => error
