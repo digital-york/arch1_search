@@ -1,7 +1,9 @@
 namespace :sync_solr do
 
-  desc "TODO"
+  desc "Tasks for reindexing in solr"
 
+  # Do a solr sync
+  # NB. manually change info at lines 108, 109 and 110
   task sync: :environment do
 
     Rails.env = 'production'
