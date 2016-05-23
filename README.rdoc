@@ -6,6 +6,6 @@ The application powered by this code is available: http://archbishopsregisters.y
 
 This code is made freely available, without warranty. It relies on the existence of a Fedora4 repository and solr instance containing data structured according the models here and in the accompanying arch1 application codebase: https://github.com/digital-york/arch1
 
-For further information on the underlying data model, please see: 
+For further information on the underlying data model, please see: https://docs.google.com/document/d/1U3sLgaJr07d7LfvyDPT2rUnVAI1ccWp-Zeon_rlBd6o/edit
  
-Please contact us if you would like to ma
+Please contact us if you would like to make use of the codebase: dlib-info@york.ac.uk
