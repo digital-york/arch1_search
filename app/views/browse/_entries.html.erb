@@ -56,7 +56,7 @@
             </tr>
 
             <%# Entry Type %>
-            <% if @db_entry.db_entry_types.size > 0 %>
+            <% if @db_entry.db_entry_types != nil and @db_entry.db_entry_types.size > 0 %>
                 <tr>
                     <th>Entry Type:</th>
                     <td>
@@ -70,7 +70,7 @@
             <% end %>
 
             <%# Section Type %>
-            <% if @db_entry.db_section_types.size > 0 %>
+            <% if @db_entry.db_section_types != nil and @db_entry.db_section_types.size > 0 %>
                 <tr>
                     <th>Section Type:</th>
                     <td>
@@ -102,7 +102,7 @@
             <% end %>
 
             <%# Marginalia %>
-            <% if @db_entry.db_marginalia.size > 0 %>
+            <% if @db_entry.db_marginalia != nil and @db_entry.db_marginalia.size > 0 %>
                 <tr>
                     <th>Marginalia:</th>
                     <td>
@@ -116,7 +116,7 @@
             <% end %>
 
             <%# Language %>
-            <% if @db_entry.db_languages.size > 0 %>
+            <% if @db_entry.db_languages != nil and @db_entry.db_languages.size > 0 %>
                 <tr>
                     <th>Language:</th>
                     <td>
@@ -130,7 +130,7 @@
             <% end %>
 
             <%# Subject %>
-            <% if @db_entry.db_subjects.size > 0 %>
+            <% if @db_entry.db_subjects != nil and @db_entry.db_subjects.size > 0 %>
                 <tr>
                     <th>Subject:</th>
                     <td>
@@ -144,7 +144,7 @@
             <% end %>
 
             <%# Note %>
-            <% if @db_entry.db_notes.size > 0 %>
+            <% if @db_entry.db_notes != nil and @db_entry.db_notes.size > 0 %>
                 <tr>
                     <th>Note:</th>
                     <td>
@@ -158,7 +158,7 @@
             <% end %>
 
             <%# Editorial Note %>
-            <% if @db_entry.db_editorial_notes.size > 0 %>
+            <% if @db_entry.db_editorial_notes != nil and @db_entry.db_editorial_notes.size > 0 %>
                 <tr>
                     <th>Editorial Note:</th>
                     <td>
@@ -172,7 +172,7 @@
             <% end %>
 
             <%# Referenced By %>
-            <% if @db_entry.db_is_referenced_bys.size > 0 %>
+            <% if @db_entry.db_is_referenced_bys != nil and @db_entry.db_is_referenced_bys.size > 0 %>
                 <tr>
                     <th>Referenced By:</th>
                     <td>
@@ -196,7 +196,7 @@
                 <% dates = Hash.new() %>
                 <% entry_date.db_single_dates.each do |single_date| %>
 
-                    <% if single_date.date_type.size > 0 %>
+                    <% if single_date.date_type != nil and single_date.date_type.size > 0 %>
                         <% unless single_date.date.nil? %>
                             <% if single_date.date_type == 'single' %>
                                 <tr>
@@ -204,7 +204,7 @@
                                     <td style="padding-top: 15px">
                                         <%= single_date.date %>
                                         <% unless single_date.date == 'undated' %>
-                                            <% if single_date.db_date_certainties.size > 0 %>
+                                            <% if single_date.db_date_certainties != nil and single_date.db_date_certainties.size > 0 %>
                                                 <% certs = '' %>
                                                 <% single_date.db_date_certainties.each do |cert| %>
                                                     <% certs = cert.name + ';' %>
@@ -216,7 +216,7 @@
 
                                 <% dt = single_date.date
                                    unless single_date.date == 'undated'
-                                     if single_date.db_date_certainties.size > 0
+                                     if single_date.db_date_certainties != nil and single_date.db_date_certainties.size > 0
                                        certs = ''
                                        single_date.db_date_certainties.each do |cert|
                                          certs = cert.name + ';'
@@ -258,7 +258,7 @@
                 </tr>
 
                 <%# Place As Written %>
-                <% if related_place.db_place_as_writtens.size > 0 %>
+                <% if related_place.db_place_as_writtens != nil and related_place.db_place_as_writtens.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">As Written:</th>
                         <td>
@@ -284,7 +284,7 @@
                 <% end %>
 
                 <%# Place Role %>
-                <% if related_place.db_place_roles.size > 0 %>
+                <% if related_place.db_place_roles != nil and related_place.db_place_roles.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">Role:</th>
                         <td>
@@ -298,7 +298,7 @@
                 <% end %>
 
                 <%# Place Type %>
-                <% if related_place.db_place_types.size > 0 %>
+                <% if related_place.db_place_types != nil and related_place.db_place_types.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">Type:</th>
                         <td>
@@ -312,7 +312,7 @@
                 <% end %>
 
                 <%# Place Note %>
-                <% if related_place.db_place_notes.size > 0 %>
+                <% if related_place.db_place_notes != nil and related_place.db_place_notes.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">Note:</th>
                         <td>
@@ -336,7 +336,7 @@
                 </tr>
 
                 <%# Person As Written %>
-                <% if related_agent.db_person_as_writtens.size > 0 %>
+                <% if related_agent.db_person_as_writtens != nil and related_agent.db_person_as_writtens.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">As Written:</th>
                         <td>
@@ -386,7 +386,7 @@
                 <% end %>
 
                 <%# Person Role %>
-                <% if related_agent.db_person_roles.size > 0 %>
+                <% if related_agent.db_person_roles != nil and related_agent.db_person_roles.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">Role:</th>
                         <td>
@@ -400,7 +400,7 @@
                 <% end %>
 
                 <%# Person Descriptor %>
-                <% if related_agent.db_person_descriptors.size > 0 %>
+                <% if related_agent.db_person_descriptors != nil and related_agent.db_person_descriptors.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">Descriptor:</th>
                         <td>
@@ -414,7 +414,7 @@
                 <% end %>
 
                 <%# Person Descriptor As Written %>
-                <% if related_agent.db_person_descriptor_as_writtens.size > 0 %>
+                <% if related_agent.db_person_descriptor_as_writtens != nil and related_agent.db_person_descriptor_as_writtens.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">Descriptor As Written:</th>
                         <td>
@@ -428,7 +428,7 @@
                 <% end %>
 
                 <%# Person Note %>
-                <% if related_agent.db_person_notes.size > 0 %>
+                <% if related_agent.db_person_notes != nil and related_agent.db_person_notes.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">Note:</th>
                         <td>
@@ -442,7 +442,7 @@
                 <% end %>
 
                 <%# Person Related Place %>
-                <% if related_agent.db_person_related_places.size > 0 %>
+                <% if related_agent.db_person_related_places != nil and related_agent.db_person_related_places.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">Related Place:</th>
                         <td>
@@ -456,7 +456,7 @@
                 <% end %>
 
                 <%# Person Related Person %>
-                <% if related_agent.db_person_related_people.size > 0 %>
+                <% if related_agent.db_person_related_people != nil and related_agent.db_person_related_people.size > 0 %>
                     <tr>
                         <th class="pad_th_person_place">Related Person:</th>
                         <td>
