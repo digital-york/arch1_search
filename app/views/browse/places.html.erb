@@ -29,7 +29,7 @@
 
                     <br/><br/>Everywhere else:
 
-                    <% value.sort.to_h.each do |k, v| %>
+                    <% (value.sort_by &:to_s).to_h.each do |k, v| %>
                         <% unless k.nil? || k == 'East Riding of Yorkshire' || k == 'North Riding of Yorkshire' || k == 'West Riding of Yorkshire' || k == 'Yorkshire' %>
                             <%= link_to k, browse_places_path(:letter => k, :all => session[:all]) %> |
                         <% end %>
