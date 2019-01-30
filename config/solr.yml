@@ -4,4 +4,4 @@ development:
 test:
   url: http://localhost:8983/solr/test
 production:
-  url: http://opal.york.ac.uk:8983/solr/production
+  url: <%= ENV['PRODUCTION_SOLR'] %>
