@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>York Archbishops&#39; Registers</title>
-    <%= stylesheet_link_tag "application", media: "all" %>
+    <%= stylesheet_link_tag "northernway", media: "all" %>
     <%= javascript_include_tag "application" %>
 </head>
 
@@ -27,7 +27,7 @@
                     <!-- <li><%= link_to 'Home', home_page_index_path %></li> -->
                     <li><%= link_to 'Search', searches_path(:search_term => 'NO_SEARCH') %></li>
                     <li><%= link_to 'Browse', browse_path %></li>
-                    <li><%= link_to 'About', about_path %></li>
+                    <li><%= link_to 'About', northernway_about_path %></li>
                 </ul>
         </div>
         <!--/.nav-collapse -->
@@ -55,8 +55,8 @@
 
         <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the size of the background image here %>
         <div class="row"
-             <% if @is_home_page == true then %>id="search_row_home"
-        <% else %>id="search_row_default"
+             <% if @is_home_page == true then %>id="norther_home"
+        <% else %>id="norther_default"
         <% end %>>
 
             <div class="col-md-3"></div>
