@@ -50,31 +50,33 @@
 
     </div>
 
-    <%# Display the search box %>
-    <%= form_tag searches_index_path, :method => 'get', :id => 'search_form', :onsubmit => 'return validate_search_field()' do |f| %>
-
-        <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the size of the background image here %>
-        <div class="row"
-             <% if @is_home_page == true then %>id="norther_home"
-        <% else %>id="norther_default"
-        <% end %>>
-
-            <div class="col-md-3"></div>
-
-            <div class="col-md-6">
-
-
-                <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the margin_top height here %>
-                <%
-                   search_margin_top = '35px'
-                   if @is_home_page == true then
-                     search_margin_top = '150px'
-                   end
-                %>
+    <%# Display Northern Banner %>
+      <%# Note: @is_home_page is defined in 'northern_controller.rb' - it determines the size of the background image here %>
+      <div class="row"
+         <% if @is_home_page == true then %>id="norther_home"
+         <% else %>id="norther_default"
+         <% end %>>
+         <% if @is_home_page == true then %>
+           <div class="northern-banner-box">
+             <p style="font-size:3.5em; color: #A6810E;">THE NORTHERN WAY</p>
+             <p style="font-size:2.2em; color: #FFFFFF;">THE ARCHBISHOPS OF YORK & </p>
+             <p style="font-size:2.2em; color: #FFFFFF;">THE NORTH OF ENGLAND, 1304-1405</p>
             </div>
-        </div>
+        <% end %>>
+      </div>
 
-    <% end %>
+      <div class="col-md-3"></div>
+
+      <div class="col-md-6">
+        <%# Note: @is_home_page is defined in 'norther_controller.rb' - it determines the margin_top height here %>
+        <%
+           search_margin_top = '35px'
+           if @is_home_page == true then
+             search_margin_top = '150px'
+           end
+        %>
+      </div>
+    </div>
 
     <%# Display main code %>
     <%= yield %>
