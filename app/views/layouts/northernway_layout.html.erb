@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>York Archbishops&#39; Registers</title>
-    <%= stylesheet_link_tag "application", media: "all" %>
+    <%= stylesheet_link_tag "northernway", media: "all" %>
     <%= javascript_include_tag "application" %>
 </head>
 
@@ -27,7 +27,7 @@
                     <!-- <li><%= link_to 'Home', home_page_index_path %></li> -->
                     <li><%= link_to 'Search', searches_path(:search_term => 'NO_SEARCH') %></li>
                     <li><%= link_to 'Browse', browse_path %></li>
-                    <li><%= link_to 'About', about_path %></li>
+                    <li><%= link_to 'About', northernway_about_path %></li>
                 </ul>
         </div>
         <!--/.nav-collapse -->
@@ -50,42 +50,33 @@
 
     </div>
 
-    <%# Display the search box %>
-    <%= form_tag searches_index_path, :method => 'get', :id => 'search_form', :onsubmit => 'return validate_search_field()' do |f| %>
-
-        <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the size of the background image here %>
-        <div class="row"
-             <% if @is_home_page == true then %>id="search_row_home"
-        <% else %>id="search_row_default"
-        <% end %>>
-
-            <div class="col-md-3"></div>
-
-            <div class="col-md-6">
-
-
-                <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the margin_top height here %>
-                <%
-                   search_margin_top = '35px'
-                   if @is_home_page == true then
-                     search_margin_top = '150px'
-                   end
-                %>
-
-                <div class="input-group search-input-group" style="margin-top: <%= search_margin_top %>; width: 100%">
-
-                    <%= text_field_tag 'search_term', @search_term, :class => 'form-control', :id => 'search_box', :placeholder => 'Search the registers...' %>
-
-                    <button type="submit" class="btn go_button" id="spin-me">
-                        <i class="fa fa-refresh fa-spin fa-2x" style="display: none"></i>
-                        <span class="go_text" style="display: inherit">Go</span>
-                    </button>
-                </div>
-                <div class="col-md-3"></div>
+    <%# Display Northern Banner %>
+      <%# Note: @is_home_page is defined in 'northern_controller.rb' - it determines the size of the background image here %>
+      <div class="row"
+         <% if @is_home_page == true then %>id="norther_home"
+         <% else %>id="norther_default"
+         <% end %>>
+         <% if @is_home_page == true then %>
+           <div class="northern-banner-box">
+             <p style="font-size:3.5em; color: #A6810E;">THE NORTHERN WAY</p>
+             <p style="font-size:2.2em; color: #FFFFFF;">THE ARCHBISHOPS OF YORK & </p>
+             <p style="font-size:2.2em; color: #FFFFFF;">THE NORTH OF ENGLAND, 1304-1405</p>
             </div>
-        </div>
+        <% end %>>
+      </div>
 
-    <% end %>
+      <div class="col-md-3"></div>
+
+      <div class="col-md-6">
+        <%# Note: @is_home_page is defined in 'norther_controller.rb' - it determines the margin_top height here %>
+        <%
+           search_margin_top = '35px'
+           if @is_home_page == true then
+             search_margin_top = '150px'
+           end
+        %>
+      </div>
+    </div>
 
     <%# Display main code %>
     <%= yield %>
@@ -99,17 +90,17 @@
 
         <div class="col-md-8">
             <div class="col-md-3">
-                <a href="#"><%= image_tag 'arch_logo.jpg', :class => 'footer_logo', :style => 'max-width: 160px; margin-top: 10px' %></a>
+                <a href="https://ahrc.ukri.org/" target="_blank"><%= image_tag 'AHRC-logo.png', :class => 'footer_logo', :style => 'max-width: 160px; margin-top: 10px' %></a>
             </div>
             <div class="col-md-3">
-                <a href="https://mellon.org/" target="_blank"><%= image_tag 'mellon_logo.svg', :class => 'footer_logo', :style => 'max-width: 180px; margin-top: 20px' %></a>
+                <a href="http://www.nationalarchives.gov.uk/" target="_blank"><%= image_tag 'A4-TNA.jpg', :class => 'footer_logo', :style => 'max-width: 260px; margin-top: 60px' %></a>
             </div>
             <div class="col-md-3">
-                <a href="http://www.marcfitchfund.org.uk/" target="_blank"><%= image_tag 'marc_fitch_-_logo_0.jpg', :class => 'footer_logo', :style => 'max-width: 140px'  %></a>
+                <a href="https://yorkminster.org/" target="_blank"><%= image_tag 'York-Minster-logo.jpg', :class => 'footer_logo', :style => 'max-width: 220px; margin-top: 40px'  %></a>
             </div>
             <div class="col-md-3">
                 <a href="http://www.york.ac.uk/" target="_blank">
-                    <%= image_tag 'uoy_logo.svg', :class => 'footer_logo', :style => 'max-width: 300px; margin-top: 42px' %></a>
+                    <%= image_tag 'uoy_logo.svg', :class => 'footer_logo', :style => 'max-width: 300px; margin-top: 50px' %></a>
             </div>
         </div>
         <div class="col-md-2"></div>

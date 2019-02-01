@@ -39,8 +39,13 @@ Rails.application.routes.draw do
   get 'browse/groups'
   get 'browse/subjects'
   get 'about/index'
+  get 'northernway/index'
+  get 'northernway_about/index'
   get 'browse' => 'browse#index'
   get 'about' => 'about#index'
+  get 'northernway' => 'northernway#index'
+  get 'northernway/about' => 'northernway_about#index'
+
 
 
   # The priority is based upon order of creation: first created -> highest priority.
