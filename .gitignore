@@ -15,7 +15,7 @@
 # Ignore jetty directory (from hydra-jetty)
 /jetty
 
-#Ignore .env
+# Ignore .env
 .env
 
 # Ignore rubyMine IDE
@@ -24,8 +24,8 @@
 # Ignore intellij .iml file
 *.iml
 
-#Ignore Gemfile.lock
-Gemfile.lock
-
-#Ignore assets
+# Ignore assets
 public/assets
+
+# Ignore vendor
+vendor/*
