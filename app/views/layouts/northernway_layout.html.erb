@@ -2,118 +2,85 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <title>York Archbishops&#39; Registers</title>
-    <%= stylesheet_link_tag "northernway", media: "all" %>
-    <%= javascript_include_tag "application" %>
+  <meta charset="UTF-8">
+  <title>York Archbishops&#39; Registers</title>
+  <%= stylesheet_link_tag "northernway", media: "all" %>
+  <%= javascript_include_tag "application" %>
 </head>
 
 <body>
 
-<nav class="navbar navbar-inverse navbar-fixed-top" id="top_menu">
-    <div class="container">
-        <div class="navbar-header" id="top_menu">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div id="navbar" class="collapse navbar-collapse">
-
-                <ul class="nav navbar-nav">
-                    <li><%= link_to 'Home', home_page_index_path %></li>
-                    <li><%= link_to "The Northern Way", northernway_path %></li>
-                    <li><%= link_to 'Search', searches_path(:search_term => 'NO_SEARCH') %></li>
-                    <li><%= link_to 'Browse', browse_path %></li>
-                    <li><%= link_to 'About', northernway_about_path %></li>
-                </ul>
-        </div>
-        <!--/.nav-collapse -->
+<nav class="navbar navbar-inverse navbar-fixed-top" id="northern_top_menu">
+  <div class="container">
+    <div class="navbar-header" id="northern_top_menu">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
     </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><%= link_to 'Home', home_page_index_path %></li>
+        <li><%= link_to "The Northern Way", northernway_path %></li>
+        <li><%= link_to 'Search', searches_path(:search_term => 'NO_SEARCH') %></li>
+        <li><%= link_to 'Browse', browse_path %></li>
+        <li><%= link_to 'About', northernway_about_path %></li>
+      </ul>
+    </div>
+  </div>
 </nav>
+
 <div class="container-fluid">
 
-    <%# Display the top menu including the links %>
-    <div id="top_menu" class="row">
-
-        <div class="col-md-2"></div>
-
-        <%# Note: 'NO_SEARCH' is passed so that a search is not performed in the controller %>
-        <div class="col-md-8">
-            <%= link_to 'Home', home_page_index_path %>
-            <%= link_to 'Search', searches_path(:search_term => 'NO_SEARCH') %>
-            <%= link_to 'Browse', browse_path %>
-            <%= link_to 'About', about_path %>
+  <%# Display Northern Banner %>
+  <%# Note: @is_home_page is defined in 'northern_controller.rb' - it determines the size of the background image here %>
+  <div class="row"
+     <% if @is_home_page == true then %>id="northern_home"
+     <% else %>id="northern_default"
+     <% end %>>
+     <% if @is_home_page == true then %>
+       <div class="northern-banner-box">
+         <p style="font-size:3.5em; color: #A6810E;">THE NORTHERN WAY</p>
+         <p style="font-size:2.2em; color: #FFFFFF;">THE ARCHBISHOPS OF YORK & </p>
+         <p style="font-size:2.2em; color: #FFFFFF;">THE NORTH OF ENGLAND, 1304-1405</p>
         </div>
+    <% end %>>
+  </div>
 
-    </div>
+  <%# Display main code %>
+  <%= yield %>
 
-    <%# Display Northern Banner %>
-      <%# Note: @is_home_page is defined in 'northern_controller.rb' - it determines the size of the background image here %>
-      <div class="row"
-         <% if @is_home_page == true then %>id="norther_home"
-         <% else %>id="norther_default"
-         <% end %>>
-         <% if @is_home_page == true then %>
-           <div class="northern-banner-box">
-             <p style="font-size:3.5em; color: #A6810E;">THE NORTHERN WAY</p>
-             <p style="font-size:2.2em; color: #FFFFFF;">THE ARCHBISHOPS OF YORK & </p>
-             <p style="font-size:2.2em; color: #FFFFFF;">THE NORTH OF ENGLAND, 1304-1405</p>
-            </div>
-        <% end %>>
-      </div>
-
-      <div class="col-md-3"></div>
-
-      <div class="col-md-6">
-        <%# Note: @is_home_page is defined in 'norther_controller.rb' - it determines the margin_top height here %>
-        <%
-           search_margin_top = '35px'
-           if @is_home_page == true then
-             search_margin_top = '150px'
-           end
-        %>
-      </div>
-    </div>
-
-    <%# Display main code %>
-    <%= yield %>
-
-    <hr style="margin: 20px 0px"/>
-
-    <%# Display footer logos %>
-    <div id="footer" class="row">
-
-        <div class="col-md-2"></div>
-
-        <div class="col-md-8">
-            <div class="col-md-3">
-                <a href="https://ahrc.ukri.org/" target="_blank"><%= image_tag 'AHRC-logo.png', :class => 'footer_logo', :style => 'max-width: 160px; margin-top: 10px' %></a>
-            </div>
-            <div class="col-md-3">
-                <a href="http://www.nationalarchives.gov.uk/" target="_blank"><%= image_tag 'A4-TNA.jpg', :class => 'footer_logo', :style => 'max-width: 260px; margin-top: 60px' %></a>
-            </div>
-            <div class="col-md-3">
-                <a href="https://yorkminster.org/" target="_blank"><%= image_tag 'York-Minster-logo.jpg', :class => 'footer_logo', :style => 'max-width: 220px; margin-top: 40px'  %></a>
-            </div>
-            <div class="col-md-3">
-                <a href="http://www.york.ac.uk/" target="_blank">
-                    <%= image_tag 'uoy_logo.svg', :class => 'footer_logo', :style => 'max-width: 300px; margin-top: 50px' %></a>
-            </div>
-        </div>
-        <div class="col-md-2"></div>
-        <div style="clear:both"></div>
-
-        </div>
-    <div style="text-align: center" class="row">
-        <hr style="margin: 20px 0px"/>
+  <hr style="margin: 20px 0px"/>
+  <%# Display footer logos %>
+  <div id="footer" class="row">
     <div class="col-md-2"></div>
-        <div class="col-md-8"><span style="text-align: center; font-size: 0.8em; margin-top: 30px">University of York, 2016. <a href="http://www.york.ac.uk/about/legal-statements/">Disclaimer</a></span></div>
-        <div class="col-md-2"></div>
-
+    <div class="col-md-8">
+      <div class="col-md-3">
+          <a href="https://ahrc.ukri.org/" target="_blank"><%= image_tag 'AHRC-logo.png', :class => 'footer_logo', :style => 'max-width: 160px; margin-top: 10px' %></a>
+      </div>
+      <div class="col-md-3">
+          <a href="http://www.nationalarchives.gov.uk/" target="_blank"><%= image_tag 'A4-TNA.jpg', :class => 'footer_logo', :style => 'max-width: 260px; margin-top: 60px' %></a>
+      </div>
+      <div class="col-md-3">
+          <a href="https://yorkminster.org/" target="_blank"><%= image_tag 'York-Minster-logo.jpg', :class => 'footer_logo', :style => 'max-width: 220px; margin-top: 40px'  %></a>
+      </div>
+      <div class="col-md-3">
+          <a href="http://www.york.ac.uk/" target="_blank">
+              <%= image_tag 'uoy_logo.svg', :class => 'footer_logo', :style => 'max-width: 300px; margin-top: 50px' %></a>
+      </div>
     </div>
+    <div class="col-md-2"></div>
+    <div style="clear:both"></div>
+  </div>
+
+  <div style="text-align: center" class="row">
+    <hr style="margin: 20px 0px"/>
+    <div class="col-md-2"></div>
+    <div class="col-md-8"><span style="text-align: center; font-size: 0.8em; margin-top: 30px">University of York, 2016. <a href="http://www.york.ac.uk/about/legal-statements/">Disclaimer</a></span></div>
+    <div class="col-md-2"></div>
+  </div>
 
 </div>
 

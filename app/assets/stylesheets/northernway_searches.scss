@@ -1,26 +1,26 @@
 /***** Top menu *****/
-#top_menu {
+#northern_top_menu {
   min-height: 50px;
-  background-color: #403152;
+  background-color: #383639;
   //text-align: center;
   font-size: 1.2em;
   //padding-top: 10px;
 }
 
-#top_menu a {
-  color: #FFCC00;
+#northern_top_menu a {
+  color: #A6810E;
   //margin-left: 15px;
   //margin-right: 15px;
 }
 /***** Search row *****/
-#norther_home {
+#northern_home {
   height: 350px;
   background: url("/assets/northern_banner_long.jpg") no-repeat;
   background-size: cover;
   background-position: left top;
 }
 
-#norther_default {
+#northern_default {
   height: 200px;
   background: url("/assets/northern_banner_long.jpg") no-repeat;
   background-size: cover;
