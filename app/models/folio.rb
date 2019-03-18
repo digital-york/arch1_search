@@ -10,7 +10,7 @@ class Folio < ActiveFedora::Base
   #accepts_nested_attributes_for :entry, :allow_destroy => true, :reject_if => :all_blank
   accepts_nested_attributes_for :image, :allow_destroy => true, :reject_if => :all_blank
   directly_contains :images, has_member_relation: ::RDF::URI.new("http://pcdm.org/models#hasMember"), class_name: 'Image'
-  contains 'canvas', predicate: ::RDF::URI.new("http://pcdm.org/models#hasFile"), class_name: 'Canvas'
+  #contains 'canvas', predicate: ::RDF::URI.new("http://pcdm.org/models#hasFile"), class_name: 'Canvas'
 
   # Adding a lot of relationships (eg. hasMember) with has_and_belongs_to_many causes an error (solr query too large);
   # use has_many and a property instead;

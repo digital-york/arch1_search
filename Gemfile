@@ -14,7 +14,7 @@ gem 'dotenv-rails', :groups => [:development, :test, :production]
 gem 'osullivan'
 gem 'openseadragon' # to install run: bundle exec rails g openseadragon:install
 gem 'qa'
-gem 'active-fedora'
+gem 'active-fedora', '10.3.0' #'9.7.0'
 gem 'active_fedora-noid'
 # end
 
