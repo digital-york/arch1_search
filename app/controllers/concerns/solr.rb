@@ -54,6 +54,8 @@ module Solr
         unless num == 0
           q_result = query.solr_query(q, 'relatedAgentFor_ssim', num)
           q_result['response']['docs'].map do |result|
+            next if result.empty?
+
             result['relatedAgentFor_ssim'].each do |relatedagent|
               q_result2 = query.solr_query("id:#{relatedagent}", 'id,has_model_ssim', 1, nil, 0, true, -1, 'index', facets, fq_entry)
               q_result2['response']['docs'].map do |entry|
@@ -108,8 +110,10 @@ module Solr
         num = count_query(q)
         unless num == 0
           q_result = query.solr_query(q, 'dateFor_ssim', num)
-          q_result['response']['docs'].map do |res|
-            res['dateFor_ssim'].each do |single_date|
+          q_result['response']['docs'].map do |result|
+            next if res.empty?
+
+            result['dateFor_ssim'].each do |single_date|
               # from the entry dates, get the entry ids
               query.solr_query("id:#{single_date}", "entryDateFor_ssim", num)['response']['docs'].map do |result|
                 q_result2 = query.solr_query("id:#{result['entryDateFor_ssim'][0]}", 'id', 1, nil, 0, true, -1, 'index', facets,fq_entry)
@@ -120,6 +124,7 @@ module Solr
                   end
                   entry_id_set << q_result2['response']['docs'][0]['id']
                 end
+          next if result.empty?
               end
             end
           end
