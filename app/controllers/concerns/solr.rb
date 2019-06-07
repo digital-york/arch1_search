@@ -82,17 +82,21 @@ module Solr
       num = count_query(q)
       unless num == 0
         q_result = query.solr_query(q, 'relatedPlaceFor_ssim', num)
-        q_result['response']['docs'].map do |result|
-          q_result2 = query.solr_query("id:#{result['relatedPlaceFor_ssim'][0]}", 'id,has_model_ssim', 1, nil, 0, true, -1, 'index', facets, fq_entry)
-          q_result2['response']['docs'].map do |entry|
-            next if q_result2['response']['numFound'] == 0
-            # Check that the model is Entry
-            next if entry['has_model_ssim'] != ['Entry']
+        unless q_result['response']['docs'].nil?
+          q_result['response']['docs'].map do |result|
+            id = ''
+            id = result['relatedPlaceFor_ssim'][0] unless result['relatedPlaceFor_ssim'].nil?
+            q_result2 = query.solr_query("id:#{id}", 'id,has_model_ssim', 1, nil, 0, true, -1, 'index', facets, fq_entry)
+            q_result2['response']['docs'].map do |entry|
+              next if q_result2['response']['numFound'] == 0
+              # Check that the model is Entry
+              next if entry['has_model_ssim'] != ['Entry']
 
-            unless entry_id_set.include? entry['id']
-              add_facet_to_hash(q_result2)
+              unless entry_id_set.include? entry['id']
+                add_facet_to_hash(q_result2)
+              end
+              entry_id_set << entry['id']
             end
-            entry_id_set << entry['id']
           end
         end
       end
@@ -105,10 +109,10 @@ module Solr
       num = count_query(q)
       unless num == 0
         q_result = query.solr_query(q, 'dateFor_ssim', num)
-        q_result['response']['docs'].map do |result|
+        q_result['response']['docs'].map do |res|
           next if res.empty?
 
-          result['dateFor_ssim'].each do |single_date|
+          res['dateFor_ssim'].each do |single_date|
             # from the entry dates, get the entry ids
             query.solr_query("id:#{single_date}", 'entryDateFor_ssim', num)['response']['docs'].map do |result|
               q_result2 = query.solr_query("id:#{result['entryDateFor_ssim'][0]}", 'id', 1, nil, 0, true, -1, 'index', facets, fq_entry)
@@ -444,7 +448,9 @@ module Solr
   def get_entry_and_folio_details(entry_id)
     # Get the entry_no and folio_id for the entry_id
     SolrQuery.new.solr_query('id:' + entry_id, 'entry_no_tesim, entry_folio_facet_ssim, folio_ssim', 1)['response']['docs'].map do |result|
-      @element_array << "#{result['entry_folio_facet_ssim'].join} entry #{result['entry_no_tesim'].join}"
+      unless result['entry_folio_facet_ssim'].nil? or result['entry_no_tesim'].nil?
+        @element_array << "#{result['entry_folio_facet_ssim'].join} entry #{result['entry_no_tesim'].join}"
+      end
       @element_array << result['folio_ssim'].join
     end
   rescue StandardError => error
