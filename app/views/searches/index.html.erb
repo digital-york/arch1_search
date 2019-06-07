@@ -691,14 +691,14 @@
                                     </tr>
                                 <% end %>
 
-                                <% if is_referenced_by != '' %>
+                                <% unless is_referenced_by.nil? or is_referenced_by == '' %>
                                     <tr>
                                         <th>References:</th>
-                                        <td><%= is_referenced_by.html_safe %></td>
+                                        <td><%= is_referenced_by.to_s.html_safe %></td>
                                     </tr>
                                 <% end %>
 
-                                <% if dates != [] %>
+                                <% unless dates.nil? or dates == [] %>
                                     <tr>
                                         <th style="vertical-align: top">Dates:</th>
                                         <td>
