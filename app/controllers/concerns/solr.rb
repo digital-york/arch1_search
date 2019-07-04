@@ -447,9 +447,12 @@ module Solr
   # This method uses the entry_id to get the title of the search result, i.e. 'Register Folio Entry' and folio_id
   def get_entry_and_folio_details(entry_id)
     # Get the entry_no and folio_id for the entry_id
-    SolrQuery.new.solr_query('id:' + entry_id, 'entry_no_tesim, entry_folio_facet_ssim, folio_ssim', 1)['response']['docs'].map do |result|
+    id = get_id(entry_id)
+    SolrQuery.new.solr_query('id:' + id, 'entry_no_tesim, entry_folio_facet_ssim, folio_ssim', 1)['response']['docs'].map do |result|
       unless result['entry_folio_facet_ssim'].nil? or result['entry_no_tesim'].nil?
         @element_array << "#{result['entry_folio_facet_ssim'].join} entry #{result['entry_no_tesim'].join}"
+      else
+        @element_array << 'Untitled'  
       end
       @element_array << result['folio_ssim'].join
     end
@@ -964,6 +967,10 @@ module Solr
         end
       end
     end
+  end
+
+  def get_id(o)
+    id = (o.include? '/') ? o.rpartition('/').last : o
   end
 end
 
