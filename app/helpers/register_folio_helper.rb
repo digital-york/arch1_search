@@ -111,7 +111,8 @@ module RegisterFolioHelper
       q.solr_query('id:"' + collection + '/list_source"', 'ordered_targets_ssim', 2)['response']['docs'].map.each do |res|
         order = res['ordered_targets_ssim']
         order.each do |o|
-          q.solr_query('id:"' + o + '"', 'id,preflabel_tesim,reg_id_tesim', 1)['response']['docs'].map.each do |r|
+          id = get_id(o)
+          q.solr_query('id:"' + id + '"', 'id,preflabel_tesim,reg_id_tesim', 1)['response']['docs'].map.each do |r|
             registers[r['id']] = [r['reg_id_tesim'][0], r['preflabel_tesim'][0]]
           end
         end
@@ -121,6 +122,10 @@ module RegisterFolioHelper
       log_error(__method__, __FILE__, error)
       raise
     end
+  end
+
+  def get_id(o)
+    id = (o.include? '/') ? o.rpartition('/').last : o
   end
 
 end
