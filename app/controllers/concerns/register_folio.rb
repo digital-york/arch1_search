@@ -6,6 +6,11 @@ module RegisterFolio
 
     begin
       @order = SolrQuery.new.solr_query('id:"' + session[:register_id] + '/list_source"', 'ordered_targets_ssim', 1)['response']['docs'][0]['ordered_targets_ssim']
+      @order.collect! do |element|
+        get_id(element)
+      end
+
+      @order
     rescue => error
       log_error(__method__, __FILE__, error)
       raise
