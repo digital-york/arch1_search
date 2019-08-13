@@ -173,9 +173,13 @@ module RegisterFolio
     begin
       session[:entries_exist] = []
       q = SolrQuery.new
-      q.solr_query('folio_ssim:"' + fol + '"', 'id', 100, 'entry_no_si asc')['response']['docs'].map.each do |result|
-        session[:entries_exist] << result['id']
+
+      id = get_id(fol)
+
+      q.solr_query('folio_ssim:"' + id + '"', 'id', 100, 'entry_no_si asc')['response']['docs'].map.each do |result|
+        session[:entries_exist] << get_id(result['id'])
       end
+
       if session[:entries_exist] == []
         session[:entries_exist] = nil
       end
@@ -189,6 +193,10 @@ module RegisterFolio
   def get_folio(target)
     folio = SolrQuery.new.solr_query('id:"'+ target + '"',fl='folio_ssim',rows=1,'preflabel_si asc')['response']['docs'][0]['folio_ssim'][0]
     folio
+  end
+
+  def get_id(o)
+    id = (o.include? '/') ? o.rpartition('/').last : o
   end
 
 end

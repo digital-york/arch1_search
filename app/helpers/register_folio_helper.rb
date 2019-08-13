@@ -50,9 +50,11 @@ module RegisterFolioHelper
 
   def get_tile_sources_for_folio(fol)
     begin
+      id = get_id(fol)
       tile_sources = []
       @query_obj = SolrQuery.new
-      response = @query_obj.solr_query('hasTarget_ssim:' + fol, 'file_path_tesim', 2, 'preflabel_si asc')['response']['docs']
+      response = @query_obj.solr_query('hasTarget_ssim:' + id, 'file_path_tesim', 2, 'preflabel_si asc')['response']['docs']
+
       # get the file paths from the register
       tile_sources << "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{response[0]['file_path_tesim'][0]}.dzi"
       unless response[1].nil?
