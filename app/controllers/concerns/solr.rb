@@ -826,7 +826,8 @@ module Solr
         begin
             entry_list = []
 
-            SolrQuery.new.solr_query("folio_ssim:#{folio_id}", 'id, entry_no_tesim', 1800, 'entry_no_si asc')['response']['docs'].map do |result|
+            id = get_id(folio_id)
+            SolrQuery.new.solr_query("folio_ssim:#{id}", 'id, entry_no_tesim', 1800, 'entry_no_si asc')['response']['docs'].map do |result|
                 element_list = []
                 id = result['id']
                 entry_no = result['entry_no_tesim'].join

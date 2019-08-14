@@ -182,7 +182,7 @@ module RegisterFolio
       id = get_id(fol)
 
       q.solr_query('folio_ssim:"' + id + '"', 'id', 100, 'entry_no_si asc')['response']['docs'].map.each do |result|
-        session[:entries_exist] << get_id(result['id'])
+        session[:entries_exist] << result['id']
       end
 
       if session[:entries_exist] == []
