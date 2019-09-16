@@ -13,7 +13,7 @@ gem 'dotenv-rails', :groups => [:development, :test, :production]
 # added (ja)
 gem 'osullivan'
 gem 'openseadragon' # to install run: bundle exec rails g openseadragon:install
-gem 'qa'
+gem 'qa', '~> 4.0'
 gem 'active-fedora', '10.3.0' #'9.7.0'
 gem 'active_fedora-noid'
 # end
@@ -65,3 +65,6 @@ group :development, :test do
   gem 'fcrepo_wrapper'
   gem 'solr_wrapper'
 end
+
+gem "nokogiri", ">= 1.10.4"
+gem "actionview", ">= 5.0.7.2"
