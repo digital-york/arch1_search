@@ -74,14 +74,13 @@
 
                 <p style="float:left">
                     <% unless session[:first_folio_id] == session[:folio_id] %>
-                        <%= link_to '', browse_registers_path(register_id: session['register_id'], folio: session['folio'].to_i - 1), :class => 'fa fa-long-arrow-left fa-3x' %>
+                        <%= link_to '', browse_registers_path(register_id: session['register_id'], folio: session['folio'].to_i - 1), :class => 'fa fa-long-arrow-alt-left fa-3x' %>
                     <% end %>
                     &nbsp;
                 </p>
                 <p style="float:right">
-                    &nbsp;
                     <% unless session[:last_folio_id] == session[:folio_id] %>
-                        <%= link_to '', browse_registers_path(register_id: session['register_id'], folio: session['folio'].to_i + 1), :class => 'fa fa-long-arrow-right fa-3x' %>
+                        <%= link_to '', browse_registers_path(register_id: session['register_id'], folio: session['folio'].to_i + 1), :class => 'fa fa-long-arrow-alt-right fa-3x' %>
                     <% end %>
                 </p>
 
