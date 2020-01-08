@@ -89,10 +89,11 @@ class IiifController < ApplicationController
           format.any { head :not_found }
         end
       else
-        image = get_image(params[:folio_id])
+        folio_id = get_id(params[:folio_id])
+        image = get_image(folio_id)
         # restrict download size to 1000px
         data = open("http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?IIIF=#{image}/full/1000,/0/default.jpg")
-        send_data data.read, :filename => "#{params[:folio_id]}.jpg", :type => "image/jpeg", :disposition => 'attachment', :stream => 'true', :buffer_size => '4096'
+        send_data data.read, :filename => "#{folio_id}.jpg", :type => "image/jpeg", :disposition => 'attachment', :stream => 'true', :buffer_size => '4096'
 
       end
     rescue => error
@@ -110,4 +111,9 @@ class IiifController < ApplicationController
   def iiif_params
     params.require(:iiif).permit(:id,:register_id,:folio_id)
   end
+
+  def get_id(o)
+    id = (o.include? '/') ? o.rpartition('/').last : o
+  end
+
 end
