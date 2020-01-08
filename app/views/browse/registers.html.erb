@@ -61,7 +61,7 @@
                 <%= hidden_field_tag(:register_id, session[:register_id]) %>
                 <%= select_tag 'folio', options_for_select(@folio_list, session[:folio]), :class => 'choose_folio' %>
                 &nbsp;
-                <%= link_to '', {controller: 'iiif', action: 'download', folio_id: session[:folio_id]}, class: 'fa fa-download fa-2x', :title => 'Download this image' %>
+                <%= link_to '', {controller: 'iiif', action: 'download', folio_id: get_id(session[:folio_id])}, class: 'fa fa-download fa-2x', :title => 'Download this image' %>
                 &nbsp;
                 <%= link_to '', browse_registers_path, class: 'fa fa-chevron-circle-left fa-2x', :title => 'Go back' %>
 
