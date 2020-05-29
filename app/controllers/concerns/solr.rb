@@ -16,8 +16,23 @@ module Solr
         query = SolrQuery.new
         @query = SolrQuery.new
 
+        # if search term contains double quotes, means an exact match,
+        # the solr query should be field:"keyword"
+        if @search_term.start_with? '"' and @search_term.end_with? '"'
+            search_term2 = @search_term.downcase
+        elsif @search_term.include? ' ' or @search_term.downcase.include? ' or ' or @search_term.downcase.include? ' and '
+            # if the keyword contains 'and', 'or', or ' ',
+            # the solr query should be field: (A and B) / (A or B) / (A B)
+            search_term2 = '(' + @search_term.downcase + ')'
+        else
+            # if only a single word is provided, it means a 'contain' search
+            # the solr query should be field:*keyword*
+            search_term2 = '*' + @search_term.downcase + '*'
+        end
+
         # Replace all spaces in a search term with asterisks
-        search_term2 = @search_term.downcase.tr(' ', '*')
+        # Don't think the code below works, it gives lots of strange results
+#        search_term2 = @search_term.downcase.tr(' ', '*')
 
         # ENTRIES: Get the matching entry ids and facets
         if (sub != 'group') && (sub != 'person') && (sub != 'place')
@@ -25,7 +40,8 @@ module Solr
             if sub == 'subject'
                 q = 'has_model_ssim:Entry AND subject_search:"' + @search_term.downcase + '"'
             else
-                q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
+                #q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
+                q = "has_model_ssim:Entry AND (entry_type_search:#{search_term2} or section_type_search:#{search_term2} or summary_search:#{search_term2} or marginalia_search:#{search_term2} or subject_search:#{search_term2} or language_search:#{search_term2} or note_search:#{search_term2} or editorial_note_search:#{search_term2} or is_referenced_by_search:#{search_term2} or summary_tesim:#{search_term2})"
             end
             fq = filter_query
             num = count_query(q)
@@ -45,7 +61,15 @@ module Solr
             if (sub == 'group') || (sub == 'person')
                 q = 'has_model_ssim:RelatedAgent AND person_same_as_search:"' + @search_term.downcase + '"'
             else
-                q = "has_model_ssim:RelatedAgent AND (person_same_as_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
+                #q = "has_model_ssim:RelatedAgent AND (person_same_as_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
+                q = "has_model_ssim:RelatedAgent AND (person_same_as_search:#{search_term2} or
+                                                      person_role_search:#{search_term2} or
+                                                      person_descriptor_search:#{search_term2} or
+                                                      person_descriptor_same_as_search:#{search_term2} or
+                                                      person_note_search:#{search_term2} or
+                                                      person_same_as_search:#{search_term2} or
+                                                      person_related_place_search:#{search_term2} or
+                                                      person_related_person_search:#{search_term2})"
             end
             num = count_query(q)
             unless num == 0
@@ -76,7 +100,12 @@ module Solr
             if sub == 'place'
                 q = 'has_model_ssim:RelatedPlace AND place_same_as_search:"' + @search_term.downcase + '"'
             else
-                q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_as_written_search:*#{search_term2}*)"
+                #q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_as_written_search:*#{search_term2}*)"
+                q = "has_model_ssim:RelatedPlace AND (place_same_as_search:#{search_term2} or
+                                                      place_role_search:#{search_term2} or
+                                                      place_type_search:#{search_term2} or
+                                                      place_note_search:#{search_term2} or
+                                                      place_as_written_search:#{search_term2})"
             end
             facets = facet_fields
             num = count_query(q)
@@ -104,7 +133,8 @@ module Solr
 
         # SINGLE DATES: Get the matching entry ids and facets
         if (sub != 'group') && (sub != 'person') && (sub != 'subject') && (sub != 'place')
-            q = "has_model_ssim:SingleDate AND date_tesim:*#{search_term2}*"
+            #q = "has_model_ssim:SingleDate AND date_tesim:*#{search_term2}*"
+            q = "has_model_ssim:SingleDate AND date_tesim:#{search_term2}"
             facets = facet_fields
             num = count_query(q)
             unless num == 0
