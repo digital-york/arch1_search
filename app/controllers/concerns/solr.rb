@@ -509,7 +509,8 @@ module Solr
 
                 # The following code highlights text which matches the search_term
                 # It highlights all combinations, e.g. 'york', 'York', 'YORK', 'paul young', 'paul g', etc
-                if (is_match == true) && (@search_term != '')
+                # if (is_match == true) && (@search_term != '')
+                if (is_match == true) && (@search_term != '') && not(@search_term.downcase.include? 'and') && not(@search_term.downcase.include? '*')
                     # Replace all spaces with '.*' so that it searches for all characters in between text, e.g. 'paul y' will find 'paul young'
                     temp = @search_term.gsub(/\s+/, '.*')
                     str = str.gsub(/#{temp}/i) do |term|
