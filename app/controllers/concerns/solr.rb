@@ -20,7 +20,29 @@ module Solr
         # the solr query should be field:"keyword"
         if @search_term.start_with? '"' and @search_term.end_with? '"'
             search_term2 = @search_term.downcase
-        elsif @search_term.include? ' ' or @search_term.downcase.include? ' or ' or @search_term.downcase.include? ' and '
+        elsif @search_term.downcase.include? ' and '
+            s = '('
+            @search_term.downcase.split('and').each_with_index do |t, index|
+                if index != @search_term.downcase.split('and').size - 1
+                    s = s + '(' + t + ') and '
+                else
+                    s = s + '(' + t + ')'
+                end
+            end
+            s = s + ')'
+            search_term2 = s
+        elsif @search_term.downcase.include? ' or '
+            s = '('
+            @search_term.downcase.split('or').each_with_index do |t, index|
+                if index != @search_term.downcase.split('or').size - 1
+                    s = s + '(' + t + ') or '
+                else
+                    s = s + '(' + t + ')'
+                end
+            end
+            s = s + ')'
+            search_term2 = s
+        elsif @search_term.include? ' '
             # if the keyword contains 'and', 'or', or ' ',
             # the solr query should be field: (A and B) / (A or B) / (A B)
             search_term2 = '(' + @search_term.downcase + ')'
@@ -38,11 +60,14 @@ module Solr
         if (sub != 'group') && (sub != 'person') && (sub != 'place')
             # if the search has come from the subjects browse, limit to searching for the subject
             if sub == 'subject'
-                q = 'has_model_ssim:Entry AND subject_search:"' + @search_term.downcase + '"'
+                q = 'has_model_ssim:Entry AND subject_search:' + search_term2
             else
                 #q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
                 q = "has_model_ssim:Entry AND (entry_type_search:#{search_term2} or section_type_search:#{search_term2} or summary_search:#{search_term2} or marginalia_search:#{search_term2} or subject_search:#{search_term2} or language_search:#{search_term2} or note_search:#{search_term2} or editorial_note_search:#{search_term2} or is_referenced_by_search:#{search_term2} or summary_tesim:#{search_term2})"
             end
+
+puts q
+
             fq = filter_query
             num = count_query(q)
             unless num == 0
