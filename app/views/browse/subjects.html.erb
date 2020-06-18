@@ -24,7 +24,8 @@
                         <% unless subject[:elements].nil? %>
                             <%= button_tag '', :type => 'button', :class => 'show_hide fa fa-plus plus-minus' %>
                         <% end %>
-                        <%= subject['label'] %>
+                        <%#= subject['label'] %>
+                        <%= link_to subject['label'], searches_path(:search_term => subject[:joined_sub_terms], :search_type => 'subject') %>
 
                         <% unless subject['definition'].nil? %>
                             -- <strong>Definition:</strong> <%= subject['definition'] %>
