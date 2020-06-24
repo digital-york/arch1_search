@@ -64,7 +64,7 @@ $(document).ready(function () {
 
     $('body').on('click', '.show_hide_all', function(e) {
 
-        $(".show_hide").next(".tog").toggle();
+        $(".show_hide").next().next(".tog").toggle();
 
         if ($(".show_hide").hasClass('fa-plus')) {
             $(".show_hide").removeClass('fa-plus').addClass('fa-minus');
