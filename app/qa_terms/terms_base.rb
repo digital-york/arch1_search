@@ -110,6 +110,15 @@ class TermsBase
       id = t1['id']
 
       second_level_list = parse_authority_response(SolrQuery.new.solr_query(q='broader_ssim:' + id + ' AND used_tesim:used', fl='id,preflabel_tesim,altlabel_tesim,definition_tesim,used_tesim', rows=1000, sort='preflabel_si asc'))
+
+      s = ''
+      second_level_list.each_with_index do |x, index|
+        s = s + ' or ' unless index == 0
+        s = s + x['label'] if not x['label'].include? ' and '
+        s = s + '(' + x['label'] + ')' if x['label'].include? ' and '
+      end
+      t1[:joined_sub_terms] = s
+
       t1[:elements] = second_level_list
 
       # we don't currently have any third level terms

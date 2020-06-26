@@ -26,7 +26,7 @@ $(document).ready(function () {
 
     $('body').on('click', '.show_hide', function(e) {
 
-        $(this).next(".tog").toggle();
+        $(this).next().next(".tog").toggle();
         if ($(this).hasClass('fa-plus')) {
             $(this).removeClass('fa-plus').addClass('fa-minus');
             if (sessionStorage.open != null) {
@@ -64,7 +64,7 @@ $(document).ready(function () {
 
     $('body').on('click', '.show_hide_all', function(e) {
 
-        $(".show_hide").next(".tog").toggle();
+        $(".show_hide").next().next(".tog").toggle();
 
         if ($(".show_hide").hasClass('fa-plus')) {
             $(".show_hide").removeClass('fa-plus').addClass('fa-minus');

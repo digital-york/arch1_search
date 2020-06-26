@@ -16,20 +16,26 @@ module Solr
         query = SolrQuery.new
         @query = SolrQuery.new
 
-        # Replace all spaces in a search term with asterisks
-        search_term2 = @search_term.downcase.tr(' ', '*')
+        unless @search_term.include? ' ' or @search_term.include? '*'
+            search_term2 = '(*' + @search_term.downcase + '*)'
+        else
+            search_term2 = '(' + @search_term.downcase + ')'
+        end
 
         # ENTRIES: Get the matching entry ids and facets
         if (sub != 'group') && (sub != 'person') && (sub != 'place')
             # if the search has come from the subjects browse, limit to searching for the subject
             if sub == 'subject'
-                q = 'has_model_ssim:Entry AND subject_search:"' + @search_term.downcase + '"'
+                q = 'has_model_ssim:Entry AND subject_search:' + search_term2
             else
-                q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
+                #q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
+                q = "has_model_ssim:Entry AND (entry_type_search:#{search_term2} or section_type_search:#{search_term2} or summary_search:#{search_term2} or marginalia_search:#{search_term2} or subject_search:#{search_term2} or language_search:#{search_term2} or note_search:#{search_term2} or editorial_note_search:#{search_term2} or is_referenced_by_search:#{search_term2} or summary_tesim:#{search_term2})"
             end
+
             fq = filter_query
             num = count_query(q)
             unless num == 0
+               #@query.solr_query(query, 'id', 0)['response']['numFound'].to_i
                 q_result = query.solr_query(q, 'id', num, nil, 0, true, -1, 'index', facets, fq)
                 facet_hash(q_result)
                 entry_id_set.merge(q_result['response']['docs'].map {|e| e['id']})
@@ -43,9 +49,18 @@ module Solr
         if (sub != 'subject') && (sub != 'place')
             # if the search has come from the people or group browse, limit to searching for group or person
             if (sub == 'group') || (sub == 'person')
-                q = 'has_model_ssim:RelatedAgent AND person_same_as_search:"' + @search_term.downcase + '"'
+                #q = 'has_model_ssim:RelatedAgent AND person_same_as_search:"' + @search_term.downcase + '"'
+                q = 'has_model_ssim:RelatedAgent AND person_same_as_search:' + search_term2
             else
-                q = "has_model_ssim:RelatedAgent AND (person_same_as_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
+                #q = "has_model_ssim:RelatedAgent AND (person_same_as_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
+                q = "has_model_ssim:RelatedAgent AND (person_same_as_search:#{search_term2} or
+                                                      person_role_search:#{search_term2} or
+                                                      person_descriptor_search:#{search_term2} or
+                                                      person_descriptor_same_as_search:#{search_term2} or
+                                                      person_note_search:#{search_term2} or
+                                                      person_same_as_search:#{search_term2} or
+                                                      person_related_place_search:#{search_term2} or
+                                                      person_related_person_search:#{search_term2})"
             end
             num = count_query(q)
             unless num == 0
@@ -74,9 +89,15 @@ module Solr
         if (sub != 'group') && (sub != 'person') && (sub != 'subject')
             # if the search has come from the places browse, limit to searching for places
             if sub == 'place'
-                q = 'has_model_ssim:RelatedPlace AND place_same_as_search:"' + @search_term.downcase + '"'
+                #q = 'has_model_ssim:RelatedPlace AND place_same_as_search:"' + @search_term.downcase + '"'
+                q = 'has_model_ssim:RelatedPlace AND place_same_as_search:' + search_term2
             else
-                q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_as_written_search:*#{search_term2}*)"
+                #q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_as_written_search:*#{search_term2}*)"
+                q = "has_model_ssim:RelatedPlace AND (place_same_as_search:#{search_term2} or
+                                                      place_role_search:#{search_term2} or
+                                                      place_type_search:#{search_term2} or
+                                                      place_note_search:#{search_term2} or
+                                                      place_as_written_search:#{search_term2})"
             end
             facets = facet_fields
             num = count_query(q)
@@ -104,7 +125,8 @@ module Solr
 
         # SINGLE DATES: Get the matching entry ids and facets
         if (sub != 'group') && (sub != 'person') && (sub != 'subject') && (sub != 'place')
-            q = "has_model_ssim:SingleDate AND date_tesim:*#{search_term2}*"
+            #q = "has_model_ssim:SingleDate AND date_tesim:*#{search_term2}*"
+            q = "has_model_ssim:SingleDate AND date_tesim:#{search_term2}"
             facets = facet_fields
             num = count_query(q)
             unless num == 0
@@ -144,7 +166,9 @@ module Solr
         @place_same_as_facet_hash = @place_same_as_facet_hash.sort.to_h
         @subject_facet_hash = @subject_facet_hash.sort.to_h
         @date_facet_hash = @date_facet_hash.sort.to_h
-        @register_facet_hash = @register_facet_hash.sort.to_h
+
+        # sort by register number
+        @register_facet_hash = @register_facet_hash.sort_by { |k,_| (k[9..10].to_i<10 ? '0'+k[9..10]:k) }.to_h
 
         # This variable is used on the display page
         @number_of_rows = entry_id_set.size
@@ -479,9 +503,12 @@ module Solr
 
                 # The following code highlights text which matches the search_term
                 # It highlights all combinations, e.g. 'york', 'York', 'YORK', 'paul young', 'paul g', etc
-                if (is_match == true) && (@search_term != '')
+                # if (is_match == true) && (@search_term != '')
+                if (is_match == true) && (@search_term != '') && not(@search_term.downcase.include? '*')
                     # Replace all spaces with '.*' so that it searches for all characters in between text, e.g. 'paul y' will find 'paul young'
-                    temp = @search_term.gsub(/\s+/, '.*')
+                    #temp = @search_term.gsub(/\s+/, '.*')
+                    # remove double quotes
+                    temp = @search_term.gsub('"','').gsub(/\s+/, '.*')
                     str = str.gsub(/#{temp}/i) do |term|
                         "<span class=\'highlight_text\'>#{term}</span>"
                     end
