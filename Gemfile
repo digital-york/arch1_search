@@ -4,6 +4,7 @@ ruby '2.5.3'
 gem 'rails', '~> 5.2.0'
 
 gem 'active-fedora', '~> 13.2.0'
+# gem 'active_fedora-noid'
 gem 'noid-rails'
 gem 'openseadragon' # to install run: bundle exec rails g openseadragon:install
 gem 'osullivan', '1.0.0', path: './osullivan'
