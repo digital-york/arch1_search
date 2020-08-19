@@ -2,7 +2,7 @@ module AssignId
   extend ActiveSupport::Concern
 
   included do
-    require 'active_fedora/noid'
+    require 'noid-rails'
   end
 
   # Called automatically by the noid service
@@ -25,8 +25,8 @@ module AssignId
   end
 
   private
-  def noid_service
-    @noid_service ||= ActiveFedora::Noid::Service.new
-  end
 
+  def noid_service
+    @noid_service ||= Noid::Rails::Service.new
+  end
 end
