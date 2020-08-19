@@ -1,7 +1,7 @@
 class NorthernwayController < ApplicationController
   layout 'northernway_layout'
 
-  before_filter :set_layout_flag
+  before_action :set_layout_flag
 
   # Set flag so that background image height is greater than the other pages
   # (see default_layout.html.erb)
