@@ -1,6 +1,6 @@
 # Place any default configuration for fcrepo_wrapper here
 port: 8984
-version: 4.7.3
+version: 4.7.5
 instance_dir: tmp/
 fcrepo_home_dir: tmp/fedora-development-data
 enable_jms: false
