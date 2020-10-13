@@ -229,6 +229,8 @@ class BrowseController < ApplicationController
     session[:entries_exist] = nil
     session[:letter] = nil
     session[:all] = nil
+    session[:folio_image] = nil
+    session[:alt_image] = nil
   end
 
   #whitelist params
