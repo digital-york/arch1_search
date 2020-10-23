@@ -8,4 +8,7 @@ class ImageZoomLargeController < ApplicationController
     @folio_id = params[:folio_id]
   end
 
+  def alt
+
+  end
 end

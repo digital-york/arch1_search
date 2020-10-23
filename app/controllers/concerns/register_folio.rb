@@ -61,6 +61,7 @@ module RegisterFolio
 
       q = SolrQuery.new
       # Set the folio image session variable
+
       q.solr_query('hasTarget_ssim:"' + next_id + '"', 'file_path_tesim', 1, sort='preflabel_si asc')['response']['docs'].map do |result|
         next_image = result['file_path_tesim'][0]
       end
@@ -95,7 +96,28 @@ module RegisterFolio
 
   end
 
-  # Set @folio_list - this is used to display the folio drop-down list
+  # set image and alt image (UV) in session
+  def get_images_for_folio(folio_id)
+    images = {}
+    q = SolrQuery.new
+    response = q.solr_query('has_model_ssim:Image and hasTarget_ssim:' + folio_id,
+                            fl='preflabel_tesim,file_path_tesim',
+                            2,
+                            'preflabel_si asc')['response']
+    if response['numFound'] > 0
+      response['docs'].map do |result|
+        if result['preflabel_tesim'][0] == "Image (UV)"
+          images[:alt_image] = result['file_path_tesim'][0]
+        else
+          images[:folio_image] = result['file_path_tesim'][0]
+        end
+      end
+    end
+    images
+  end
+
+
+    # Set @folio_list - this is used to display the folio drop-down list
   def set_folio_list
 
     begin

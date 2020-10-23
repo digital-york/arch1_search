@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   root 'home_page#index'
 
   get 'image_zoom_large' => 'image_zoom_large#index'
+  get 'image_zoom_large/alt' => 'image_zoom_large#alt'
 
   get 'index2' => 'searches#index2'
 

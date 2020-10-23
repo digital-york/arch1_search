@@ -13,7 +13,7 @@ class BrowseController < ApplicationController
       reset_session_variables
 
       if (browse_params['collection'].nil? or browse_params['collection'] == '') and (browse_params['register_id'].nil? or browse_params['register_id'] == '')
-        # Get collections
+         # Get collections
         @coll_list = get_collections()
       elsif browse_params['collection'] != nil and (browse_params['register_id'].nil? or browse_params['register_id'] == '')
         @coll_list = get_collections(browse_params['collection'])
@@ -31,6 +31,7 @@ class BrowseController < ApplicationController
         set_folio_list
 
         @fol_list = get_order(session[:register_id])
+
         session[:length] = @fol_list.size()
 
         if session[:last_folio_id] == nil
@@ -44,9 +45,14 @@ class BrowseController < ApplicationController
           get_entries(session[:folio_id])
         else
           session[:folio] = browse_params['folio'].to_i
-          session[:folio_id] = @fol_list[browse_params['folio'].to_i - 1]
+          session[:folio_id] = get_id(@fol_list[browse_params['folio'].to_i - 1])
           get_entries(session[:folio_id])
         end
+
+        # set folio_image / alt_image (UV)
+        images = get_images_for_folio(session[:folio_id])
+        session[:folio_image] = images[:folio_image] unless images[:folio_image].blank?
+        session[:alt_image]   = images[:alt_image] unless images[:alt_image].blank?
 
         unless session[:entries_exist].nil?
           # Create a new DbEntry model from the database tables
@@ -64,7 +70,6 @@ class BrowseController < ApplicationController
           # @entry_list is used to get the tabs for the view page
           @entry_list = get_entry_list(session[:folio_id])
         end
-
       end
     rescue => error
       log_error(__method__, __FILE__, error)
@@ -224,6 +229,8 @@ class BrowseController < ApplicationController
     session[:entries_exist] = nil
     session[:letter] = nil
     session[:all] = nil
+    session[:folio_image] = nil
+    session[:alt_image] = nil
   end
 
   #whitelist params

@@ -28,7 +28,7 @@ module SearchesHelper
 
     folio_image = ''
 
-    SolrQuery.new.solr_query('hasTarget_ssim:"' + folio_id + '"', 'file_path_tesim', 1)['response']['docs'].map do |result|
+    SolrQuery.new.solr_query('hasTarget_ssim:"' + get_id(folio_id) + '"', 'file_path_tesim', 1)['response']['docs'].map do |result|
       folio_image = result['file_path_tesim'][0]
     end
 
@@ -72,6 +72,10 @@ module SearchesHelper
     end
 
     return person_same_as
+  end
+
+  def get_id(o)
+    id = (o.include? '/') ? o.rpartition('/').last : o
   end
 
 end
