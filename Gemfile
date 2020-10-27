@@ -29,6 +29,7 @@ gem 'sqlite3'
 gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier', '>= 1.3.0'
+gem 'iiif-presentation', '~> 1.0.0'
 
 group :development, :test do
   gem 'fcrepo_wrapper'

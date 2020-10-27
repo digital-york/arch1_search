@@ -2,9 +2,6 @@ PATH
   remote: osullivan
   specs:
     osullivan (1.0.0)
-      activesupport (>= 3.2.18)
-      faraday (~> 0.17.0)
-      json
 
 GEM
   remote: https://rubygems.org/
@@ -120,6 +117,10 @@ GEM
     http_logger (0.6.0)
     i18n (1.8.5)
       concurrent-ruby (~> 1.0)
+    iiif-presentation (1.0.0)
+      activesupport (>= 3.2.18)
+      faraday (>= 0.9)
+      json
     jbuilder (2.10.0)
       activesupport (>= 5.0.0)
     jquery-rails (4.4.0)
@@ -321,6 +322,7 @@ DEPENDENCIES
   dotenv-rails
   fcrepo_wrapper
   font-awesome-sass
+  iiif-presentation (~> 1.0.0)
   jbuilder (~> 2.0)
   jquery-rails
   noid-rails
