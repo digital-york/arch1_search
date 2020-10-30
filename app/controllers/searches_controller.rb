@@ -101,6 +101,7 @@ class SearchesController < ApplicationController
       # Populate db_entry with data from Solr
       get_solr_data(@db_entry)
 
+      session[:folio_id] = params[:folio_id]  
       @folio_id = params[:folio_id]
       if params[:folio_title].nil?
         @folio_title = get_folio_title(params[:entry_id])
