@@ -4,10 +4,9 @@ ruby '2.5.3'
 gem 'rails', '~> 5.2.0'
 
 gem 'active-fedora', '~> 13.2.0'
-# gem 'active_fedora-noid'
+gem 'iiif-presentation', '~> 1.0.0'
 gem 'noid-rails'
 gem 'openseadragon' # to install run: bundle exec rails g openseadragon:install
-gem 'osullivan', '1.0.0', path: './osullivan'
 gem 'qa', '~> 5.4.0'
 gem 'rdf', '~> 3.1.4'
 gem 'rsolr'
@@ -29,15 +28,15 @@ gem 'sqlite3'
 gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier', '>= 1.3.0'
-gem 'iiif-presentation', '~> 1.0.0'
 
 group :development, :test do
+  gem 'brakeman'
   gem 'fcrepo_wrapper'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'solr_wrapper'
   gem 'spring'
-  gem 'thin'
+  gem 'puma'
   gem 'web-console'
   gem 'xray-rails'
 end
