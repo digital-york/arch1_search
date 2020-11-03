@@ -8,6 +8,8 @@
     <%# Display the folio title and the 'go back' arrow %>
     <div class="col-md-5" id="folio_title">
         <%= @folio_title %>&nbsp;
+        <%= link_to '', {controller: 'iiif', action: 'download', folio_id: get_id(session[:folio_id])}, class: 'fa fa-download fa-1x', :title => 'Download this image' %>
+        &nbsp;
         <a href="<%= searches_path(:search_term => @search_term, :page => @page) %>" title="Return to search results">
             <span class="fa fa-chevron-circle-left fa-1x"></span>
         </a>
