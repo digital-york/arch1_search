@@ -22,7 +22,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'jquery-rails'
 gem 'nokogiri', '>= 1.10.4'
 gem 'sass-rails', '~> 5.0'
-gem 'sdoc', '~> 0.4.0', group: :doc
+gem 'sdoc', group: :doc
 gem 'sprockets', '~> 3.7.2'
 gem 'sqlite3'
 gem 'therubyracer', platforms: :ruby
