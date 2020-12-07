@@ -10,6 +10,6 @@
         id: "location",
         prefixUrl: "assets/seadragonImages/",
         autoResize: true,
-        tileSources: "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=<%= session['folio_image']%>.dzi"
+        tileSources: "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=<%= get_folio_image(session[:folio_id]) %>.dzi"
     });
 </script>
