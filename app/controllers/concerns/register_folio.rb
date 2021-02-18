@@ -203,8 +203,20 @@ module RegisterFolio
 
       id = get_id(fol)
 
-      q.solr_query('folio_ssim:"' + id + '"', 'id', 100, 'entry_no_si asc')['response']['docs'].map.each do |result|
-        session[:entries_exist] << result['id']
+      current_entry_list = []
+      q.solr_query('folio_ssim:"' + id + '"', 'id,entry_no_tesim', 100, 'entry_no_si asc')['response']['docs'].map.each do |result|
+        #session[:entries_exist] << result['id']
+        element_list = []
+        id = result['id']
+        entry_no = result['entry_no_tesim'].join
+        element_list << id
+        element_list << entry_no
+        current_entry_list << element_list
+      end
+      # Sort entries by their numeric entry nos
+      current_entry_list.sort! { |a, b|  a[1].to_i <=> b[1].to_i }
+      current_entry_list.each do |entry|
+        session[:entries_exist] << entry[0]
       end
 
       if session[:entries_exist] == []

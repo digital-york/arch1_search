@@ -854,6 +854,7 @@ module Solr
             entry_list = []
 
             id = get_id(folio_id)
+
             SolrQuery.new.solr_query("folio_ssim:#{id}", 'id, entry_no_tesim', 1800, 'entry_no_si asc')['response']['docs'].map do |result|
                 element_list = []
                 id = result['id']
@@ -862,6 +863,8 @@ module Solr
                 element_list << entry_no
                 entry_list << element_list
             end
+            # Sort entries by their numeric entry nos
+            entry_list.sort! { |a, b|  a[1].to_i <=> b[1].to_i }
         rescue StandardError => error
             log_error(__method__, __FILE__, error)
             raise
