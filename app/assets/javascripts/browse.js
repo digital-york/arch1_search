@@ -25,8 +25,7 @@ $(document).ready(function () {
     });
 
     $('body').on('click', '.show_hide', function(e) {
-
-        $(this).next().next(".tog").toggle();
+        $(this).next(".tog").toggle();
         if ($(this).hasClass('fa-plus')) {
             $(this).removeClass('fa-plus').addClass('fa-minus');
             if (sessionStorage.open != null) {
