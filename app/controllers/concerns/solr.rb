@@ -29,14 +29,13 @@ module Solr
                 q = 'has_model_ssim:Entry AND subject_search:' + search_term2
             else
                 #q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
-                q = "has_model_ssim:Entry AND (entry_type_search:#{search_term2} or section_type_search:#{search_term2} or summary_search:#{search_term2} or marginalia_search:#{search_term2} or subject_search:#{search_term2} or language_search:#{search_term2} or note_search:#{search_term2} or editorial_note_search:#{search_term2} or is_referenced_by_search:#{search_term2} or summary_tesim:#{search_term2})"
+                q = "has_model_ssim:Entry AND (entry_type_search:#{search_term2} or section_type_search:#{search_term2} or summary_search:#{search_term2} or marginalia_search:#{search_term2} or subject_search:#{search_term2} or language_search:#{search_term2} or note_search:#{search_term2} or editorial_note_search:#{search_term2} or is_referenced_by_search:#{search_term2} or summary_tesim:#{search_term2} or entry_person_same_as_facet_ssim:#{search_term2} or entry_place_same_as_facet_ssim:#{search_term2} or suggest:#{search_term2} )"
             end
-
             fq = filter_query
             num = count_query(q)
             unless num == 0
                #@query.solr_query(query, 'id', 0)['response']['numFound'].to_i
-                q_result = query.solr_query(q, 'id', num, nil, 0, true, -1, 'index', facets, fq)
+                q_result = query.solr_query(q, 'id', num, 'entry_date_facet_ssim asc', 0, true, -1, 'index', facets, fq)
                 facet_hash(q_result)
                 entry_id_set.merge(q_result['response']['docs'].map {|e| e['id']})
             end
