@@ -302,7 +302,9 @@ module Solr
             date_string += get_element(date_note_string, true).capitalize.to_s
         end
         # This should only happen with matched records, where there is only a role; we do not want to show this
-        date_string = '' if date_string.end_with? ': '
+        if date_string.include? '; Note:'
+            date_string = date_string[0, date_string.index('; Note:')]
+        end
         date_string
     rescue StandardError => error
         log_error(__method__, __FILE__, error)
