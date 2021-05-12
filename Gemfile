@@ -18,7 +18,7 @@ gem "dotenv-rails", groups: %i[development test production]
 gem "font-awesome-sass"
 gem "jbuilder", "~> 2.0"
 gem "jquery-rails"
-gem "nokogiri", ">= 1.10.4"
+gem "nokogiri", ">= 1.11.0"
 gem "sass-rails", "~> 5.0"
 gem "sdoc", group: :doc
 gem "sprockets", "~> 3.7.2"
