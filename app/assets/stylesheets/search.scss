@@ -1,3 +1,38 @@
 // Place all the styles related to the search controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.container-flex {
+    display: inline-flex;
+    align-items: stretch;
+    justify-content: flex-start
+}
+
+#search_term {
+    width: 88%;
+    border-color: black;
+    margin-right: 2%;
+    border-radius: 4px;
+}
+
+#start_date {
+    width: 15%;
+    border-color: black;
+    margin-right: 2%;
+    border-radius: 4px;
+}
+  
+#end_date {
+    width: 15%;
+    border-color: black;
+    margin-right: 2%;
+    border-radius: 4px;
+}
+  
+#date_label {
+    width: 15%;
+    color: #FFCC00;
+    background-color: #403152;
+    margin-right: 2%;
+    border-radius: 4px; 
+}
