@@ -10,7 +10,6 @@ gem "qa", "~> 5.4.0"
 gem "rdf", "~> 3.1.4"
 gem "rsolr"
 gem "rsolr-ext"
-gem "solrizer"
 
 gem "autoprefixer-rails", "~> 8.6.5"
 gem "bootstrap-sass", "~> 3.4.1"
@@ -28,17 +27,20 @@ gem "therubyracer", platforms: :ruby
 gem "turbolinks"
 gem "uglifier", ">= 1.3.0"
 
+group :development do
+  # Access an IRB console on exception pages or by using <%= console %> in views
+  gem 'brakeman'
+  gem 'web-console'
+  gem "standardrb"
+  gem "solargraph"
+  gem 'xray-rails'
+end
 group :development, :test do
-  gem "brakeman"
   gem "fcrepo_wrapper"
-  gem "pry-byebug"
-  gem "pry-rails"
   gem "solr_wrapper"
   gem "spring"
   gem "puma"
-  gem "web-console"
-  gem "xray-rails"
-  gem "standardrb"
-  gem "rspec" 
+  gem "pry-byebug"
+  gem "pry-rails"
   gem "rspec-rails", "~> 4.1.0"
 end
