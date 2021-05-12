@@ -39,6 +39,6 @@ group :development, :test do
   gem "web-console"
   gem "xray-rails"
   gem "standardrb"
-  gem "rspec"
-  gem "rspec-core"
+  gem "rspec" 
+  gem "rspec-rails", "~> 4.1.0"
 end
