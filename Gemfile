@@ -38,4 +38,7 @@ group :development, :test do
   gem 'puma'
   gem 'web-console'
   gem 'xray-rails'
+  gem 'standardrb'
+  gem 'rspec'
+  gem 'rspec-core'
 end
