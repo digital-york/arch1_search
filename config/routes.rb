@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'search/simple'
   mount Qa::Engine => '/qa'
 
   get 'searches/index'
