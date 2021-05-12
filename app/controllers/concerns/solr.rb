@@ -29,14 +29,13 @@ module Solr
                 q = 'has_model_ssim:Entry AND subject_search:' + search_term2
             else
                 #q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
-                q = "has_model_ssim:Entry AND (entry_type_search:#{search_term2} or section_type_search:#{search_term2} or summary_search:#{search_term2} or marginalia_search:#{search_term2} or subject_search:#{search_term2} or language_search:#{search_term2} or note_search:#{search_term2} or editorial_note_search:#{search_term2} or is_referenced_by_search:#{search_term2} or summary_tesim:#{search_term2})"
+                q = "has_model_ssim:Entry AND (entry_type_search:#{search_term2} or section_type_search:#{search_term2} or summary_search:#{search_term2} or marginalia_search:#{search_term2} or subject_search:#{search_term2} or language_search:#{search_term2} or note_search:#{search_term2} or editorial_note_search:#{search_term2} or is_referenced_by_search:#{search_term2} or summary_tesim:#{search_term2} or entry_person_same_as_facet_ssim:#{search_term2} or entry_place_same_as_facet_ssim:#{search_term2} or suggest:#{search_term2} )"
             end
-
             fq = filter_query
             num = count_query(q)
             unless num == 0
                #@query.solr_query(query, 'id', 0)['response']['numFound'].to_i
-                q_result = query.solr_query(q, 'id', num, nil, 0, true, -1, 'index', facets, fq)
+                q_result = query.solr_query(q, 'id', num, 'entry_date_facet_ssim asc', 0, true, -1, 'index', facets, fq)
                 facet_hash(q_result)
                 entry_id_set.merge(q_result['response']['docs'].map {|e| e['id']})
             end
@@ -303,7 +302,9 @@ module Solr
             date_string += get_element(date_note_string, true).capitalize.to_s
         end
         # This should only happen with matched records, where there is only a role; we do not want to show this
-        date_string = '' if date_string.end_with? ': '
+        if date_string.include? '; Note:'
+            date_string = date_string[0, date_string.index('; Note:')]
+        end
         date_string
     rescue StandardError => error
         log_error(__method__, __FILE__, error)
@@ -854,6 +855,7 @@ module Solr
             entry_list = []
 
             id = get_id(folio_id)
+
             SolrQuery.new.solr_query("folio_ssim:#{id}", 'id, entry_no_tesim', 1800, 'entry_no_si asc')['response']['docs'].map do |result|
                 element_list = []
                 id = result['id']
@@ -862,6 +864,8 @@ module Solr
                 element_list << entry_no
                 entry_list << element_list
             end
+            # Sort entries by their numeric entry nos
+            entry_list.sort! { |a, b|  a[1].to_i <=> b[1].to_i }
         rescue StandardError => error
             log_error(__method__, __FILE__, error)
             raise

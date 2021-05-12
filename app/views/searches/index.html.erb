@@ -302,14 +302,14 @@
                             <% if @page == 1 %>
                                 <li><span style="color: grey">Previous</span></li>
                             <% else %>
-                                <li><%= link_to 'Previous', searches_path(:search_term => @search_term, :page => @page, :previous => 'true', :rows_per_page => @rows_per_page, :display_type => @display_type, :search_type => @search_type, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_same_as_facet => @person_same_as_facet, :place_same_as_facet => @place_same_as_facet) %></li>
+                            <li><%= link_to 'Previous', searches_path(:search_term => @search_term, :page => @page, :previous => 'true', :register_facet => @register_facet, :date_facet => @date_facet, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_same_as_facet => @person_same_as_facet, :place_same_as_facet => @place_same_as_facet, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_type => @search_type) %></li>
                             <% end %>
                             &nbsp;<span style="font-size: 1.1em"><%= start_index %> - <%= end_index %>
                             of <strong><%= @number_of_rows %></strong></span>&nbsp;
                             <% if @number_of_rows <= @rows_per_page || total_page_rows + @rows_per_page >= @number_of_rows %>
                                 <li><span style="color: grey">Next</span></li>
                             <% else %>
-                                <li><%= link_to 'Next', searches_path(:search_term => @search_term, :page => @page, :next => 'true', :rows_per_page => @rows_per_page, :display_type => @display_type, :search_type => @search_type, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_same_as_facet => @person_same_as_facet, :place_same_as_facet => @place_same_as_facet) %></li>
+                            <li><%= link_to 'Next', searches_path(:search_term => @search_term, :page => @page, :next => 'true', :register_facet => @register_facet, :date_facet => @date_facet, :section_type_facet => @section_type_facet, :subject_facet => @subject_facet, :person_same_as_facet => @person_same_as_facet, :place_same_as_facet => @place_same_as_facet, :rows_per_page => @rows_per_page, :display_type => @display_type, :search_type => @search_type) %></li>
                             <% end %>
                         </ul>
                     </div>
