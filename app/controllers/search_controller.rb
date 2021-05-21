@@ -9,9 +9,9 @@ class SearchController < ApplicationController
     @end_date = params[:end_date]
     @archival_repository = params[:archival_repository]
 
-    #What sanitasion do we need for search_term *, minimum list of caracters etc.?
-    #if @search_term.nil? then @search_term = "" end
-     
+    # What sanitasion do we need for search_term *, minimum list of caracters etc.?
+    # if @search_term.nil? then @search_term = "" end
+
     # Initialise the arrays which display data on the page
     @partial_list_array = []
     # @section_type_facet_array = []
@@ -21,13 +21,15 @@ class SearchController < ApplicationController
     # @date_facet_array = []
     # @register_facet_array = []
 
-    search_builder = TnwCommon::SearchBuilder.new(
-      search_term: @search_term,
-      start_date: @start_date,
-      end_date: @end_date,
-      archival_repository: @archival_repository
-    )
-
+    unless @search_term.nil?
+      query = TnwCommon::SearchBuilderService.new(
+        search_term: @search_term,
+        start_date: @start_date,
+        end_date: @end_date,
+        archival_repository: @archival_repository
+      ).query
+      results = TnwCommon::SolrQueryService.new(query: query).get
+    end
   rescue => error
     log_error(__method__, __FILE__, error)
     raise
