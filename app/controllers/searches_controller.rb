@@ -73,6 +73,7 @@ class SearchesController < ApplicationController
         end
 
         # Set arrays which display data on the page
+        # @search_type only set for browse searches
         if @search_type == 'subject' or @search_type == 'group' or @search_type == 'person' or @search_type == 'place'
           set_search_result_arrays(@search_type)
         else

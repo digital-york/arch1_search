@@ -950,15 +950,13 @@ module TnwCommon
     def get_id(o)
       o.include?("/") ? o.rpartition("/").last : o
     end
-  end
 
-  # Writes error message to the log
-  def log_error(method, file, error)
-    time = ""
-    # Only add time for development log because production already outputs timestamp
-    if Rails.env == "development"
-      time = Time.now.strftime("[%d/%m/%Y %H:%M:%S] ").to_s
+    # Writes error message to the log
+    def log_error(method, file, error)
+      time = ""
+      # Only add time for development log because production already outputs timestamp
+      time = Time.now.strftime("[%d/%m/%Y %H:%M:%S] ").to_s if Rails.env == "development"
+      logger.error "#{time}EXCEPTION IN #{file}, method='#{method}' [#{error}]"
     end
-    logger.error "#{time}EXCEPTION IN #{file}, method='#{method}' [#{error}]"
   end
 end

@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'search/simple'
   mount Qa::Engine => '/qa'
 
   get 'searches/index'
@@ -8,12 +7,14 @@ Rails.application.routes.draw do
 
   resources :searches
 
+  get 'search/simple'
+  get 'search/show'
+  resources :search
+  
   root 'home_page#index'
 
   get 'image_zoom_large' => 'image_zoom_large#index'
   get 'image_zoom_large/alt' => 'image_zoom_large#alt'
-
-  get 'index2' => 'searches#index2'
 
   # added (ja)
 
