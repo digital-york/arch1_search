@@ -1,5 +1,13 @@
 module TnwCommon
   module SimpleSearchHelper
+    def date_filter(start_date:, end_date:)
+      start_date = start_date.blank? ? "*" : start_date
+      end_date = end_date.blank? ? "*" : end_date
+      if (start_date != "*") || (end_date != "*")
+        "entry_date_facet_ssim:[#{start_date} TO #{end_date}]"
+      end
+    end
+
     # Sets the facet arrays and search results according to the search term
     def set_search_result_arrays(sub = nil)
       # Issue: Can this be simplyfied? Required for add_facet_to_hash and facet_hash
@@ -22,6 +30,11 @@ module TnwCommon
         "(*" + @search_term.downcase + "*)"
       end
 
+      # Filter query for the entry (section types and subject facets), used when looping through the entries
+      fq_entry = filter_query
+      fq_date = date_filter(start_date: @start_date, end_date: @end_date)
+      fq_entry = Array(fq_entry) | Array(fq_date) unless fq_date.nil?
+
       # ENTRIES: Get the matching entry ids and facets
       if (sub != "group") && (sub != "person") && (sub != "place")
         # if the search has come from the subjects browse, limit to searching for the subject
@@ -31,18 +44,14 @@ module TnwCommon
           # q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
           "has_model_ssim:Entry AND (entry_type_search:#{search_term2} or section_type_search:#{search_term2} or summary_search:#{search_term2} or marginalia_search:#{search_term2} or subject_search:#{search_term2} or language_search:#{search_term2} or note_search:#{search_term2} or editorial_note_search:#{search_term2} or is_referenced_by_search:#{search_term2} or summary_tesim:#{search_term2} or entry_person_same_as_facet_ssim:#{search_term2} or entry_place_same_as_facet_ssim:#{search_term2} or suggest:#{search_term2} )"
         end
-        fq = filter_query
         num = count_query(q)
         unless num == 0
           # @query.solr_query(query, 'id', 0)['response']['numFound'].to_i
-          q_result = query.solr_query(q, "id", num, "entry_date_facet_ssim asc", 0, true, -1, "index", facets, fq)
+          q_result = query.solr_query(q, "id", num, "entry_date_facet_ssim asc", 0, true, -1, "index", facets, fq_entry)
           facet_hash(q_result)
           entry_id_set.merge(q_result["response"]["docs"].map { |e| e["id"] })
         end
       end
-
-      # Filter query for the entry (section types and subject facets), used when looping through the entries
-      fq_entry = filter_query
 
       # PEOPLE/GROUPS: Get the matching entry ids and facets
       if (sub != "subject") && (sub != "place")
