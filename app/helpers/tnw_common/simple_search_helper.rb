@@ -500,14 +500,17 @@ module TnwCommon
 
           # The following code highlights text which matches the search_term
           # It highlights all combinations, e.g. 'york', 'York', 'YORK', 'paul young', 'paul g', etc
-          # if (is_match == true) && (@search_term != '')
-          if (is_match == true) && (@search_term != "") && !@search_term.downcase.include?("*")
+          if (is_match == true) && (@search_term != "")
+          # if (is_match == true) && (@search_term != "") && !@search_term.downcase.include?("*")
             # Replace all spaces with '.*' so that it searches for all characters in between text, e.g. 'paul y' will find 'paul young'
             # temp = @search_term.gsub(/\s+/, '.*')
-            # remove double quotes
-            temp = @search_term.delete('"').gsub(/\s+/, ".*")
-            str = str.gsub(/#{temp}/i) do |term|
-              "<span class=\'highlight_text\'>#{term}</span>"
+            # remove double quotes and other Solr special characters
+            temp = @search_term.delete('\"\+\-\!\?\*\~\&\|\(\)') #.gsub(/\s+/, ".*")
+            # Split each term for highlight FixMe: support for "word phrases"
+            temp.split.each do |t|
+              str = str.gsub(/#{t}/i) do |term|
+                "<span class=\'highlight_text\'>#{term}</span>"
+              end
             end
           elsif (is_match == false) && (@search_term != "")
             str = "" if return_string.nil?
