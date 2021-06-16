@@ -132,19 +132,21 @@ module TnwCommon
       # SINGLE DATES: Get the matching entry ids and facets
       if (sub != "group") && (sub != "person") && (sub != "subject") && (sub != "place")
         # q = "has_model_ssim:SingleDate AND date_tesim:*#{search_term2}*"
-        q = "has_model_ssim:SingleDate AND date_tesim:#{search_term2}"
+        # q = "has_model_ssim:SingleDate AND date_tesim:#{search_term2}"
+        q = "has_model_ssim:SingleDate AND date_new_ssi:#{search_term2}"
         facets = facet_fields
         num = count_query(q)
         unless num == 0
-          q_result = query.solr_query(q, "dateFor_ssim", num)
+          q_result = query.solr_query(q, "dateFor_ssim", num, "date_new_ssi asc")
           q_result["response"]["docs"].map do |res|
             next if res.empty?
 
             res["dateFor_ssim"]&.each do |single_date|
               # from the entry dates, get the entry ids
               query.solr_query("id:#{single_date}", "entryDateFor_ssim", num)["response"]["docs"]&.map do |result|
-                q_result2 = query.solr_query("id:#{result["entryDateFor_ssim"]&[0]}", "id", 1, nil, 0, true, -1,
-                  "index", facets, fq_entry)
+                q_result2 = query.solr_query("id:#{result["entryDateFor_ssim"][0]}", "id", 1, nil, 0, true, -1,
+                  "index", facets, fq_entry) unless result["entryDateFor_ssim"].blank?
+                next if q_result2.blank?
                 unless q_result2["response"]["numFound"] == 0
                   unless entry_id_set.include? q_result2["response"]["docs"][0]["id"]
                     add_result_to_facet_hash(q_result2)
@@ -155,14 +157,16 @@ module TnwCommon
               end
             end
           end
-
-          # ENTRY DATES: Get the matching entry ids (no facets needed for entry dates)
-          q = "has_model_ssim:EntryDate AND (date_note_tesim:*#{search_term2}*"
-          num = count_query(q)
-          unless num == 0
-            q_result = query.solr_query(q, "entryDateFor_ssim", num, nil, 0, nil, nil, nil, nil, fq_entry)
-            entry_id_set.merge(q_result["response"]["docs"].map { |e| e["entryDateFor_ssim"][0] })
-          end
+        end
+        # ENTRY DATES: Get the matching entry ids (no facets needed for entry dates)
+        q = "has_model_ssim:EntryDate AND (date_note_tesim:#{search_term2})"
+        num = count_query(q)
+        unless num == 0
+          q_result = query.solr_query(q, "entryDateFor_ssim", num, nil, 0, nil, nil, nil, nil, fq_entry)
+          entry_id_set.merge(q_result["response"]["docs"]&.map { |e| 
+              e["entryDateFor_ssim"][0] unless e["entryDateFor_ssim"].blank?
+            }
+          )
         end
       end
 
