@@ -55,7 +55,7 @@ module TnwCommon
         num = count_query(q)
         unless num == 0
           # @query.solr_query(query, 'id', 0)['response']['numFound'].to_i
-          q_result = query.solr_query(q, "id", num, "entry_date_facet_ssim asc", 0, true, -1, "index", facets, fq_entry)
+          q_result = query.solr_query(q, "id", num, "date_full_ssim asc", 0, true, -1, "index", facets, fq_entry)
           result_to_facet_hash(q_result) 
           entry_id_set.merge(q_result["response"]["docs"].map { |e| e["id"] })
         end
