@@ -1,0 +1,96 @@
+<div class="row">
+
+  11<%= @document_list %>11<br/><br/>
+  22<%= @document_json %>22
+
+  <div class="col-md-1">left space 1</div>
+
+  <%# Display the document title and the 'go back' arrow %>
+  <div class="col-md-10" id="folio_title">
+    @folio_title
+    link_to '', {controller: 'iiif', action: 'download', folio_id: get_id(session[:folio_id])}, class: 'fa fa-download fa-1x', :title => 'Download this image'
+    &nbsp;
+    <a href="<%= searches_path(:search_term => @search_term, :page => @page) %>" title="Return to search results">
+      <span class="fa fa-chevron-circle-left fa-1x"></span>
+    </a>
+  </div>
+
+  <div class="col-md-1">right space 1</div>
+</div>
+
+<div class="row" style="margin-top: 0px">
+
+  <div class="col-md-1">left space 2</div>
+
+
+
+
+
+
+  <div class="col-md-10" id='form_frame'>
+
+    <div class='tab1'>
+      <table>
+        <%# Display tabs for documents %>
+        <tr>
+          <th colspan='2' id='entry_menu' style="background-color: grey">
+            <ul>
+              <%# Display 1 - 9 %>
+              <% @document_list.each do |document| %>
+                <%
+                  document_id = document[:id]
+                  document_ref = document[:reference]
+                %>
+                <% if document_id == @document_id %>
+                  <li><span class='highlight'><%= document_ref %></span></li>
+                <% else %>
+                  <li>
+                    <span class='nohighlight'><%= link_to document_ref, searches_show_path(:document_id => document_id, :series_id => @series_id, :search_term => @search_term, :page => @page) %></span>
+                  </li>
+                <% end %>
+              <% end %>
+            </ul>
+          </th>
+        </tr>
+
+        <%# Display entry data %>
+
+
+      </table>
+     
+    </div>
+
+
+
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="col-md-1">right space 2</div>
+</div>
+
+<div class="row" style="height: 100px">
+  <div class="cold-md-12">
+    cold-md-12
+  </div>
+</div>
