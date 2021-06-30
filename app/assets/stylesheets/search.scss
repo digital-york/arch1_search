@@ -7,18 +7,42 @@
     display: flex;
 }
 
-#simple_search_block {
-    height: 350px;
+.inline-btn-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1%;
+}
+
+.form-group {
+    margin: 0;
+}
+
+#simple_search_block, #advanced_search_block {
     background: url('/assets/arch_banner_home.jpg') no-repeat;
     background-size: cover;
     background-position: center top;
+}
+
+#simple_search_block {
+    height: 350px;
+}
+
+#advanced_search_block {
+    height: 450px;
 }
 
 #search_term {
     border-color: black;
     margin-top: 2%;
     border-radius: 4px;
-    width: 88%;
+    width: 100%;
+}
+
+#all_sterms, #exact_sterms, #any_sterms, #none_sterms {
+    border-color: black;
+    margin-top: 2%;
+    border-radius: 4px;
+    width: 100%;
 }
 
 #simple_button {
@@ -38,7 +62,7 @@
     min-width: 200px; 
 }
 
-#start_date {
+#start_date, #end_date {
     border-color: black;
     margin-right: 2%;
     margin-top: 2%;
@@ -46,23 +70,21 @@
     min-width: 80px; 
 }
   
-#end_date {
-    border-color: black;
-    margin-right: 2%;
-    margin-top: 2%;
-    padding: 4px;
-    border-radius: 4px;
-    min-width: 80px; 
-}
-  
-#date_label {
+#date_label, #term_label {
     color: #FFCC00;
     background-color: #403152;
     margin-top: 2%;
     padding: 4px;
     border-radius: 4px;
     height: 34px;
-    min-width: 90px; 
+}
+
+#date_label {
+    min-width: 90px;  
+}
+
+#term_label {
+    min-width: 160px; 
 }
 
 #archival_repository {

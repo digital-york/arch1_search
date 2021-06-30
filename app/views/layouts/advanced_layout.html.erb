@@ -31,17 +31,38 @@
     <div class="container-fluid"> <%# Bootstrap %>
       <%# Note Display the top menu including the links %>
       <div id="top_menu" class="row"></div>
-      <div class="row"  id="simple_search_block"> <%# id="search_row_home" id="search_row_default" %>
+      <div class="row"  id="advanced_search_block"> <%# id="search_row_home" id="search_row_default" %>
         <div class="col-md-3"></div>
         <div class="col-md-6">
           <% search_margin_top = '35px' # search_margin_top = '150px' %>
           <%# <div class="container-flex"> %>
-          <%= form_tag("/search/simple", method: "get", id: "search_form", onsubmit: "return validate_search_field()") do |f| %>
+          <%= form_tag("/search/advanced", method: "get", id: "search_form", onsubmit: "return validate_search_field()") do |f| %>
             <div class="form-row">
               <div class="form-group col-md-10 inline-group">
                 <%# <div class="form-group mb-2"> %>
-                <%= label_tag(:search_term, "Search for", id: "date_label") %>
-                <%= text_field_tag("search_term", @search_term, class: "form-control", placeholder: "Enter keyword(s)...") %>
+                <%= label_tag(:search_term, "All of these words", id: "term_label") %>
+                <%= text_field_tag("all_sterms", @all_sterms, class: "form-control", placeholder: "All of theses words") %>
+              </div>
+            </div>
+	          <div class="form-row">
+              <div class="form-group col-md-10 inline-group">
+                <%# <div class="form-group mb-2"> %>
+                <%= label_tag(:search_term, "Exact word of phrase", id: "term_label") %>
+                <%= text_field_tag("exact_sterms", @exact_sterms, class: "form-control", placeholder: "Excat word or phrase") %>
+              </div>
+            </div>
+	          <div class="form-row">
+              <div class="form-group col-md-10 inline-group">
+                <%# <div class="form-group mb-2"> %>
+                <%= label_tag(:search_term, "Any of these words", id: "term_label") %>
+                <%= text_field_tag("any_sterms", @any_sterms, class: "form-control", placeholder: "Any of these words") %>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-md-10 inline-group">
+                <%# <div class="form-group mb-2"> %>
+                <%= label_tag(:search_term, "None of these words", id: "term_label") %>
+                <%= text_field_tag("none_sterms", @none_sterms, class: "form-control", placeholder: "None these words") %>
               </div>
             </div>
             <div class="form-row">
@@ -66,7 +87,7 @@
             </div>
             <div class="form-group col-sm-12">
               <small id="search_links" class="text-muted">
-                <%= link_to 'Advanced', search_advanced_path(search_term: @search_term) %> search
+                <%= link_to 'Simple', search_simple_path(search_term: @search_term) %> search
               </small>
             </div>
           <% end %> <%# form_tag %>
