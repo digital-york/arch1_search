@@ -36,12 +36,26 @@
         <div class="col-md-6">
           <% search_margin_top = '35px' # search_margin_top = '150px' %>
           <%# <div class="container-flex"> %>
-          <%= form_tag("/search/simple", method: "get", id: "search_form", onsubmit: "return validate_search_field()") do |f| %>
+          <%= form_tag("/search/advanced", method: "get", id: "search_form", onsubmit: "return validate_search_field()") do |f| %>
             <div class="form-row">
               <div class="form-group col-md-10 inline-group">
                 <%# <div class="form-group mb-2"> %>
-                <%= label_tag(:search_term, "Search for", id: "date_label") %>
-                <%= text_field_tag("search_term", @search_term, class: "form-control", placeholder: "Enter keyword(s)...") %>
+                <%= label_tag(:search_term, "All of theses words", id: "date_label") %>
+                <%= text_field_tag("search_all_terms", @search_term, class: "form-control", placeholder: "All of theses words") %>
+              </div>
+            </div>
+	    <div class="form-row">
+              <div class="form-group col-md-10 inline-group">
+                <%# <div class="form-group mb-2"> %>
+                <%= label_tag(:search_term, "Exact word of phrase", id: "date_label") %>
+                <%= text_field_tag("search_exact_terms", @search_term, class: "form-control", placeholder: "Excat word or phrase") %>
+              </div>
+            </div>
+	    <div class="form-row">
+              <div class="form-group col-md-10 inline-group">
+                <%# <div class="form-group mb-2"> %>
+                <%= label_tag(:search_term, "Any of theses words", id: "date_label") %>
+                <%= text_field_tag("search_any_terms", @search_term, class: "form-control", placeholder: "Any of theses words") %>
               </div>
             </div>
             <div class="form-row">
@@ -62,13 +76,14 @@
             </div>
             <div class="form-group col-md-3">
               <%= submit_tag("Search", class: "btn go_button", id: "simple_button") %>
+	      <%= submit_tag("Clear form", class: "btn btn-default", id: 'reset', name: 'reset', type: 'reset') %> 
             </div>
           <% end %> <%# form_tag %>
           <div class="row">
             <div class="col-md-12">
               <small id="search_links" class="text-muted">
-                Switch to <%= link_to 'Default', searches_path(search_term: @search_term) %> or 
-                <%= link_to 'Advanced Search', search_advanced_path(search_term: @search_term) %> interface.
+                Switch to <%= link_to 'Default', searches_path(search_term: @search_term) %> search interface
+                or <%= link_to 'Search with Dates', search_simple_path(search_term: @search_term) %>.
               </small>
             </div>
           </div>

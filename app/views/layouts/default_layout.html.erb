@@ -40,7 +40,9 @@
                   <div class="row">
             <div class="col-md-12">
               <small id="search_links" class="text-muted">
-                Switch to <%= link_to 'Search with Dates', search_simple_path(search_term: @search_term) %> interface
+                Switch to <%= link_to 'Search with Dates', search_simple_path(search_term: @search_term) %> or 
+                <%= link_to 'Advanced Search', search_advanced_path(search_term: @search_term) %> interface.
+              
               </small>
             </div>
           </div>
