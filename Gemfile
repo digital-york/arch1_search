@@ -40,8 +40,6 @@ group :development, :test do
   gem "solr_wrapper"
   gem "spring"
   gem "puma"
-  gem "web-console"
-  gem "xray-rails"
   gem "standardrb"
   gem "pry-byebug"
   gem "pry-rails"
