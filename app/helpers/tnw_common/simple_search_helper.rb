@@ -7,7 +7,13 @@ module TnwCommon
     end
 
     def parse_search_term(search_term:)
-      "(" + search_term.downcase + ")"
+      # Match searching for dates 1340/11/30
+      date = %r{\d{4}/\d{2}/\d{2}}
+      if search_term.match? date
+        "\"#{search_term}\""
+      else
+        "(#{search_term.downcase})"
+      end
     end
 
     # Sets the facet arrays and search results according to the search term
