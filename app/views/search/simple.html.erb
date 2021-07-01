@@ -618,7 +618,7 @@
                    is_referenced_by = t[11]
                    place = t[12]
                    person = t[13]
-                   dates = t[14]
+                   dates = t[14].sort_by { |s| s.scan(/\d+/).join } # Sort by dates digit only
                 %>
 
                 <div style="padding-bottom: 15px">
