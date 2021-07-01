@@ -1,46 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <title>York Archbishops&#39; Registers</title>
-  <%= stylesheet_link_tag "application", media: "all" %>
-  <%= javascript_include_tag "application" %>
-</head>
-
-<body>
-
-<nav class="navbar navbar-inverse navbar-fixed-top" id="top_menu">
-  <div class="container">
-    <div class="navbar-header" id="top_menu">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
-        <span class="sr-only">Toggle navigation</span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-    </div>
-    <div id="navbar" class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li><%= link_to 'Home', home_page_index_path %></li>
-        <li><%= link_to "The Northern Way", northernway_path %></li>
-        <li><%= link_to 'Search', searches_path(:search_term => 'NO_SEARCH') %></li>
-        <li><%= link_to 'Browse', browse_path %></li>
-        <li><%= link_to 'About', about_path %></li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<div class="container-fluid">
-  <%# Note Display the top menu including the links %>
-  <div id="top_menu" class="row"></div>
-  <%= form_tag searches_index_path, :method => 'get', :id => 'search_form', :onsubmit => 'return validate_search_field()' do |f| %>
-    <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the size of the background image here %>
-    <div class="row"
+  <head>
+    <meta charset="UTF-8">
+    <title>York Archbishops&#39; Registers</title>
+    <%= stylesheet_link_tag "application", media: "all" %>
+    <%= javascript_include_tag "application" %>
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top" id="top_menu">
+      <div class="container">
+        <div class="navbar-header" id="top_menu">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><%= link_to 'Home', home_page_index_path %></li>
+            <li><%= link_to "The Northern Way", northernway_path %></li>
+            <li><%= link_to 'Search', searches_path(:search_term => 'NO_SEARCH') %></li>
+            <li><%= link_to 'Browse', browse_path %></li>
+            <li><%= link_to 'About', about_path %></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <div class="container-fluid">
+      <%# Note Display the top menu including the links %>
+      <div id="top_menu" class="row"></div>
+      <%= form_tag searches_index_path, :method => 'get', :id => 'search_form', :onsubmit => 'return validate_search_field()' do |f| %>
+        <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the size of the background image here %>
+        <div class="row"
         <% if @is_home_page == true then %>id="search_row_home"
         <% else %>id="search_row_default"
         <% end %>>
+                  <div class="row">
+            <div class="col-md-12">
+              <small id="search_links" class="text-muted">
+                Switch to <%= link_to 'Search with Dates', search_simple_path(search_term: @search_term) %> interface
+              </small>
+            </div>
+          </div>
         <div class="col-md-3"></div>
         <div class="col-md-6">
           <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the margin_top height here %>
@@ -66,39 +69,34 @@
   <%= yield %>
 
   <hr style="margin: 20px 0px"/>
-  <%# Display footer logos %>
-  <div id="footer" class="row">
-    <div class="col-md-2"></div>
-    <div class="col-md-8">
-      <div class="col-md-3">
-        <a href="#"><%= image_tag 'arch_logo.jpg', :class => 'footer_logo', :style => 'max-width: 160px; margin-top: 10px' %></a>
+        <%# Display footer logos %>
+        <div id="footer" class="row">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <div class="col-md-3">
+              <a href="#"><%= image_tag 'arch_logo.jpg', :class => 'footer_logo', :style => 'max-width: 160px; margin-top: 10px' %></a>
+            </div>
+            <div class="col-md-3">
+              <a href="https://mellon.org/" target="_blank"><%= image_tag 'mellon_logo.svg', :class => 'footer_logo', :style => 'max-width: 180px; margin-top: 20px' %></a>
+            </div>
+            <div class="col-md-3">
+              <a href="http://www.marcfitchfund.org.uk/" target="_blank"><%= image_tag 'marc_fitch_-_logo_0.jpg', :class => 'footer_logo', :style => 'max-width: 140px'  %></a>
+            </div>
+            <div class="col-md-3">
+              <a href="http://www.york.ac.uk/" target="_blank">
+                <%= image_tag 'UOY-Logo-Stacked-shield-Black.png', :class => 'footer_logo', :style => 'max-width: 270px; margin-top: 10px' %></a>
+            </div>
+          </div>
+          <div class="col-md-2"></div>
+          <div style="clear:both"></div>
+        </div>
+        <div style="text-align: center" class="row">
+          <hr style="margin: 20px 0px"/>
+          <div class="col-md-2"></div>
+          <div class="col-md-8"><span style="text-align: center; font-size: 0.8em; margin-top: 30px">University of York, 2016. <a href="http://www.york.ac.uk/about/legal-statements/">Disclaimer</a></span></div>
+          <div class="col-md-2"></div>
+        </div>
       </div>
-      <div class="col-md-3">
-        <a href="https://mellon.org/" target="_blank"><%= image_tag 'mellon_logo.svg', :class => 'footer_logo', :style => 'max-width: 180px; margin-top: 20px' %></a>
-      </div>
-      <div class="col-md-3">
-        <a href="http://www.marcfitchfund.org.uk/" target="_blank"><%= image_tag 'marc_fitch_-_logo_0.jpg', :class => 'footer_logo', :style => 'max-width: 140px'  %></a>
-      </div>
-      <div class="col-md-3">
-        <a href="http://www.york.ac.uk/" target="_blank">
-        <%= image_tag 'UOY-Logo-Stacked-shield-Black.png', :class => 'footer_logo', :style => 'max-width: 270px; margin-top: 10px' %></a>
-      </div>
-    </div>
-    <div class="col-md-2"></div>
-    <div style="clear:both"></div>
-  </div>
-
-  <div style="text-align: center" class="row">
-    <hr style="margin: 20px 0px"/>
-    <div class="col-md-2"></div>
-    <div class="col-md-8"><span style="text-align: center; font-size: 0.8em; margin-top: 30px">University of York, 2016. <a href="http://www.york.ac.uk/about/legal-statements/">Disclaimer</a></span></div>
-    <div class="col-md-2"></div>
-  </div>
-
-</div>
-
-<%= render 'home_page/analytics' %>
-
-</body>
-
-</html>
+      <%= render 'home_page/analytics' %>
+    </body>
+  </html>

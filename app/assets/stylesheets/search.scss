@@ -1,0 +1,85 @@
+// Place all the styles related to the search controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+
+.inline-group {
+    display: flex;
+}
+
+#simple_search_block {
+    height: 350px;
+    background: url('/assets/arch_banner_home.jpg') no-repeat;
+    background-size: cover;
+    background-position: center top;
+}
+
+#search_term {
+    border-color: black;
+    margin-top: 2%;
+    border-radius: 4px;
+    width: 88%;
+}
+
+#simple_button {
+    width: auto;
+    min-width: 90px;
+    border-color: black;
+    margin-top: 2%;
+    border-radius: 4px;
+}
+
+#search_links {
+    background-color: #FFCC00;
+    margin-top: 2%;
+    padding: 4px;
+    border-radius: 4px;
+    height: 34px;
+    min-width: 200px; 
+}
+
+#start_date {
+    border-color: black;
+    margin-right: 2%;
+    margin-top: 2%;
+    padding: 4px;
+    min-width: 80px; 
+}
+  
+#end_date {
+    border-color: black;
+    margin-right: 2%;
+    margin-top: 2%;
+    padding: 4px;
+    border-radius: 4px;
+    min-width: 80px; 
+}
+  
+#date_label {
+    color: #FFCC00;
+    background-color: #403152;
+    margin-top: 2%;
+    padding: 4px;
+    border-radius: 4px;
+    height: 34px;
+    min-width: 90px; 
+}
+
+#archival_repository {
+    border-color: black;
+    margin-right: 2%;
+    margin-top: 2%;
+    padding: 4px;
+    border-radius: 4px;
+    min-width: 100px; 
+}
+
+#archival_repository_label {
+    color: #FFCC00;
+    background-color: #403152;
+    margin-top: 2%;
+    padding: 4px;
+    border-radius: 4px;
+    height: 34px;
+    min-width: 90px; 
+}
