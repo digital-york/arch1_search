@@ -518,6 +518,8 @@ module TnwCommon
             temp = @search_term.delete('\"\+\-\!\?\*\~\&\|\(\)') #.gsub(/\s+/, ".*")
             # Split each term for highlight FixMe: support for "word phrases"
             temp.split.each do |t|
+              next unless t.length > 3 # Skip short words e.g. "of, at, in"
+
               str = str.gsub(/#{t}/i) do |term|
                 "<span class=\'highlight_text\'>#{term}</span>"
               end
