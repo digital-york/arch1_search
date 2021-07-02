@@ -1,0 +1,48 @@
+<% unless @tna_places.blank? %>
+  <% @tna_places.each do |tna_place| %>
+    <tr>
+      <th>Place:</th>
+      <td></td>
+    </tr>
+    <% unless tna_place['place_as_written'].blank? %>
+      <tr>
+        <th class="pad_th_person_place">
+          As written
+        </th>
+        <td>
+          <%== tna_place['place_as_written'][0] %>
+        </td>
+      </tr>
+    <% end %>
+    <% unless tna_place['place_same_as'].blank? %>
+      <tr>
+        <th class="pad_th_person_place">
+          Place Authority
+        </th>
+        <td>
+          <%== tna_place['place_same_as'][0] %>
+        </td>
+      </tr>
+    <% end %>
+    <% unless tna_place['place_role'].blank? %>
+      <tr>
+        <th class="pad_th_person_place">
+          Role
+        </th>
+        <td>
+          <%== tna_place['place_role'][0] %>
+        </td>
+      </tr>
+    <% end %>
+    <% unless tna_place['place_note'].blank? %>
+      <tr>
+        <th class="pad_th_person_place">
+          Note
+        </th>
+        <td>
+          <%== tna_place['place_note'][0] %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+<% end %>
