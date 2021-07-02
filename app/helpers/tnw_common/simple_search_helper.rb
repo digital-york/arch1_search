@@ -105,10 +105,11 @@ module TnwCommon
         # if the search has come from the places browse, limit to searching for places
         q = if sub == "place"
           # q = 'has_model_ssim:RelatedPlace AND place_same_as_search:"' + @search_term.downcase + '"'
-          "has_model_ssim:RelatedPlace AND place_same_as_search:" + search_term2
+          # Note Solr place_same_as_search filed will only match exact filed content. Otherwise returns nothing. 
+          "has_model_ssim:RelatedPlace AND place_same_as_search:#{search_term2}"
         else
           # q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_as_written_search:*#{search_term2}*)"
-          "has_model_ssim:RelatedPlace AND (place_same_as_search:#{search_term2} or
+          "has_model_ssim:RelatedPlace AND (place_same_as_new_tesim:#{search_term2} or
                                                       place_role_search:#{search_term2} or
                                                       place_type_search:#{search_term2} or
                                                       place_note_search:#{search_term2} or
