@@ -1,0 +1,12 @@
+<% unless @document_json["summary_tesim"].blank? %>
+  <tr>
+    <th>Summary:</th>
+    <td>
+      <% @document_json["summary_tesim"].each do |summary| %>
+        <div class="pad_multi_element">
+          <%== summary %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

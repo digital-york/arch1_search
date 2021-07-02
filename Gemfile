@@ -28,6 +28,7 @@ gem 'sqlite3'
 gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier', '>= 1.3.0'
+gem 'tnw_common', git: 'https://github.com/digital-york/tnw_common', branch: 'tna_ui'
 
 group :development, :test do
   gem 'brakeman'
