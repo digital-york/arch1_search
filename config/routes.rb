@@ -37,6 +37,7 @@ Rails.application.routes.draw do
 
   get 'browse/index'
   get 'browse/registers'
+  get 'browse/departments'
   get 'browse/people'
   get 'browse/places'
   get 'browse/groups'
