@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/digital-york/tnw_common
-  revision: 6d2c0c36345f9dbaf36d30c191696427125e5820
-  branch: tna_ui
+  revision: 7f9d1375483321641a7cb89696faea487cf3a0a0
+  branch: development
   specs:
     tnw_common (0.1.0)
       rsolr
@@ -354,4 +354,4 @@ RUBY VERSION
    ruby 2.5.3p105
 
 BUNDLED WITH
-   1.17.3
+   2.2.6
