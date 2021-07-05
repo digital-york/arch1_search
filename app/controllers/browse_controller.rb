@@ -85,7 +85,16 @@ class BrowseController < ApplicationController
     tna_search = TnwCommon::Tna::TnaSearch.new(solr_server)
     begin
       reset_session_variables
-      @department_list = tna_search.get_all_departments()
+
+      # if no department_id provided, display all departments
+      if params[:department_id].blank?
+        @department_list = tna_search.get_all_departments()
+      else
+        session[:department_id] = params[:department_id]
+        session[:department_name] = tna_search.get_department_desc(session[:department_id])
+
+        @series_list = tna_search.get_all_series(params[:department_id])
+      end
     rescue => error
       log_error(__method__, __FILE__, error)
       raise

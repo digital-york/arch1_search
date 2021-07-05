@@ -31,57 +31,31 @@
       </div>
 
     <% else %>
-      <h1><%= session['register_name'] %></h1>
+      <div class="row">
+        <div class="col-md-12">
+          <h1><%= session['department_name'] %><span style="float: right">
+              <%= link_to '', browse_departments_path, class: 'fa fa-chevron-circle-left fa-2x' %>
+              </span></h1>
+          <br/><br/><br/>
+          <% @series_list and @series_list.each_with_index do |series, index| %>
+            <div class="col-md-3 registers-grid">
+              <%= link_to browse_departments_path(series_id: series[0]) do %>
+                <h2><%= series[1][0] %></h2>
+                <p><%= series[2][0] %></p>
+              <% end %>
+            </div>
+            <% num = index + 1
+               if num.modulo(4).zero? %>
+              </div>
+              <div style="clear: both;"></div>
+              <div class="col-md-12">
+            <% end %>
+          <%
+            end %>
+          </div>
+          <div style="clear: both;"></div>
 
-      <br/>
-      <%= form_tag(browse_registers_path, method: 'get', id: 'choose_folio') do %>
-        <span>Showing <%= session[:folio].to_i %> of <%= session[:length] %></span>
-
-        <%= hidden_field_tag(:register_id, session[:register_id]) %>
-        <%= select_tag 'folio', options_for_select(@folio_list, session[:folio]), :class => 'choose_folio' %>
-        &nbsp;
-        <%= link_to '', {controller: 'iiif', action: 'download', folio_id: get_id(session[:folio_id])}, class: 'fa fa-download fa-2x', :title => 'Download this image' %>
-        &nbsp;
-        <%= link_to '', browse_registers_path, class: 'fa fa-chevron-circle-left fa-2x', :title => 'Go back' %>
-
-        <br/><br/>
-
-        <% unless session[:entries_exist].nil? %>
-          <p>Entries on this folio have been indexed. View <%= link_to 'Entries', '#entries' %> at the bottom of
-            this page.</p>
-        <% end %>
-
-        <p style="float:left">
-          <% unless session[:first_folio_id] == session[:folio_id] %>
-            <%= link_to '', browse_registers_path(register_id: session['register_id'], folio: session['folio'].to_i - 1), :class => 'fa fa-long-arrow-alt-left fa-3x' %>
-          <% end %>
-          &nbsp;
-        </p>
-        <p style="float:right">
-          <% unless session[:last_folio_id] == session[:folio_id] %>
-            <%= link_to '', browse_registers_path(register_id: session['register_id'], folio: session['folio'].to_i + 1), :class => 'fa fa-long-arrow-alt-right fa-3x' %>
-          <% end %>
-        </p>
-
-
-      <% end %>
-
-      <% tile_sources = get_tile_sources_for_folio(session['folio_id']) %>
-      <% if session['alt_image'].blank? %>
-        <div style="margin-top: 40px; text-align: center">
-        </div>
-      <% else %>
-        <div style="margin-top: 20px; text-align: center">
-          <em><%= link_to "View UV image", "#", :onclick => "popup('/image_zoom_large/alt', '#{session['folio_id']}'); return false" %></em>
-          <%= link_to image_tag('magnifying_glass.png', :alt => 'magnifying glass icon', :class => 'icon', :style => 'position: relative; top: 7px', :title => 'Image zoom'), '#', :onclick => "popup('/image_zoom_large/alt', '#{session['folio_id']}'); return false", :title => "" %>
-        </div>
-      <% end %>
-
-      <div style="padding-top: 25px">
-        <%= openseadragon_picture_tag tile_sources.reverse %>
-      </div>
-
-      <%= render 'entries' %>
+          </div>
     <% end %>
   </div>
   <div class="col-md-2"></div>
