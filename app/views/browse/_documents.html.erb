@@ -1,0 +1,39 @@
+<% unless @document_list.nil? or @document_list.length() == 0 %>
+  <a id="documents"></a>
+  <h2>Documents</h2>
+
+  <div class='tab1'>
+
+    <table>
+
+      <%# Display tabs for documents %>
+      <tr>
+        <th colspan='2' id='entry_menu' style="background-color: grey">
+          <ul>
+            <%# Display 1 - 9 %>
+            <% @document_list.each do |document| %>
+              <%
+                document_id = document[:id]
+                document_reference = document[:reference]
+              %>
+              <% if document_id == @current_document['id'] %>
+                <li><span class='highlight'><%= document_reference %></span></li>
+              <% else %>
+                <li>
+                  <span class='nohighlight'><%= link_to document_reference, browse_departments_path(:department_id => session[:department_id], :series => session[:series_id], :document_id => document_id) + '#documents' %></span>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        </th>
+      </tr>
+
+      <tr>
+        <th style="width: 30%; padding-top: 15px">Reference:</th>
+        <td style="padding-top: 15px"><%= @current_document %></td>
+      </tr>
+
+    </table>
+  </div>
+<% end %>
+

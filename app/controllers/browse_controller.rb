@@ -99,6 +99,13 @@ class BrowseController < ApplicationController
         else
           session[:series_id] = params['series']
         end
+
+        @document_list = tna_search.get_ordered_documents_from_series(session[:series_id])
+        if params['document_id'].nil? or params['document_id'] == ''
+            @current_document = @document_list.length()==0? {}: tna_search.get_document_json(@document_list[0][:id])
+        else
+            @current_document = tna_search.get_document_json(params['document_id'])
+        end
       end
     rescue => error
       log_error(__method__, __FILE__, error)
