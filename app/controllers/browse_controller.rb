@@ -94,6 +94,11 @@ class BrowseController < ApplicationController
         session[:department_name] = tna_search.get_department_desc(session[:department_id])
 
         @series_list = tna_search.get_all_series(params[:department_id])
+        if params['series'].nil? or params['series'] == ''
+          session[:series_id] = @series_list[0][1]
+        else
+          session[:series_id] = params['series']
+        end
       end
     rescue => error
       log_error(__method__, __FILE__, error)

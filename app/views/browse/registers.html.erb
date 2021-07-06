@@ -55,7 +55,7 @@
             <% end %>
         <% else %>
             <h1><%= session['register_name'] %></h1>
-
+<%=@folio_list %>
             <br/>
             <%= form_tag(browse_registers_path, method: 'get', id: 'choose_folio') do %>
                 <span>Showing <%= session[:folio].to_i %> of <%= session[:length] %></span>

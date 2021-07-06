@@ -19,33 +19,6 @@
             </div>
             <% num = index + 1
                if num.modulo(4).zero? %>
-                </div>
-                <div style="clear: both;"></div>
-                <div class="col-md-12">
-            <% end %>
-          <%
-            end %>
-          </div>
-          <div style="clear: both;"></div>
-
-      </div>
-
-    <% else %>
-      <div class="row">
-        <div class="col-md-12">
-          <h1><%= session['department_name'] %><span style="float: right">
-              <%= link_to '', browse_departments_path, class: 'fa fa-chevron-circle-left fa-2x' %>
-              </span></h1>
-          <br/><br/><br/>
-          <% @series_list and @series_list.each_with_index do |series, index| %>
-            <div class="col-md-3 registers-grid">
-              <%= link_to browse_departments_path(series_id: series[0]) do %>
-                <h2><%= series[1][0] %></h2>
-                <p><%= series[2][0] %></p>
-              <% end %>
-            </div>
-            <% num = index + 1
-               if num.modulo(4).zero? %>
               </div>
               <div style="clear: both;"></div>
               <div class="col-md-12">
@@ -56,6 +29,37 @@
           <div style="clear: both;"></div>
 
           </div>
+
+    <% else %>
+      <h1><%= session['department_name'] %></h1>
+      <br/>
+      <%= form_tag(browse_departments_path, method: 'get', id: 'choose_series') do %>
+        <span>Showing <%= session[:series_index] %> of <%= session[:series_length] %></span>
+
+        <%= hidden_field_tag(:department_id, session[:department_id]) %>
+        <%= select_tag 'series', options_for_select(@series_list, session[:series_id]), :class => 'choose_folio' %>
+        &nbsp;
+        <%= link_to '', browse_departments_path, class: 'fa fa-chevron-circle-left fa-2x', :title => 'Go back' %>
+
+        <br/><br/>
+
+        <% unless session[:documents_exist].nil? %>
+          <p>Documents on this series have been indexed. View entries at the bottom of
+            this page.</p>
+        <% end %>
+
+        <p style="float:left">
+          <% unless session[:first_series_id] == session[:series_id] %>
+            <%= link_to '', browse_departments_path(department_id: session['department_id'], series: session['series_index'].to_i - 1), :class => 'fa fa-long-arrow-alt-left fa-3x' %>
+          <% end %>
+          &nbsp;
+        </p>
+        <p style="float:right">
+          <% unless session[:last_series_id] == session[:series_id] %>
+            <%= link_to '', browse_departments_path(department_id: session['department_id'], series: session['series_index'].to_i + 1), :class => 'fa fa-long-arrow-alt-right fa-3x' %>
+          <% end %>
+        </p>
+      <% end %>
     <% end %>
   </div>
   <div class="col-md-2"></div>
