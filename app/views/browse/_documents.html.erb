@@ -1,6 +1,5 @@
 <% unless @document_list.nil? or @document_list.length() == 0 %>
   <a id="documents"></a>
-  <h2>Documents</h2>
 
   <div class='tab1'>
 
@@ -10,7 +9,6 @@
       <tr>
         <th colspan='2' id='entry_menu' style="background-color: grey">
           <ul>
-            <%# Display 1 - 9 %>
             <% @document_list.each do |document| %>
               <%
                 document_id = document[:id]
@@ -20,7 +18,7 @@
                 <li><span class='highlight'><%= document_reference %></span></li>
               <% else %>
                 <li>
-                  <span class='nohighlight'><%= link_to document_reference, browse_departments_path(:department_id => session[:department_id], :series => session[:series_id], :document_id => document_id) + '#documents' %></span>
+                  <span class='nohighlight'><%= link_to document_reference, browse_departments_path(:department_id => @department_id, :series => @series_id, :document_id => document_id) + '#documents' %></span>
                 </li>
               <% end %>
             <% end %>
@@ -29,9 +27,90 @@
       </tr>
 
       <tr>
-        <th style="width: 30%; padding-top: 15px">Reference:</th>
-        <td style="padding-top: 15px"><%= @current_document %></td>
+        <td colspan="2">
+          <%= @current_document %>
+        </td>
       </tr>
+
+      <!-- Reference -->
+      <tr>
+        <th style="width: 30%; padding-top: 15px">Reference:</th>
+        <td style="padding-top: 15px"><%= @current_document['reference_tesim'][0] %></td>
+      </tr>
+
+      <!-- Summary -->
+      <%unless @current_document['summary_tesim'].nil? or @current_document['summary_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Summary:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['summary_tesim'].each do |s| %>
+              <%= s %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- Note -->
+      <%unless @current_document['note_tesim'].nil? or @current_document['note_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Note:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['note_tesim'].each do |n| %>
+              <%= n %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- language -->
+      <%unless @current_document['language_facet_ssim'].nil? or @current_document['language_facet_ssim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Language:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['language_facet_ssim'].each do |l| %>
+              <%= l %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- addressee -->
+      <%unless @current_document['tna_addressees_tesim'].nil? or @current_document['tna_addressees_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Addressee:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['tna_addressees_tesim'].each do |a| %>
+              <%= a %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- Sender -->
+      <%unless @current_document['tna_senders_tesim'].nil? or @current_document['tna_senders_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Sender:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['tna_senders_tesim'].each do |s| %>
+              <%= s %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- Person -->
+      <%unless @current_document['tna_persons_tesim'].nil? or @current_document['tna_persons_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Person:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['tna_persons_tesim'].each do |p| %>
+              <%= p %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+
 
     </table>
   </div>

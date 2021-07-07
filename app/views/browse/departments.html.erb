@@ -31,13 +31,13 @@
           </div>
 
     <% else %>
-      <h1><%= session['department_name'] %></h1>
+      <h1><%= @department_name %></h1>
       <br/>
       <%= form_tag(browse_departments_path, method: 'get', id: 'choose_series') do %>
-        <span>Showing <%= session[:series_index] %> of <%= session[:series_length] %></span>
+        <span>Showing <%= @series_index.to_i+1 %> of <%= @series_list.length() %></span>
 
-        <%= hidden_field_tag(:department_id, session[:department_id]) %>
-        <%= select_tag 'series', options_for_select(@series_list, session[:series_id]), :class => 'choose_folio' %>
+        <%= hidden_field_tag(:department_id, @department_id) %>
+        <%= select_tag 'series', options_for_select(@series_list, @series_id), :class => 'choose_folio' %>
         &nbsp;
         <%= link_to '', browse_departments_path, class: 'fa fa-chevron-circle-left fa-2x', :title => 'Go back' %>
 
@@ -49,14 +49,14 @@
         <% end %>
 
         <p style="float:left">
-          <% unless session[:first_series_id] == session[:series_id] %>
-            <%= link_to '', browse_departments_path(department_id: session['department_id'], series: session['series_index'].to_i - 1), :class => 'fa fa-long-arrow-alt-left fa-3x' %>
+          <% unless @series_index.to_i == 0 %>
+            <%= link_to '', browse_departments_path(department_id: @department_id, series: @series_list[@series_index.to_i-1][1]), :class => 'fa fa-long-arrow-alt-left fa-3x' %>
           <% end %>
           &nbsp;
         </p>
         <p style="float:right">
-          <% unless session[:last_series_id] == session[:series_id] %>
-            <%= link_to '', browse_departments_path(department_id: session['department_id'], series: session['series_index'].to_i + 1), :class => 'fa fa-long-arrow-alt-right fa-3x' %>
+          <% unless @series_index.to_i == @series_list.length()-1 %>
+            <%= link_to '', browse_departments_path(department_id: session['department_id'], series: @series_list[@series_index.to_i+1][1]), :class => 'fa fa-long-arrow-alt-right fa-3x' %>
           <% end %>
         </p>
       <% end %>

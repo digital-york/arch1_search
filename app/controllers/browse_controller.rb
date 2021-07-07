@@ -9,6 +9,15 @@ class BrowseController < ApplicationController
     reset_session_variables
   end
 
+  def get_series_index(series_id, series_list)
+    series_list.each_with_index do |s, index|
+      if s[1] == series_id
+        return index
+      end
+    end
+    0
+  end
+
   # browse/registers
   def registers
     begin
@@ -90,17 +99,21 @@ class BrowseController < ApplicationController
       if params[:department_id].blank?
         @department_list = tna_search.get_all_departments()
       else
-        session[:department_id] = params[:department_id]
-        session[:department_name] = tna_search.get_department_desc(session[:department_id])
+        @department_id = params[:department_id]
+        @department_name = tna_search.get_department_desc(session[:department_id])
 
         @series_list = tna_search.get_all_series(params[:department_id])
-        if params['series'].nil? or params['series'] == ''
-          session[:series_id] = @series_list[0][1]
-        else
-          session[:series_id] = params['series']
+        unless @series_list.nil? or @series_list.length()==0
+          @first_series_id = @series_list[0][1]
+          @last_series_id = @series_list[@series_list.length()-1][1]
         end
-
-        @document_list = tna_search.get_ordered_documents_from_series(session[:series_id])
+        if params['series'].nil? or params['series'] == ''
+          @series_id = @series_list[0][1]
+        else
+          @series_id = params['series']
+        end
+        @series_index = get_series_index(@series_id, @series_list)
+        @document_list = tna_search.get_ordered_documents_from_series(@series_id)
         if params['document_id'].nil? or params['document_id'] == ''
             @current_document = @document_list.length()==0? {}: tna_search.get_document_json(@document_list[0][:id])
         else
