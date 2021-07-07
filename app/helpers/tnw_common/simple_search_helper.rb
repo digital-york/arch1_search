@@ -16,6 +16,21 @@ module TnwCommon
       end
     end 
 
+    def combine_advanced_search_terms(all_sterms:, exact_sterms:, any_sterms:, none_sterms:)
+      search_term = ""
+      search_term += "(#{all_sterms.downcase.split.join(' && ')})" unless all_sterms.blank?
+      unless exact_sterms.blank? || any_sterms.blank?
+        search_term += " && " unless search_term.delete(" ").blank?
+      end
+      search_term += "(\"#{exact_sterms.downcase}\")" unless exact_sterms.blank?
+      if (!all_sterms.blank? || !exact_sterms.blank?) && !any_sterms.blank?
+        search_term += " && "
+      end
+      search_term += "(#{any_sterms.downcase.split.join(' || ')})" unless any_sterms.blank?
+      search_term += " !#{none_sterms.downcase.split.join(' !')}" unless none_sterms.blank?
+      "(#{search_term})"
+    end
+
     # Sets the facet arrays and search results according to the search term
     def set_search_result_arrays(sub = nil)
       # Issue: Can this be simplyfied? Required for add_facet_to_hash and facet_hash
@@ -37,7 +52,16 @@ module TnwCommon
       # else
       #   "(*" + @search_term.downcase + "*)"
       # end
-      search_term2 = parse_search_term(search_term: @search_term)
+      if sub == "advanced"
+        search_term2 = combine_advanced_search_terms(
+          all_sterms: @all_sterms,
+          exact_sterms: @exact_sterms,
+          any_sterms: @any_sterms,
+          none_sterms: @none_sterms
+        )
+      else
+        search_term2 = parse_search_term(search_term: @search_term) unless @search_term.blank?
+      end
       # Filter query for the entry (section types and subject facets), used when looping through the entries
       fq_entry = filter_query
       fq_date = date_filter(start_date: @start_date, end_date: @end_date)
@@ -50,6 +74,7 @@ module TnwCommon
           "has_model_ssim:Entry AND subject_search:" + search_term2
         else
           # q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
+          # Solr field issue summary_search and summary_tesim term not matched in 1st field despite same content
           "has_model_ssim:Entry AND (entry_type_search:#{search_term2} or section_type_search:#{search_term2} or summary_search:#{search_term2} or marginalia_search:#{search_term2} or subject_search:#{search_term2} or language_search:#{search_term2} or note_search:#{search_term2} or editorial_note_search:#{search_term2} or is_referenced_by_search:#{search_term2} or summary_tesim:#{search_term2} or entry_person_same_as_facet_ssim:#{search_term2} or entry_place_same_as_facet_ssim:#{search_term2} or suggest:#{search_term2} )"
         end
         num = count_query(q)
