@@ -125,8 +125,8 @@ class SearchesController < ApplicationController
         @series_id = params[:series_id]
         @document_list = tna_search.get_ordered_documents_from_series(params[:series_id])
         @document_json = tna_search.get_document_json(@document_id)
-        @tna_place_of_datings = JSON.parse(tna_search.get_place_of_datings(@document_id))
-        @tna_places = JSON.parse(tna_search.get_tna_places(@document_id))
+        @tna_place_of_datings = tna_search.get_place_of_datings(@document_id)
+        @tna_places = tna_search.get_tna_places(@document_id)
         @search_term = params[:search_term]
         @page = params[:page]
 
