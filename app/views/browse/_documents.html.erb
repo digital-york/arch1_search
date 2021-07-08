@@ -28,7 +28,7 @@
 
       <tr>
         <td colspan="2">
-          <%= @current_document %>
+
         </td>
       </tr>
 
@@ -125,6 +125,18 @@
           <%= render :partial => 'document_place_details', :locals => {:p => p} %>
         <% end %>
       <% end %>
+
+      <!-- dates -->
+      <!-- Person -->
+      <%unless @dates.nil? or @dates.length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Dates:</th>
+          <td></td>
+        </tr>
+        <% @dates.each do |d| %>
+          <%= render :partial => 'document_date', :locals => {:d => d} %>
+        <% end %>
+      <%end %>
     </table>
   </div>
 <% end %>
