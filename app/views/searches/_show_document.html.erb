@@ -1,0 +1,107 @@
+<div class="row">
+  <div class="col-md-12">
+    11<%= @document_list %>11<br/><br/>
+    22<%= @document_json %>22
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <%# Display the document title and the 'go back' arrow %>
+  <div class="col-md-10" id="folio_title">
+    <%== @document_json["reference_tesim"][0] unless @document_json["reference_tesim"].blank? %>
+    &nbsp;
+    <a href="<%= searches_path(:search_term => @search_term, :page => @page) %>" title="Return to search results">
+      <span class="fa fa-chevron-circle-left fa-1x"></span>
+    </a>
+  </div>
+
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row" style="margin-top: 0px">
+
+  <div class="col-md-1"></div>
+
+  <div class="col-md-10" id='form_frame'>
+
+    <div class='tab1'>
+      <table>
+        <%# Display tabs for documents %>
+        <tr>
+          <th colspan='2' id='entry_menu' style="background-color: grey">
+            <ul>
+              <%# Display 1 - 9 %>
+              <% @document_list.each do |document| %>
+                <%
+                  document_id = document[:id]
+                  document_ref = document[:reference]
+                %>
+                <% if document_id == @document_id %>
+                  <li><span class='highlight'><%= document_ref %></span></li>
+                <% else %>
+                  <li>
+                    <span class='nohighlight'><%= link_to document_ref, searches_show_path(:document_id => document_id, :series_id => @series_id, :search_term => @search_term, :page => @page) %></span>
+                  </li>
+                <% end %>
+              <% end %>
+            </ul>
+          </th>
+        </tr>
+
+        <%# Display document data %>
+        <%# Document reference %>
+        <%= render 'document_reference' %>
+
+        <%# Document type %>
+        <%= render 'document_type' %>
+
+        <%# Document summary %>
+        <%= render 'document_summary' %>
+
+        <%# Document note %>
+        <%= render 'document_note' %>
+
+        <%# Document publication %>
+        <%= render 'document_publication' %>
+
+        <%# Document date %>
+        <%= render 'document_dates' %>
+
+        <%# Document place of dating %>
+        <%= render 'document_place_of_dating' %>
+        <%# Document place  %>
+        <%= render 'document_place' %>
+
+        <%# Place same as %>
+        <%#= render 'place_same_as' %>
+        <%# Place as written %>
+        <%#= render 'place_as_written' %>
+
+        <%# Document subject %>
+        <%= render 'document_subject' %>
+
+        <%# Document language %>
+        <%= render 'document_language' %>
+
+        <%# Document addressee %>
+        <%= render 'document_addressee' %>
+
+        <%# Document sender %>
+        <%= render 'document_sender' %>
+
+        <%# Document person %>
+        <%= render 'document_person' %>
+      </table>
+
+    </div>
+
+
+  </div>
+
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row" style="height: 100px">
+  <div class="cold-md-12">
+  </div>
+</div>

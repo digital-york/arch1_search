@@ -1,4 +1,6 @@
-# added (ja)
+require 'tnw_common/solr/solr_query'
+require 'tnw_common/tna/tna_search'
+
 class BrowseController < ApplicationController
 
   layout 'default_layout'
@@ -76,6 +78,29 @@ class BrowseController < ApplicationController
       raise
     end
   end
+
+  # browse/departments
+  def departments
+    solr_server = TnwCommon::Solr::SolrQuery.new(SOLR[Rails.env]['url'])
+    tna_search = TnwCommon::Tna::TnaSearch.new(solr_server)
+    begin
+      reset_session_variables
+
+      # if no department_id provided, display all departments
+      if params[:department_id].blank?
+        @department_list = tna_search.get_all_departments()
+      else
+        session[:department_id] = params[:department_id]
+        session[:department_name] = tna_search.get_department_desc(session[:department_id])
+
+        @series_list = tna_search.get_all_series(params[:department_id])
+      end
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      raise
+    end
+  end
+
 
   # browse/people
   def people
@@ -231,6 +256,13 @@ class BrowseController < ApplicationController
     session[:all] = nil
     session[:folio_image] = nil
     session[:alt_image] = nil
+
+    session[:department] = nil
+    session[:series] = nil
+    session[:series_id] = nil
+    session[:first_series_id] = nil
+    session[:last_series_id] = nil
+    session[:department_name] = nil
   end
 
   #whitelist params

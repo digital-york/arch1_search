@@ -1,0 +1,12 @@
+<% unless @document_json["date_ssim"].blank? %>
+  <tr>
+    <th>Date:</th>
+    <td>
+      <% @document_json["date_ssim"].each do |date| %>
+        <div class="pad_multi_element">
+          <%== date %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

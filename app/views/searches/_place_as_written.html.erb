@@ -1,0 +1,12 @@
+<% unless @document_json["place_as_written_tesim"].blank? %>
+  <tr>
+    <th>Place as written:</th>
+    <td>
+      <% @document_json["place_as_written_tesim"].each do |place| %>
+        <div class="pad_multi_element">
+          <%== place %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

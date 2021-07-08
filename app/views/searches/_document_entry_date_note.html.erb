@@ -1,0 +1,12 @@
+<% unless @document_json["document_type_tesim"].blank? %>
+  <tr>
+    <th>Document Type:</th>
+    <td>
+      <% @document_json["document_type_tesim"].each do |document_type| %>
+        <div class="pad_multi_element">
+          <%== document_type %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

@@ -1,0 +1,48 @@
+<% unless @tna_place_of_datings.blank? %>
+  <% @tna_place_of_datings.each do |place_of_dating| %>
+    <tr>
+      <th>Place:</th>
+      <td></td>
+    </tr>
+    <% unless place_of_dating['place_as_written'].blank? %>
+      <tr>
+        <th class="pad_th_person_place">
+          As written
+        </th>
+        <td>
+          <%== place_of_dating['place_as_written'][0]%>
+        </td>
+      </tr>
+    <% end %>
+    <% unless place_of_dating['place_same_as'].blank? %>
+      <tr>
+        <th class="pad_th_person_place">
+          Place Authority
+        </th>
+        <td>
+          <%== place_of_dating['place_same_as'][0]%>
+        </td>
+      </tr>
+    <% end %>
+    <% unless place_of_dating['place_role'].blank? %>
+      <tr>
+        <th class="pad_th_person_place">
+          Role
+        </th>
+        <td>
+          <%== place_of_dating['place_role'][0] %>
+        </td>
+      </tr>
+    <% end %>
+    <% unless place_of_dating['place_note'].blank? %>
+      <tr>
+        <th class="pad_th_person_place">
+          Note
+        </th>
+        <td>
+          <%== place_of_dating['place_note'][0] %>
+        </td>
+      </tr>
+    <% end %>
+  <% end %>
+<% end %>
