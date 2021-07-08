@@ -7,7 +7,10 @@ Rails.application.routes.draw do
 
   resources :searches
 
+  
+  get 'search' => 'search#simple'
   get 'search/simple'
+  get 'search/advanced'
   get 'search/show'
   resources :search
   
