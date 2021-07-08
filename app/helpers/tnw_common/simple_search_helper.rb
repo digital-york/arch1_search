@@ -19,11 +19,11 @@ module TnwCommon
     def combine_advanced_search_terms(all_sterms:, exact_sterms:, any_sterms:, none_sterms:)
       search_term = ""
       search_term += "(#{all_sterms.downcase.split.join(' && ')})" unless all_sterms.blank?
-      unless exact_sterms.blank? || any_sterms.blank?
+      unless all_sterms.blank? || (exact_sterms.blank? && any_sterms.blank?)
         search_term += " && " unless search_term.delete(" ").blank?
       end
       search_term += "(\"#{exact_sterms.downcase}\")" unless exact_sterms.blank?
-      if (!all_sterms.blank? || !exact_sterms.blank?) && !any_sterms.blank?
+      unless exact_sterms.blank? || any_sterms.blank?
         search_term += " && "
       end
       search_term += "(#{any_sterms.downcase.split.join(' || ')})" unless any_sterms.blank?
