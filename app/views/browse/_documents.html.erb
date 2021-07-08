@@ -110,9 +110,21 @@
         </tr>
       <%end %>
 
+      <!-- Places -->
+      <%unless @place_of_datings.nil? and @tna_places.nil?%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Places:</th>
+          <td></td>
+        </tr>
 
+        <% @place_of_datings.each do |p| %>
+          <%= render :partial => 'document_place_details', :locals => {:p => p} %>
+        <% end %>
 
+        <% @tna_places.each do |p| %>
+          <%= render :partial => 'document_place_details', :locals => {:p => p} %>
+        <% end %>
+      <% end %>
     </table>
   </div>
 <% end %>
-

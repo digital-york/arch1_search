@@ -119,6 +119,10 @@ class BrowseController < ApplicationController
         else
             @current_document = tna_search.get_document_json(params['document_id'])
         end
+        unless @current_document.nil? || @current_document == '{}'
+          @place_of_datings = tna_search.get_place_of_datings(@current_document['id'])
+          @tna_places = tna_search.get_tna_places(@current_document['id'])
+        end
       end
     rescue => error
       log_error(__method__, __FILE__, error)
