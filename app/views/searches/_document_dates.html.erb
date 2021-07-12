@@ -1,12 +1,48 @@
-<% unless @document_json["date_ssim"].blank? %>
+<%unless @dates.nil? or @dates.length()==0%>
   <tr>
-    <th>Date:</th>
-    <td>
-      <% @document_json["date_ssim"].each do |date| %>
-        <div class="pad_multi_element">
-          <%== date %>
-        </div>
-      <% end %>
-    </td>
+    <th style="width: 30%; padding-top: 15px">Dates:</th>
+    <td></td>
   </tr>
-<% end %>
+  <% @dates.each do |d| %>
+    <% unless d.nil? %>
+      <% unless d[:date].blank? %>
+        <tr>
+          <th class="pad_th_person_place">
+            Date
+          </th>
+          <td>
+            <% d[:date].each do |current_date| %>
+              <%= current_date%><br/>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <% unless d[:certainty].blank? %>
+        <tr>
+          <th class="pad_th_person_place">
+            Certainty:
+          </th>
+          <td>
+            <% d[:certainty].each do |c| %>
+              <%= c%><br/>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+      <% unless d[:type].blank? or d[:type]==''%>
+        <tr>
+          <th class="pad_th_person_place">
+            Type:
+          </th>
+          <td>
+            <% d[:type].each do |dt| %>
+              <% unless dt.blank? %>
+                <%= dt%><br/>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  <% end %>
+<%end %>

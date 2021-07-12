@@ -1,0 +1,48 @@
+<% unless p.nil? %>
+  <% unless p[:place_as_written].blank? %>
+    <tr>
+      <th class="pad_th_person_place">
+        As Written
+      </th>
+      <td>
+        <% p[:place_as_written].each do |paw| %>
+          <%= paw%><br/>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <% unless p[:place_same_as].blank? %>
+    <tr>
+      <th class="pad_th_person_place">
+        Name Authority:
+      </th>
+      <td>
+        <% p[:place_same_as].each do |psa| %>
+          <%= psa%><br/>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <th class="pad_th_person_place">
+        Role:
+      </th>
+      <td>
+        place of dating
+      </td>
+    </tr>
+  <% end %>
+  <% unless p[:place_note].blank? or p[:place_note]==''%>
+    <tr>
+      <th class="pad_th_person_place">
+        Note:
+      </th>
+      <td>
+        <% p[:place_note].each do |pn| %>
+          <% unless pn.blank? %>
+            <%= pn%><br/>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>

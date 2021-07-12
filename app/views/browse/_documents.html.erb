@@ -1,0 +1,142 @@
+<% unless @document_list.nil? or @document_list.length() == 0 %>
+  <a id="documents"></a>
+
+  <div class='tab1'>
+
+    <table>
+
+      <%# Display tabs for documents %>
+      <tr>
+        <th colspan='2' id='entry_menu' style="background-color: grey">
+          <ul>
+            <% @document_list.each do |document| %>
+              <%
+                document_id = document[:id]
+                document_reference = document[:reference]
+              %>
+              <% if document_id == @current_document['id'] %>
+                <li><span class='highlight'><%= document_reference %></span></li>
+              <% else %>
+                <li>
+                  <span class='nohighlight'><%= link_to document_reference, browse_departments_path(:department_id => @department_id, :series => @series_id, :document_id => document_id) + '#documents' %></span>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        </th>
+      </tr>
+
+      <tr>
+        <td colspan="2">
+
+        </td>
+      </tr>
+
+      <!-- Reference -->
+      <tr>
+        <th style="width: 30%; padding-top: 15px">Reference:</th>
+        <td style="padding-top: 15px"><%= @current_document['reference_tesim'][0] %></td>
+      </tr>
+
+      <!-- Summary -->
+      <%unless @current_document['summary_tesim'].nil? or @current_document['summary_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Summary:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['summary_tesim'].each do |s| %>
+              <%= s %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- Note -->
+      <%unless @current_document['note_tesim'].nil? or @current_document['note_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Note:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['note_tesim'].each do |n| %>
+              <%= n %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- language -->
+      <%unless @current_document['language_facet_ssim'].nil? or @current_document['language_facet_ssim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Language:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['language_facet_ssim'].each do |l| %>
+              <%= l %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- addressee -->
+      <%unless @current_document['tna_addressees_tesim'].nil? or @current_document['tna_addressees_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Addressee:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['tna_addressees_tesim'].each do |a| %>
+              <%= a %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- Sender -->
+      <%unless @current_document['tna_senders_tesim'].nil? or @current_document['tna_senders_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Sender:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['tna_senders_tesim'].each do |s| %>
+              <%= s %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- Person -->
+      <%unless @current_document['tna_persons_tesim'].nil? or @current_document['tna_persons_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Person:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['tna_persons_tesim'].each do |p| %>
+              <%= p %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
+      <!-- Places -->
+      <%unless @place_of_datings.nil? and @tna_places.nil?%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Places:</th>
+          <td></td>
+        </tr>
+
+        <% @place_of_datings.each do |p| %>
+          <%= render :partial => 'document_place_details', :locals => {:p => p} %>
+        <% end %>
+
+        <% @tna_places.each do |p| %>
+          <%= render :partial => 'document_place_details', :locals => {:p => p} %>
+        <% end %>
+      <% end %>
+
+      <!-- dates -->
+      <!-- Person -->
+      <%unless @dates.nil? or @dates.length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Dates:</th>
+          <td></td>
+        </tr>
+        <% @dates.each do |d| %>
+          <%= render :partial => 'document_date', :locals => {:d => d} %>
+        <% end %>
+      <%end %>
+    </table>
+  </div>
+<% end %>
