@@ -75,36 +75,42 @@
       <%end %>
 
       <!-- addressee -->
-      <%unless @current_document['tna_addressees_tesim'].nil? or @current_document['tna_addressees_tesim'].length()==0%>
+      <%unless @tna_addressees.nil? or @tna_addressees.length()==0%>
         <tr>
           <th style="width: 30%; padding-top: 15px">Addressee:</th>
           <td style="padding-top: 15px">
-            <% @current_document['tna_addressees_tesim'].each do |a| %>
-              <%= a %>
+            <% @tna_addressees.each do |a| %>
+              <% a[:person_as_written].each do |p| %>
+                <%= p%>
+              <% end %>
             <% end %>
           </td>
         </tr>
       <%end %>
 
       <!-- Sender -->
-      <%unless @current_document['tna_senders_tesim'].nil? or @current_document['tna_senders_tesim'].length()==0%>
+      <%unless @tna_senders.nil? or @tna_senders.length()==0%>
         <tr>
           <th style="width: 30%; padding-top: 15px">Sender:</th>
           <td style="padding-top: 15px">
-            <% @current_document['tna_senders_tesim'].each do |s| %>
-              <%= s %>
+            <% @tna_senders.each do |s| %>
+              <% s[:person_as_written].each do |p| %>
+                <%= p%>
+              <% end %>
             <% end %>
           </td>
         </tr>
       <%end %>
 
       <!-- Person -->
-      <%unless @current_document['tna_persons_tesim'].nil? or @current_document['tna_persons_tesim'].length()==0%>
+      <%unless @tna_persons.nil? or @tna_persons.length()==0%>
         <tr>
           <th style="width: 30%; padding-top: 15px">Person:</th>
           <td style="padding-top: 15px">
-            <% @current_document['tna_persons_tesim'].each do |p| %>
-              <%= p %>
+            <% @tna_persons.each do |p| %>
+              <% p[:person_as_written].each do |paw| %>
+                <%= paw%>
+              <% end %>
             <% end %>
           </td>
         </tr>
