@@ -1,0 +1,12 @@
+<%= hidden_field_tag(:search_term, @search_term) unless @search_term.blank? %>
+<%= hidden_field_tag(:all_sterms, @all_sterms) unless @all_sterms.blank? %>
+<%= hidden_field_tag(:exact_sterms, @exact_sterms) unless @exact_sterms.blank? %>
+<%= hidden_field_tag(:any_sterms, @any_sterms) unless @any_sterms.blank? %>
+<%= hidden_field_tag(:none_sterms, @none_sterms) unless @none_sterms.blank? %>
+<%= hidden_field_tag(:search_type, @search_type) unless @search_type.blank?%>
+<%= hidden_field_tag(:register_facet, @register_facet) unless @register_facet.blank? %>
+<%= hidden_field_tag(:section_type_facet, @section_type_facet) unless @section_type_facet.blank? %>
+<%= hidden_field_tag(:subject_facet, @subject_facet) unless @subject_facet.blank? %>
+<%= hidden_field_tag(:person_same_as_facet, @person_same_as_facet) unless @person_same_as_facet.blank? %>
+<%= hidden_field_tag(:place_same_as_facet, @place_same_as_facet) unless @place_same_as_facet.blank? %>
+<%= hidden_field_tag(:date_facet, @date_facet) unless @date_facet.blank? %>
