@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/digital-york/tnw_common
-  revision: c625bc8be34b880b2f39c77ada4b42cb4aeb14c5
+  revision: 5fff6599b985b6d7c3cb8f169014c46d8200088c
   branch: development
   specs:
     tnw_common (0.1.0)

@@ -122,6 +122,9 @@ class BrowseController < ApplicationController
         unless @current_document.nil? || @current_document == '{}'
           @place_of_datings = tna_search.get_place_of_datings(@current_document['id'])
           @tna_places = tna_search.get_tna_places(@current_document['id'])
+          @tna_addressees = tna_search.get_tna_addressees(@current_document['id'])
+          @tna_senders = tna_search.get_tna_senders(@current_document['id'])
+          @tna_persons = tna_search.get_tna_persons(@current_document['id'])
           @dates = tna_search.get_dates(@current_document['id'])
         end
       end
