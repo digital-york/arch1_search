@@ -1,0 +1,40 @@
+<% unless d.nil? %>
+  <% unless d[:date].blank? %>
+    <tr>
+      <th class="pad_th_person_place">
+        Date
+      </th>
+      <td>
+        <% d[:date].each do |current_date| %>
+          <%= current_date%><br/>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <% unless d[:certainty].blank? %>
+    <tr>
+      <th class="pad_th_person_place">
+        Certainty:
+      </th>
+      <td>
+        <% d[:certainty].each do |c| %>
+          <%= c%><br/>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+  <% unless d[:type].blank? or d[:type]==''%>
+    <tr>
+      <th class="pad_th_person_place">
+        Type:
+      </th>
+      <td>
+        <% d[:type].each do |dt| %>
+          <% unless dt.blank? %>
+            <%= dt%><br/>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+  <% end %>
+<% end %>

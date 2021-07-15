@@ -1,0 +1,12 @@
+<% unless @document_json["tna_senders_tesim"].blank? %>
+  <tr>
+    <th>Sender:</th>
+    <td>
+      <% @document_json["tna_senders_tesim"].each do |sender| %>
+        <div class="pad_multi_element">
+          <%== sender %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

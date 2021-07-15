@@ -1,3 +1,6 @@
+require 'tnw_common/solr/solr_query'
+require 'tnw_common/tna/tna_search'
+
 class SearchesController < ApplicationController
 
   layout 'default_layout'
@@ -73,6 +76,7 @@ class SearchesController < ApplicationController
         end
 
         # Set arrays which display data on the page
+        # @search_type only set for browse searches
         if @search_type == 'subject' or @search_type == 'group' or @search_type == 'person' or @search_type == 'place'
           set_search_result_arrays(@search_type)
         else
@@ -91,30 +95,44 @@ class SearchesController < ApplicationController
   end
 
   def show
+    solr_server = TnwCommon::Solr::SolrQuery.new(SOLR[Rails.env]['url'])
+    tna_search = TnwCommon::Tna::TnaSearch.new(solr_server)
 
     begin
+      if not params[:entry_id].blank?
+        # Create a new DbEntry model from the database tables
+        @db_entry = DbEntry.new
+        @db_entry.entry_id = params[:entry_id]
 
-      # Create a new DbEntry model from the database tables
-      @db_entry = DbEntry.new
-      @db_entry.entry_id = params[:entry_id]
+        # Populate db_entry with data from Solr
+        get_solr_data(@db_entry)
 
-      # Populate db_entry with data from Solr
-      get_solr_data(@db_entry)
+        session[:folio_id] = params[:folio_id]
+        @folio_id = params[:folio_id]
+        if params[:folio_title].nil?
+          @folio_title = get_folio_title(params[:entry_id])
+        else
+          @folio_title = params[:folio_title]
+        end
 
-      session[:folio_id] = params[:folio_id]  
-      @folio_id = params[:folio_id]
-      if params[:folio_title].nil?
-        @folio_title = get_folio_title(params[:entry_id])
-      else
-        @folio_title = params[:folio_title]
+
+        # @entry_list is used to get the tabs for the view page
+        @entry_list = get_entry_list(@folio_id)
+
+        @search_term = params[:search_term]
+        @page = params[:page]
+      elsif not params[:document_id].blank?
+        @document_id = params[:document_id]
+        @series_id = params[:series_id]
+        @document_list = tna_search.get_ordered_documents_from_series(params[:series_id])
+        @document_json = tna_search.get_document_json(@document_id)
+        @tna_place_of_datings = tna_search.get_place_of_datings(@document_id)
+        @tna_places = tna_search.get_tna_places(@document_id)
+        @dates = tna_search.get_dates(@document_id)
+        @search_term = params[:search_term]
+        @page = params[:page]
+
       end
-
-
-      # @entry_list is used to get the tabs for the view page
-      @entry_list = get_entry_list(@folio_id)
-
-      @search_term = params[:search_term]
-      @page = params[:page]
 
     rescue => error
       log_error(__method__, __FILE__, error)

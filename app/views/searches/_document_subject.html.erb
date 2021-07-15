@@ -1,0 +1,12 @@
+<% unless @document_json["subject_facet_ssim"].blank? %>
+  <tr>
+    <th>Subject:</th>
+    <td>
+      <% @document_json["subject_facet_ssim"].each do |subject| %>
+        <div class="pad_multi_element">
+          <%== subject %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

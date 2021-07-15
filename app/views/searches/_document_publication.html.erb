@@ -1,0 +1,12 @@
+<% unless @document_json["publication_tesim"].blank? %>
+  <tr>
+    <th>Publication:</th>
+    <td>
+      <% @document_json["publication_tesim"].each do |publication| %>
+        <div class="pad_multi_element">
+          <%== publication %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

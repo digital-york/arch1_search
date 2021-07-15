@@ -1,10 +1,21 @@
-# added (ja)
+require 'tnw_common/solr/solr_query'
+require 'tnw_common/tna/tna_search'
+
 class BrowseController < ApplicationController
 
   layout 'default_layout'
 
   def index
     reset_session_variables
+  end
+
+  def get_series_index(series_id, series_list)
+    series_list.each_with_index do |s, index|
+      if s[1] == series_id
+        return index
+      end
+    end
+    0
   end
 
   # browse/registers
@@ -76,6 +87,53 @@ class BrowseController < ApplicationController
       raise
     end
   end
+
+  # browse/departments
+  def departments
+    solr_server = TnwCommon::Solr::SolrQuery.new(SOLR[Rails.env]['url'])
+    tna_search = TnwCommon::Tna::TnaSearch.new(solr_server)
+    begin
+      reset_session_variables
+
+      # if no department_id provided, display all departments
+      if params[:department_id].blank?
+        @department_list = tna_search.get_all_departments()
+      else
+        @department_id = params[:department_id]
+        @department_name = tna_search.get_department_desc(session[:department_id])
+
+        @series_list = tna_search.get_all_series(params[:department_id])
+        unless @series_list.nil? or @series_list.length()==0
+          @first_series_id = @series_list[0][1]
+          @last_series_id = @series_list[@series_list.length()-1][1]
+        end
+        if params['series'].nil? or params['series'] == ''
+          @series_id = @series_list[0][1]
+        else
+          @series_id = params['series']
+        end
+        @series_index = get_series_index(@series_id, @series_list)
+        @document_list = tna_search.get_ordered_documents_from_series(@series_id)
+        if params['document_id'].nil? or params['document_id'] == ''
+            @current_document = @document_list.length()==0? {}: tna_search.get_document_json(@document_list[0][:id])
+        else
+            @current_document = tna_search.get_document_json(params['document_id'])
+        end
+        unless @current_document.nil? || @current_document == '{}'
+          @place_of_datings = tna_search.get_place_of_datings(@current_document['id'])
+          @tna_places = tna_search.get_tna_places(@current_document['id'])
+          @tna_addressees = tna_search.get_tna_addressees(@current_document['id'])
+          @tna_senders = tna_search.get_tna_senders(@current_document['id'])
+          @tna_persons = tna_search.get_tna_persons(@current_document['id'])
+          @dates = tna_search.get_dates(@current_document['id'])
+        end
+      end
+    rescue => error
+      log_error(__method__, __FILE__, error)
+      raise
+    end
+  end
+
 
   # browse/people
   def people
@@ -231,6 +289,13 @@ class BrowseController < ApplicationController
     session[:all] = nil
     session[:folio_image] = nil
     session[:alt_image] = nil
+
+    session[:department] = nil
+    session[:series] = nil
+    session[:series_id] = nil
+    session[:first_series_id] = nil
+    session[:last_series_id] = nil
+    session[:department_name] = nil
   end
 
   #whitelist params
