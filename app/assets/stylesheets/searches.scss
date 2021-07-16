@@ -262,7 +262,7 @@ ul {
 }
 
 .highlight_red a {
-  color: red;
+  color: #ee0000;
 }
 
 .highlight_facet {
@@ -385,14 +385,14 @@ ul {
 }
 
 .nohighlight a {
-  color: #9b9b9b;
+  color: #6c6c6c;
   text-decoration: none;
   font-weight: bold;
 }
 
 .nohighlight a:hover {
   color: #403152;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 /***** End of entry menu *****/
