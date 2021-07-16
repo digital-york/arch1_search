@@ -14,7 +14,7 @@ module TnwCommon
       else
         "(#{search_term.downcase})"
       end
-    end 
+    end
 
     def combine_advanced_search_terms(all_sterms:, exact_sterms:, any_sterms:, none_sterms:)
       search_term = ""
@@ -29,6 +29,63 @@ module TnwCommon
       search_term += "(#{any_sterms.downcase.split.join(' || ')})" unless any_sterms.blank?
       search_term += " !#{none_sterms.downcase.split.join(' !')}" unless none_sterms.blank?
       "(#{search_term})"
+    end
+
+    def shared_search_fields(sterm:)
+      # AR Entries
+      entry = "entry_type_search:#{sterm} ||
+      section_type_search:#{sterm} ||
+      summary_search:#{sterm} ||
+      marginalia_search:#{sterm} ||
+      subject_search:#{sterm} ||
+      language_search:#{sterm} ||
+      note_search:#{sterm} ||
+      editorial_note_search:#{sterm} ||
+      is_referenced_by_search:#{sterm} ||
+      summary_tesim:#{sterm} ||
+      entry_person_same_as_facet_ssim:#{sterm} ||
+      entry_place_same_as_facet_ssim:#{sterm} || "
+
+      # TNA Documents
+      #
+      # Do not search IDs
+      # "series_ssim":["p55485090"],
+      # "language_tesim":["pz50gw105"],
+      # "subject_tesim":["6t053j89s"],
+      # "document_type_search":["47429c30v"],
+      # "document_type_facet_ssim":["47429c30v"],
+      #
+      # Do not search facets
+      # "subject_facet_ssim":["Archives"],
+      # "register_or_department_facet_ssim":[""],
+      # "language_facet_ssim":["Latin"],
+      #
+      # Avoid searching _search filed will only match exact term. Requires adding *term* to match term oin phrase.
+      # "entry_date_note_search":["entry date note test"],
+      # "note_search":["for the appointment of commissioners to arrest hemmyngburgh, monk of selby, a vagabond in secular habit, as certified by abbot geoffrey, and deliver him to his abbot, dated 28 may 1359, see cpr 1358-61, p. 224."],
+      # "language_search":["latin"],
+      # "summary_search":["request for the arrest of brother john de hemmyngbrough, who has fled selby abbey without licence and is wandering in both secular and monastic habit."],
+      # "subject_search":["archives"],
+      #
+      # Prefere search _tesim will match a term out of a pphrase.
+      # "entry_date_note_tesim":["Entry date note test"],
+      # "note_tesim":["For the appointment of commissioners to arrest Hemmyngburgh, monk of Selby, a vagabond in secular habit, as certified by Abbot Geoffrey, and deliver him to his abbot, dated 28 May 1359, see CPR 1358-61, p. 224."],
+      # "language_new_tesim":["Latin"],
+      # "repository_tesim":["TNA"],
+      # "reference_tesim":["C 81/1786/45"],
+      # "summary_tesim":["Request for the arrest of Brother John de Hemmyngbrough, who has fled Selby abbey without licence and is wandering in both secular and monastic habit."],
+      # "subject_new_tesim":["Archives"],
+      #
+      # Add Document _tesim fields but summary_tesim
+      document = "entry_date_note_tesim: ||
+      note_tesim:#{sterm} ||
+      language_new_tesim:#{sterm} ||
+      repository_tesim:#{sterm} ||
+      reference_tesim:#{sterm} ||
+      subject_new_tesim:#{sterm} "
+      #
+      # All fields
+      entry + document + "|| suggest:#{sterm}"
     end
 
     # Sets the facet arrays and search results according to the search term
@@ -67,21 +124,41 @@ module TnwCommon
       fq_date = date_filter(start_date: @start_date, end_date: @end_date)
       fq_entry = Array(fq_entry) | Array(fq_date) unless fq_date.nil?
 
+      # TNA Documents: Get matching document ids and facets
+      # has_model_ssim:Document AND repository_tesim:(TNA)
+      if (sub != "group") && (sub != "person") && (sub != "place") && (@archival_repository == "all" || @archival_repository != "borthwick")
+        # if the search has come from the subjects browse, limit to searching for the subject
+        q = if sub == "subject"
+          "has_model_ssim:Document AND subject_search:" + search_term2
+        else
+          # q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
+          # Solr field issue summary_search and summary_tesim term not matched in 1st field despite same content
+          "has_model_ssim:Document AND (#{shared_search_fields(sterm: search_term2)})"
+        end
+        num = count_query(q)
+        unless num == 0
+          # @query.solr_query(query, 'id', 0)['response']['numFound'].to_i
+          q_result = query.solr_query(q, "id", num, "date_full_ssim asc", 0, true, -1, "index", facets, fq_entry)
+          result_to_facet_hash(q_result)
+          entry_id_set.merge(q_result["response"]["docs"].map { |e| e["id"] })
+        end
+      end
+
       # ENTRIES: Get the matching entry ids and facets
-      if (sub != "group") && (sub != "person") && (sub != "place")
+      if (sub != "group") && (sub != "person") && (sub != "place") && (@archival_repository == "all" || @archival_repository != "tna")
         # if the search has come from the subjects browse, limit to searching for the subject
         q = if sub == "subject"
           "has_model_ssim:Entry AND subject_search:" + search_term2
         else
           # q = "has_model_ssim:Entry AND (entry_type_search:*#{search_term2}* or section_type_search:*#{search_term2}* or summary_search:*#{search_term2}* or marginalia_search:*#{search_term2}* or subject_search:*#{search_term2}* or language_search:*#{search_term2}* or note_search:*#{search_term2}* or editorial_note_search:*#{search_term2}* or is_referenced_by_search:*#{search_term2}*)"
           # Solr field issue summary_search and summary_tesim term not matched in 1st field despite same content
-          "has_model_ssim:Entry AND (entry_type_search:#{search_term2} or section_type_search:#{search_term2} or summary_search:#{search_term2} or marginalia_search:#{search_term2} or subject_search:#{search_term2} or language_search:#{search_term2} or note_search:#{search_term2} or editorial_note_search:#{search_term2} or is_referenced_by_search:#{search_term2} or summary_tesim:#{search_term2} or entry_person_same_as_facet_ssim:#{search_term2} or entry_place_same_as_facet_ssim:#{search_term2} or suggest:#{search_term2} )"
+          "has_model_ssim:Entry AND (#{shared_search_fields(sterm: search_term2)})"
         end
         num = count_query(q)
         unless num == 0
           # @query.solr_query(query, 'id', 0)['response']['numFound'].to_i
           q_result = query.solr_query(q, "id", num, "date_full_ssim asc", 0, true, -1, "index", facets, fq_entry)
-          result_to_facet_hash(q_result) 
+          result_to_facet_hash(q_result)
           entry_id_set.merge(q_result["response"]["docs"].map { |e| e["id"] })
         end
       end
@@ -130,7 +207,7 @@ module TnwCommon
         # if the search has come from the places browse, limit to searching for places
         q = if sub == "place"
           # q = 'has_model_ssim:RelatedPlace AND place_same_as_search:"' + @search_term.downcase + '"'
-          # Note Solr place_same_as_search filed will only match exact filed content. Otherwise returns nothing. 
+          # Note Solr place_same_as_search filed will only match exact filed content. Otherwise returns nothing.
           "has_model_ssim:RelatedPlace AND place_same_as_search:#{search_term2}"
         else
           # q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_as_written_search:*#{search_term2}*)"
@@ -176,8 +253,10 @@ module TnwCommon
             res["dateFor_ssim"]&.each do |single_date|
               # from the entry dates, get the entry ids
               query.solr_query("id:#{single_date}", "entryDateFor_ssim", num)["response"]["docs"]&.map do |result|
-                q_result2 = query.solr_query("id:#{result["entryDateFor_ssim"][0]}", "id", 1, nil, 0, true, -1,
-                  "index", facets, fq_entry) unless result["entryDateFor_ssim"].blank?
+                unless result["entryDateFor_ssim"].blank?
+                  q_result2 = query.solr_query("id:#{result["entryDateFor_ssim"][0]}", "id", 1, nil, 0, true, -1,
+                    "index", facets, fq_entry)
+                end
                 next if q_result2.blank?
                 unless q_result2["response"]["numFound"] == 0
                   unless entry_id_set.include? q_result2["response"]["docs"][0]["id"]
@@ -195,15 +274,14 @@ module TnwCommon
         num = count_query(q)
         unless num == 0
           q_result = query.solr_query(q, "entryDateFor_ssim", num, nil, 0, nil, nil, nil, nil, fq_entry)
-          entry_id_set.merge(q_result["response"]["docs"]&.map { |e| 
-              e["entryDateFor_ssim"][0] unless e["entryDateFor_ssim"].blank?
-            }
-          )
+          entry_id_set.merge(q_result["response"]["docs"]&.map { |e|
+                               e["entryDateFor_ssim"][0] unless e["entryDateFor_ssim"].blank?
+                             })
         end
       end
 
       # Sort all of the hashes
-      @section_type_facet_hash = @section_type_facet_hash.sort.to_h unless @section_type_facet_hash.blank? 
+      @section_type_facet_hash = @section_type_facet_hash.sort.to_h unless @section_type_facet_hash.blank?
       @person_same_as_facet_hash = @person_same_as_facet_hash.sort.to_h unless @person_same_as_facet_hash.blank?
       @place_same_as_facet_hash = @place_same_as_facet_hash.sort.to_h unless @place_same_as_facet_hash.blank?
       @subject_facet_hash = @subject_facet_hash.sort.to_h unless @subject_facet_hash.blank?
@@ -537,11 +615,11 @@ module TnwCommon
           # The following code highlights text which matches the search_term
           # It highlights all combinations, e.g. 'york', 'York', 'YORK', 'paul young', 'paul g', etc
           if (is_match == true) && (@search_term != "")
-          # if (is_match == true) && (@search_term != "") && !@search_term.downcase.include?("*")
+            # if (is_match == true) && (@search_term != "") && !@search_term.downcase.include?("*")
             # Replace all spaces with '.*' so that it searches for all characters in between text, e.g. 'paul y' will find 'paul young'
             # temp = @search_term.gsub(/\s+/, '.*')
             # remove double quotes and other Solr special characters
-            temp = @search_term.delete('\"\+\-\!\?\*\~\&\|\(\)') #.gsub(/\s+/, ".*")
+            temp = @search_term.delete('\"\+\-\!\?\*\~\&\|\(\)') # .gsub(/\s+/, ".*")
             # Split each term for highlight FixMe: support for "word phrases"
             temp.split.each do |t|
               next unless t.length > 3 # Skip short words e.g. "of, at, in"
