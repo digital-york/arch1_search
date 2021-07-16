@@ -56,7 +56,7 @@
         </p>
         <p style="float:right">
           <% unless @series_index.to_i == @series_list.length()-1 %>
-            <%= link_to '', browse_departments_path(department_id: session['department_id'], series: @series_list[@series_index.to_i+1][1]), :class => 'fa fa-long-arrow-alt-right fa-3x' %>
+            <%= link_to '', browse_departments_path(department_id: @department_id, series: @series_list[@series_index.to_i+1][1]), :class => 'fa fa-long-arrow-alt-right fa-3x' %>
           <% end %>
         </p>
       <% end %>
