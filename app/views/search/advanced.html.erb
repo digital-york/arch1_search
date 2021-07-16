@@ -324,7 +324,7 @@
 
                         <ul class="pager" style="text-align: left">
                             <% if @page == 1 %>
-                                <li><span style="color: grey">Previous</span></li>
+                                <li><span style="color: #767676">Previous</span></li>
                             <% else %>
                             <li><%= link_to 'Previous', 
                                 search_advanced_path(
@@ -349,7 +349,7 @@
                             &nbsp;<span style="font-size: 1.1em"><%= start_index %> - <%= end_index %>
                             of <strong><%= @number_of_rows %></strong></span>&nbsp;
                             <% if @number_of_rows <= @rows_per_page || total_page_rows + @rows_per_page >= @number_of_rows %>
-                                <li><span style="color: grey">Next</span></li>
+                                <li><span style="color: #767676">Next</span></li>
                             <% else %>
                             <li><%= link_to 'Next', 
                                 search_advanced_path(

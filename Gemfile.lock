@@ -179,6 +179,7 @@ GEM
       nokogiri (~> 1.8)
       parslet
       rdf (~> 3.0)
+    libv8 (3.16.14.19)
     libv8 (3.16.14.19-x86_64-linux)
     link_header (0.0.8)
     llhttp-ffi (0.3.1)
@@ -200,6 +201,8 @@ GEM
     noid-rails (3.0.3)
       actionpack (>= 5.0.0, < 7)
       noid (~> 0.9)
+    nokogiri (1.11.7-x86_64-darwin)
+      racc (~> 1.4)
     nokogiri (1.11.7-x86_64-linux)
       racc (~> 1.4)
     openseadragon (0.6.0)
@@ -400,6 +403,7 @@ GEM
     yard (0.9.26)
 
 PLATFORMS
+  x86_64-darwin-19
   x86_64-linux
 
 DEPENDENCIES
