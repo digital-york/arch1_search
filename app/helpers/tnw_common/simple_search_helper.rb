@@ -97,6 +97,7 @@ module TnwCommon
       @subject_facet_hash = Hash.new 0
       @date_facet_hash = Hash.new 0
       @register_facet_hash = Hash.new 0
+      @search_result_type = Hash.new 0 # To storre information on search result typs :entry, :document
 
       entry_id_set = Set.new
       facets = facet_fields
@@ -141,6 +142,8 @@ module TnwCommon
           q_result = query.solr_query(q, "id", num, "date_full_ssim asc", 0, true, -1, "index", facets, fq_entry)
           result_to_facet_hash(q_result)
           entry_id_set.merge(q_result["response"]["docs"].map { |e| e["id"] })
+          # Keep information aboout search result types
+          q_result["response"]["docs"].map { |e| @search_result_type[e["id"]] = :document }
         end
       end
 
@@ -160,6 +163,8 @@ module TnwCommon
           q_result = query.solr_query(q, "id", num, "date_full_ssim asc", 0, true, -1, "index", facets, fq_entry)
           result_to_facet_hash(q_result)
           entry_id_set.merge(q_result["response"]["docs"].map { |e| e["id"] })
+          # Keep information aboout search result types
+          q_result["response"]["docs"].map { |e| @search_result_type[e["id"]] = :entry }
         end
       end
 
@@ -311,7 +316,10 @@ module TnwCommon
           # Build up the element_array with the entry_id, etc
           @element_array = []
           @element_array << entry_id
-          get_entry_and_folio_details(entry_id)
+          # Process :entry search results => "Register 5A f.110 (recto) entry 6", "9593tv46x"
+          get_entry_and_folio_details(entry_id) 
+          # Proces TNA Documents search results => "TNA C 81/365/22990A", "p55485090"
+          get_document_details(entry_id) 
           @element_array << get_element(result["entry_type_facet_ssim"])
           @element_array << get_element(result["section_type_facet_ssim"])
           @element_array << get_element(result["summary_tesim"])
@@ -582,6 +590,9 @@ module TnwCommon
     def get_entry_and_folio_details(entry_id)
       # Get the entry_no and folio_id for the entry_id
       id = get_id(entry_id)
+      # if TNA Documents stop gracefully
+      return if @search_result_type[id] == :document
+
       SolrQuery.new.solr_query("id:" + id, "entry_no_tesim, entry_folio_facet_ssim, folio_ssim",
         1)["response"]["docs"].map do |result|
         @element_array << if result["entry_folio_facet_ssim"].nil? || result["entry_no_tesim"].nil?
@@ -590,6 +601,28 @@ module TnwCommon
           "#{result["entry_folio_facet_ssim"].join} entry #{result["entry_no_tesim"].join}"
         end
         @element_array << result["folio_ssim"].join
+      end
+    rescue => e
+      log_error(__method__, __FILE__, e)
+      raise
+    end
+
+    # This method uses the document_id to get the title of the search result, i.e. 'TNA Reference' and series_id
+    def get_document_details(entry_id)
+      # Get the entry_no and folio_id for the entry_id
+      id = get_id(entry_id)
+      # if TNA Documents stop gracefully
+      return if @search_result_type[id] != :document
+
+      # Constructed from "series_ssim":["p55485090"], "repository_tesim":["TNA"], "reference_tesim":["C 81/365/22990A"],
+      SolrQuery.new.solr_query("id:" + id, "repository_tesim, reference_tesim, series_ssim",
+        1)["response"]["docs"].map do |result|
+        @element_array << if result["repository_tesim"].nil? || result["reference_tesim"].nil?
+          "Untitled"
+        else
+          "#{result["repository_tesim"].join} entry #{result["reference_tesim"].join}"
+        end
+        @element_array << result["series_ssim"].join
       end
     rescue => e
       log_error(__method__, __FILE__, e)
