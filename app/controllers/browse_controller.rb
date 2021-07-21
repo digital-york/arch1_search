@@ -113,9 +113,18 @@ class BrowseController < ApplicationController
           @series_id = params['series']
         end
         @series_index = get_series_index(@series_id, @series_list)
-        @document_list = tna_search.get_ordered_documents_from_series(@series_id)
+        # @document_list = tna_search.get_ordered_documents_from_series(@series_id)
+        @document_hash = tna_search.get_ordered_documents_from_series_in_year_group(@series_id)
+        @years = @document_hash.keys.sort
+        if params['year'].nil? or @document_hash[params['year']].blank?
+          @current_year, @document_list = @document_hash.first
+        else
+          @current_year = params['year']
+          @document_list = @document_hash[@current_year]
+        end
+
         if params['document_id'].nil? or params['document_id'] == ''
-            @current_document = @document_list.length()==0? {}: tna_search.get_document_json(@document_list[0][:id])
+            @current_document = (@document_list.nil? or @document_list.length()==0)? {}: tna_search.get_document_json(@document_list[0][:id])
         else
             @current_document = tna_search.get_document_json(params['document_id'])
         end

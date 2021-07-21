@@ -3,7 +3,6 @@
 <div class="row">
   <div class="col-md-2"></div>
   <div class="col-md-8">
-
     <% if params['department_id'].nil? or params['department_id'] == '' %>
       <div class="row">
         <div class="col-md-12">
@@ -38,8 +37,9 @@
 
         <%= hidden_field_tag(:department_id, @department_id) %>
         <%= select_tag 'series', options_for_select(@series_list, @series_id), :class => 'choose_folio' %>
-        &nbsp;
-        <%= link_to '', browse_departments_path, class: 'fa fa-chevron-circle-left fa-2x', :title => 'Go back' %>
+        <%= link_to '', browse_departments_path, class: 'fa fa-chevron-circle-left fa-2x', :title => 'Go back' %><br/><br/>
+        Please choose a year:
+        <%= select_tag 'year', options_for_select(@years, @current_year), :class => 'choose_folio' %>
 
         <br/><br/>
 

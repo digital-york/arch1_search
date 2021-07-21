@@ -29,6 +29,10 @@ $(document).ready(function () {
         $("#choose_series").submit();
     });
 
+    $('body').on('change', '#year', function(e) {
+        $("#choose_series").submit();
+    });
+
     $('body').on('click', '.show_hide', function(e) {
         $(this).next(".tog").toggle();
         if ($(this).hasClass('fa-plus')) {

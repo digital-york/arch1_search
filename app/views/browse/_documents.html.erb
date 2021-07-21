@@ -18,7 +18,7 @@
                 <li><span class='highlight'><%= document_reference %></span></li>
               <% else %>
                 <li>
-                  <span class='nohighlight'><%= link_to document_reference, browse_departments_path(:department_id => @department_id, :series => @series_id, :document_id => document_id) + '#documents' %></span>
+                  <span class='nohighlight'><%= link_to document_reference, browse_departments_path(:department_id => @department_id, :series => @series_id, :document_id => document_id, :year => @current_year) + '#documents' %></span>
                 </li>
               <% end %>
             <% end %>
