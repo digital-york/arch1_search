@@ -67,7 +67,7 @@ module TnwCommon
       # "summary_search":["request for the arrest of brother john de hemmyngbrough, who has fled selby abbey without licence and is wandering in both secular and monastic habit."],
       # "subject_search":["archives"],
       #
-      # Prefere search _tesim will match a term out of a pphrase.
+      # Prefere search _tesim will match a term out of a phrase.
       # "entry_date_note_tesim":["Entry date note test"],
       # "note_tesim":["For the appointment of commissioners to arrest Hemmyngburgh, monk of Selby, a vagabond in secular habit, as certified by Abbot Geoffrey, and deliver him to his abbot, dated 28 May 1359, see CPR 1358-61, p. 224."],
       # "language_new_tesim":["Latin"],
@@ -332,6 +332,7 @@ module TnwCommon
           get_places(entry_id, search_term2)
           get_people(entry_id, search_term2)
           get_dates(entry_id, search_term2)
+          @element_array << @search_result_type[entry_id] unless @search_result_type[entry_id] != :document
           @partial_list_array << @element_array
         end
       end
@@ -620,7 +621,7 @@ module TnwCommon
         @element_array << if result["repository_tesim"].nil? || result["reference_tesim"].nil?
           "Untitled"
         else
-          "#{result["repository_tesim"].join} entry #{result["reference_tesim"].join}"
+          "#{result["repository_tesim"].join} - #{result["reference_tesim"].join}"
         end
         @element_array << result["series_ssim"].join
       end

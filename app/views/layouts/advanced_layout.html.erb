@@ -36,7 +36,7 @@
         <div class="col-md-6">
           <% search_margin_top = '35px' # search_margin_top = '150px' %>
           <%# <div class="container-flex"> %>
-          <%= form_tag("/search/advanced", method: "get", id: "search_form", onsubmit: "return validate_search_field()") do |f| %>
+          <%= form_tag("/search/advanced", method: "get", id: "search_form", onsubmit: "validate_advanced_search_fields()") do |f| %>
             <div class="form-row">
               <div class="form-group col-md-10 inline-group">
                 <%# <div class="form-group mb-2"> %>
@@ -83,7 +83,7 @@
             </div>
             <div class="inline-btn-group col-sm-10">
               <%= submit_tag("Search", class: "btn go_button", id: "simple_button") %>
-              <%= submit_tag("Clear form", name: "reset", type: "reset", class: "btn go_button", id: "simple_button") %>
+              <%= submit_tag("Clear form", name: "clear_search_form", type: "button", class: "btn go_button", id: "simple_button", onclick: "clear_advanced_search_fields()") %>
             </div>
             <div class="form-group col-sm-12">
               <small id="search_links" class="text-muted">
