@@ -28,10 +28,3 @@ function validate_search_field() {
         return false;
     }
 }
-
-
-$(document).ready(function () {
-    $('body').on('change', '#year', function(e) {
-        $("#searches_choose_year").submit();
-    });
-});

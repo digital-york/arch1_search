@@ -1,12 +1,14 @@
 <% unless @document_json["tna_persons_tesim"].blank? %>
-  <tr>
-    <th>Person:</th>
-    <td>
+  <div class="row">
+    <div class="col-md-3 document_field_title">
+      Person:
+    </div>
+    <div class="col-md-9">
       <% @document_json["tna_persons_tesim"].each do |person| %>
         <div class="pad_multi_element">
           <%== person %>
         </div>
       <% end %>
-    </td>
-  </tr>
+    </div>
+  </div>
 <% end %>

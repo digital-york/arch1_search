@@ -1,49 +1,73 @@
 <% unless @tna_places.blank? %>
   <% @tna_places.each do |tna_place| %>
     <%if (not tna_place[:place_same_as].nil?) or (not tna_place[:place_as_written].nil?) %>
-      <tr>
-        <th>Place:</th>
-        <td></td>
-      </tr>
       <% unless tna_place[:place_as_written].blank? %>
-        <tr>
-          <th class="pad_th_person_place">
-            As written
-          </th>
-          <td>
-            <%== tna_place[:place_as_written][0] %>
-          </td>
-        </tr>
+        <div class="row">
+          <div class="col-md-3 document_field_title">
+            Place:
+          </div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-2">
+                As written
+              </div>
+              <div class="col-md-10">
+                <%== tna_place[:place_as_written][0] %>
+              </div>
+            </div>
+          </div>
+        </div>
       <% end %>
       <% unless tna_place[:place_same_as].blank? %>
-        <tr>
-          <th class="pad_th_person_place">
-            Place Authority
-          </th>
-          <td>
-            <%== tna_place[:place_same_as][0] %>
-          </td>
-        </tr>
+        <div class="row">
+          <div class="col-md-3 document_field_title">
+            Place:
+          </div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-2">
+                Place Authority
+              </div>
+              <div class="col-md-10">
+                <%== tna_place[:place_same_as][0] %>
+              </div>
+            </div>
+          </div>
+        </div>
       <% end %>
       <% unless tna_place[:place_role].blank? %>
-        <tr>
-          <th class="pad_th_person_place">
-            Role
-          </th>
-          <td>
-            <%== tna_place[:place_role][0] %>
-          </td>
-        </tr>
+        <div class="row">
+          <div class="col-md-3 document_field_title">
+            Place:
+          </div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-2">
+                Role
+              </div>
+              <div class="col-md-10">
+                <%== tna_place[:place_role][0] %>
+              </div>
+            </div>
+          </div>
+        </div>
       <% end %>
-      <% unless tna_place[:place_note].blank? %>
-        <tr>
-          <th class="pad_th_person_place">
-            Note
-          </th>
-          <td>
-            <%== tna_place[:place_note][0] %>
-          </td>
-        </tr>
+      <% unless tna_place[:place_note].blank? or tna_place[:place_note][0].blank?%>
+        <div class="row">
+          <div class="col-md-3 document_field_title">
+            Place:
+          </div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-2">
+                Note
+              </div>
+              <div class="col-md-10">
+                <%== tna_place[:place_note][0] %>
+              </div>
+            </div>
+          </div>
+        </div>
       <% end %>
     <% end %>
   <% end %>

@@ -123,29 +123,10 @@ class SearchesController < ApplicationController
         @page = params[:page]
       elsif not params[:document_id].blank?
         @document_id = params[:document_id]
-        @series_id = params[:series_id]
-        if @series_id.blank?
-          @document_list = []
-        else
-          @document_hash = tna_search.get_ordered_documents_from_series_in_year_group(params[:series_id])
-          @years = @document_hash.keys.sort
-          if params['year'].nil? or @document_hash[params['year']].blank?
-            # @current_year, @document_list = @document_hash.first
-            @current_year = @years[0]
-            @document_list = @document_hash[@current_year]
-          else
-            @current_year = params['year']
-            @document_list = @document_hash[@current_year]
-          end
-        end
-        # @document_list = tna_search.get_ordered_documents_from_series(params[:series_id])
         @document_json = tna_search.get_document_json(@document_id)
         @tna_place_of_datings = tna_search.get_place_of_datings(@document_id)
         @tna_places = tna_search.get_tna_places(@document_id)
         @dates = tna_search.get_dates(@document_id)
-        @search_term = params[:search_term]
-        @page = params[:page]
-
       end
 
     rescue => error
