@@ -38,9 +38,12 @@
         <%= hidden_field_tag(:department_id, @department_id) %>
         <%= select_tag 'series', options_for_select(@series_list, @series_id), :class => 'choose_folio' %>
         <%= link_to '', browse_departments_path, class: 'fa fa-chevron-circle-left fa-2x', :title => 'Go back' %><br/><br/>
-        Please choose a year:
-        <%= select_tag 'year', options_for_select(@years, @current_year), :class => 'choose_folio' %>
 
+        <% unless @years.nil? or @years.length()==0 %>
+          Please choose a year:
+          <%=@current_year %>
+          <%= select_tag 'year', options_for_select(@years, @current_year), :class => 'choose_folio' %>
+        <% end %>
         <br/><br/>
 
         <% unless session[:documents_exist].nil? %>

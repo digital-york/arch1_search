@@ -26,6 +26,7 @@ $(document).ready(function () {
 
     // Called when the user chooses a series from the menu drop-down list
     $('body').on('change', '#series', function(e) {
+        $("#year").val("");  // when series changed, clear year field
         $("#choose_series").submit();
     });
 
