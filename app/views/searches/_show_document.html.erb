@@ -21,38 +21,8 @@
   <div class="col-md-1"></div>
 
   <div class="col-md-10" id='form_frame'>
-    <%= form_tag(searches_show_path, method: 'get', id: 'searches_choose_year') do %>
-      <h4 style="display: inline">Please select a year group: </h4>
-      <%= select_tag 'year', options_for_select(@years, @current_year), :class => 'choose_year' %><br/><br/>
-      <%= hidden_field_tag(:document_id, @document_id) %>
-      <%= hidden_field_tag(:series_id, @series_id) %>
-    <% end %>
 
-    <div class='tab1'>
-      <table>
-        <%# Display tabs for documents %>
-        <tr>
-          <th colspan='2' id='entry_menu' style="background-color: grey">
-            <ul>
-              <%# Display 1 - 9 %>
-              <% @document_list.each do |document| %>
-                <%
-                  document_id = document[:id]
-                  document_ref = document[:reference]
-                %>
-                <% if document_id == @document_id %>
-                  <li><span class='highlight'><%= document_ref %></span></li>
-                <% else %>
-                  <li>
-                    <span class='nohighlight'><%= link_to document_ref, searches_show_path(:document_id => document_id, :series_id => @series_id, :search_term => @search_term, :page => @page) %></span>
-                  </li>
-                <% end %>
-              <% end %>
-            </ul>
-          </th>
-        </tr>
-
-        <%# Display document data %>
+    <div class='document_details'>
         <%# Document reference %>
         <%= render 'document_reference' %>
 
@@ -95,8 +65,6 @@
 
         <%# Document person %>
         <%= render 'document_person' %>
-      </table>
-
     </div>
 
 
