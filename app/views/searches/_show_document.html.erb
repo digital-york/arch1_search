@@ -21,6 +21,12 @@
   <div class="col-md-1"></div>
 
   <div class="col-md-10" id='form_frame'>
+    <%= form_tag(searches_show_path, method: 'get', id: 'searches_choose_year') do %>
+      <h4 style="display: inline">Please select a year group: </h4>
+      <%= select_tag 'year', options_for_select(@years, @current_year), :class => 'choose_year' %><br/><br/>
+      <%= hidden_field_tag(:document_id, @document_id) %>
+      <%= hidden_field_tag(:series_id, @series_id) %>
+    <% end %>
 
     <div class='tab1'>
       <table>
