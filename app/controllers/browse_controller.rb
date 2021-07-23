@@ -114,16 +114,29 @@ class BrowseController < ApplicationController
         end
         @series_index = get_series_index(@series_id, @series_list)
         # @document_list = tna_search.get_ordered_documents_from_series(@series_id)
-        @document_hash = tna_search.get_ordered_documents_from_series_in_year_group(@series_id)
-        @years = @document_hash.keys.sort
+        @all_documents, @document_hash = tna_search.get_ordered_documents_from_series_in_year_group(@series_id)
+        # @years = [
+        #     ['1980[2]', '1980'],
+        #     ['1982[3]', '1981'],
+        #     ['1981[4]', '1982']
+        # ]
+        years_only = @document_hash.keys.sort
+        @years = []
+        years_only.each do |year|
+          @years << ["#{year} [#{@document_hash[year].length()}]", year]
+        end
 
-        if params['year'].nil? or @document_hash[params['year']].blank?
+        @years = @years.unshift(["all [#{@document_hash.length()}]", 'all'])
+
+        if params['year'].nil? or ('all'!=params['year'] and @document_hash[params['year']].blank?)
           # @current_year, @document_list = @document_hash.first
-          @current_year = @years[0]
-          @document_list = @document_hash[@current_year]
+          @current_year = 'all'
+          @document_list = @all_documents
         else
           @current_year = params['year']
-          if @years.include? params['year']
+          if @current_year=='all'
+            @document_list = @all_documents
+          elsif years_only.include? params['year']
             @document_list = @document_hash[@current_year]
           else
             @document_list = @document_hash[@years[0]]
