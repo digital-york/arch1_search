@@ -126,7 +126,7 @@ class BrowseController < ApplicationController
           @years << ["#{year} [#{@document_hash[year].length()}]", year]
         end
 
-        @years = @years.unshift(["all [#{@document_hash.length()}]", 'all'])
+        @years = @years.unshift(["all [#{@all_documents.length()}]", 'all'])
 
         if params['year'].nil? or ('all'!=params['year'] and @document_hash[params['year']].blank?)
           # @current_year, @document_list = @document_hash.first
