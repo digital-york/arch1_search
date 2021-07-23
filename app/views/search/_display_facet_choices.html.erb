@@ -1,0 +1,74 @@
+            <% search_mode = local_assigns[:locals][:search_mode] %>
+
+            <% if (@register_facet != nil && @register_facet != '') || 
+                  (@department_facet != nil && @department_facet != '') ||
+                  (@section_type_facet != nil && @section_type_facet != '') || 
+                  (@subject_facet != nil && @subject_facet != '') || 
+                  (@person_same_as_facet != nil && @person_same_as_facet != '') || 
+                  (@place_same_as_facet != nil && @place_same_as_facet != '') || 
+                  (@date_facet != nil && @date_facet != '') 
+            %>
+                <div id="facets_bar">
+                    <% if @register_facet != nil && @register_facet != '' %>
+                        <span class="highlight_facet">
+                            <%= @register_facet %>&nbsp;&nbsp;
+                            <%# Render facet disable link %>
+                            <% @register_facet = nil %>
+                            <%= render "search_link", locals: {search_mode: search_mode} %>
+                        </span>
+                    <% end %>
+                    <% if @department_facet != nil && @department_facet != '' %>
+                        <span class="highlight_facet">
+                            <%= @department_facet %>&nbsp;&nbsp;
+                            <%# Render facet disable link %>
+                            <% @department_facet = nil %>
+                            <%= render "search_link", locals: {search_mode: search_mode} %>
+                        </span>
+                    <% end %>
+
+                    <% if @section_type_facet != nil && @section_type_facet != '' %>
+                        <span class="highlight_facet">
+                            <%= @section_type_facet %>&nbsp;&nbsp;
+                            <%# Render facet disable link %>
+                            <% @section_type_facet = nil %>
+                            <%= render "search_link", locals: {search_mode: search_mode} %>
+                        </span>
+                    <% end %>
+
+                    <% if @subject_facet != nil && @subject_facet != '' %>
+                        <span class="highlight_facet">
+                            <%= @subject_facet %>&nbsp;&nbsp;
+                            <%# Render facet disable link %>
+                            <% @subject_facet = nil %>
+                            <%= render "search_link", locals: {search_mode: search_mode} %>
+                        </span>
+                    <% end %>
+
+                    <% if @person_same_as_facet != nil && @person_same_as_facet != '' %>
+                        <span class="highlight_facet">
+                            <%= @person_same_as_facet %>&nbsp;&nbsp;
+                            <%# Render facet disable link %>
+                            <% @person_same_as_facet = nil %>
+                            <%= render "search_link", locals: {search_mode: search_mode} %>
+                        </span>
+                    <% end %>
+
+                    <% if @place_same_as_facet != nil && @place_same_as_facet != '' %>
+                        <span class="highlight_facet">
+                            <%= @place_same_as_facet %>&nbsp;&nbsp;
+                            <%# Render facet disable link %>
+                            <% @place_same_as_facet = nil %>
+                            <%= render "search_link", locals: {search_mode: search_mode} %>
+                        </span>
+                    <% end %>
+
+                    <% if @date_facet != nil && @date_facet != '' %>
+                        <span class="highlight_facet">
+                            <%= @date_facet %>&nbsp;&nbsp;
+                            <%# Render facet disable link %>
+                            <% @date_facet = nil %>
+                            <%= render "search_link", locals: {search_mode: search_mode} %>
+                        </span>
+                    <% end %>
+                </div>
+            <% end %>
