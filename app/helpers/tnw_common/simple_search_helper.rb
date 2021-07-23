@@ -97,6 +97,7 @@ module TnwCommon
       @subject_facet_hash = Hash.new 0
       @date_facet_hash = Hash.new 0
       @register_facet_hash = Hash.new 0
+      @department_facet_hash = Hash.new 0
       @search_result_type = Hash.new 0 # To storre information on search result typs :entry, :document
 
       entry_id_set = Set.new
@@ -161,7 +162,7 @@ module TnwCommon
         unless num == 0
           # @query.solr_query(query, 'id', 0)['response']['numFound'].to_i
           q_result = query.solr_query(q, "id", num, "date_full_ssim asc", 0, true, -1, "index", facets, fq_entry)
-          result_to_facet_hash(q_result)
+          add_result_to_facet_hash(q_result)
           entry_id_set.merge(q_result["response"]["docs"].map { |e| e["id"] })
           # Keep information aboout search result types
           q_result["response"]["docs"].map { |e| @search_result_type[e["id"]] = :entry }
@@ -986,17 +987,25 @@ module TnwCommon
 
     # return the facet fields
     def facet_fields
-      %w[section_type_facet_ssim subject_facet_ssim entry_person_same_as_facet_ssim entry_place_same_as_facet_ssim
-        entry_date_facet_ssim entry_register_facet_ssim]
+      %w[
+        register_or_department_facet_ssim
+        section_type_facet_ssim
+        subject_facet_ssim
+        entry_person_same_as_facet_ssim
+        entry_place_same_as_facet_ssim
+        entry_date_facet_ssim
+        entry_register_facet_ssim
+      ]
     end
 
-    # build the filter query for solr
+    # build the filter query for solr - part of facet brows search 
     def filter_query(model = nil)
       fq = []
       if model.nil?
         fq << "section_type_facet_ssim:\"#{@section_type_facet}\"" unless @section_type_facet.nil?
         fq << "subject_facet_ssim:\"#{@subject_facet}\"" unless @subject_facet.nil?
         fq << "entry_register_facet_ssim:\"#{@register_facet}\"" unless @register_facet.nil?
+        fq << "register_or_department_facet_ssim:\"#{@department_facet}\"" unless @department_facet.nil?
         fq << "entry_person_same_as_facet_ssim:\"#{@person_same_as_facet}\"" unless @person_same_as_facet.nil?
         fq << "entry_place_same_as_facet_ssim:\"#{@place_same_as_facet}\"" unless @place_same_as_facet.nil?
         fq << "entry_date_facet_ssim:#{@date_facet}*" unless @date_facet.nil?
@@ -1025,6 +1034,9 @@ module TnwCommon
       end
       unless solr_result["facet_counts"]["facet_fields"]["entry_register_facet_ssim"].nil?
         @register_facet_hash = Hash[*solr_result["facet_counts"]["facet_fields"]["entry_register_facet_ssim"].flatten(1)]
+      end
+      unless solr_result["facet_counts"]["facet_fields"]["entry_register_facet_ssim"].nil?
+        @department_facet_hash = Hash[*solr_result["facet_counts"]["facet_fields"]["register_or_department_facet_ssim"].flatten(1)]
       end
     end
 
@@ -1084,6 +1096,16 @@ module TnwCommon
           else
             @register_facet_hash[st] =
               solr_result["facet_counts"]["facet_fields"]["entry_register_facet_ssim"][index + 1]
+          end
+        end
+      end
+      solr_result["facet_counts"]["facet_fields"]["register_or_department_facet_ssim"]&.each_with_index do |st, index|
+        if index.even? == true
+          if @department_facet_hash[st]
+            @department_facet_hash[st] += solr_result["facet_counts"]["facet_fields"]["register_or_department_facet_ssim"][index + 1]
+          else
+            @department_facet_hash[st] =
+              solr_result["facet_counts"]["facet_fields"]["register_or_department_facet_ssim"][index + 1]
           end
         end
       end

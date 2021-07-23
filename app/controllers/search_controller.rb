@@ -12,6 +12,7 @@ class SearchController < ApplicationController
     @search_term = params[:search_term]
     @page = params[:page]
     @register_facet = params[:register_facet]
+    @department_facet = params[:department_facet]
     @section_type_facet = params[:section_type_facet]
     @subject_facet = params[:subject_facet]
     @person_same_as_facet = params[:person_same_as_facet]
@@ -95,6 +96,7 @@ class SearchController < ApplicationController
     # other params
     @page = params[:page]
     @register_facet = params[:register_facet]
+    @department_facet = params[:department_facet]
     @section_type_facet = params[:section_type_facet]
     @subject_facet = params[:subject_facet]
     @person_same_as_facet = params[:person_same_as_facet]
