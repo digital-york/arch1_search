@@ -37,13 +37,13 @@
 
         <%= hidden_field_tag(:department_id, @department_id) %>
         <%= select_tag 'series', options_for_select(@series_list, @series_id), :class => 'choose_folio' %>
-        <%= link_to '', browse_departments_path, class: 'fa fa-chevron-circle-left fa-2x', :title => 'Go back' %><br/><br/>
 
         <% unless @years.nil? or @years.length()==0 %>
-          Please choose a year:
+          <span class="choose_year_label">Please choose a year:</span>
           <%=@current_year %>
-          <%= select_tag 'year', options_for_select(@years, @current_year), :class => 'choose_folio' %>
+          <%= select_tag 'year', options_for_select(@years, @current_year), :class => 'choose_year' %>
         <% end %>
+        <%= link_to '', browse_departments_path, class: 'fa fa-chevron-circle-left fa-2x', :title => 'Go back' %>
         <br/><br/>
 
         <% unless session[:documents_exist].nil? %>
@@ -59,7 +59,7 @@
         </p>
         <p style="float:right">
           <% unless @series_index.to_i == @series_list.length()-1 %>
-            <%= link_to '', browse_departments_path(department_id: session['department_id'], series: @series_list[@series_index.to_i+1][1]), :class => 'fa fa-long-arrow-alt-right fa-3x' %>
+            <%= link_to '', browse_departments_path(department_id: @department_id, series: @series_list[@series_index.to_i+1][1]), :class => 'fa fa-long-arrow-alt-right fa-3x' %>
           <% end %>
         </p>
       <% end %>
