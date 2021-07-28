@@ -140,6 +140,8 @@ module TnwCommon
         num = count_query(q)
         unless num == 0
           # @query.solr_query(query, 'id', 0)['response']['numFound'].to_i
+          # TNA Document hack to allow filtering with facets and data reange. Issue with field names in Entry and Document records
+          fq_entry&.each { |f| f.slice!("entry_") }
           q_result = query.solr_query(q, "id", num, "date_full_ssim asc", 0, true, -1, "index", facets, fq_entry)
           result_to_facet_hash(q_result)
           entry_id_set.merge(q_result["response"]["docs"].map { |e| e["id"] })
@@ -189,6 +191,8 @@ module TnwCommon
         num = count_query(q)
         unless num == 0
           q_result = query.solr_query(q, "relatedAgentFor_ssim", num)
+          # Keep information aboout search result types
+          q_result["response"]["docs"].map { |e| @search_result_type[e["relatedAgentFor_ssim"][0]] = :entry unless e.empty? }
           q_result["response"]["docs"].map do |result|
             next if result.empty?
 
@@ -227,6 +231,8 @@ module TnwCommon
         num = count_query(q)
         unless num == 0
           q_result = query.solr_query(q, "relatedPlaceFor_ssim", num)
+          # Keep information aboout search result types
+          q_result["response"]["docs"]&.map { |e| @search_result_type[e["relatedPlaceFor_ssim"][0]] = :entry unless e.empty? }
           q_result["response"]["docs"]&.map do |result|
             id = ""
             id = result["relatedPlaceFor_ssim"][0] unless result["relatedPlaceFor_ssim"].nil?
@@ -307,7 +313,9 @@ module TnwCommon
       entry_id_array.each do |entry_id|
         q = "id:#{entry_id}"
 
-        fl = "entry_type_facet_ssim, section_type_facet_ssim, summary_tesim, marginalia_tesim, language_facet_ssim, subject_facet_ssim, note_tesim, editorial_note_tesim, is_referenced_by_tesim"
+        fl = "entry_type_facet_ssim, section_type_facet_ssim, summary_tesim, marginalia_tesim, language_facet_ssim,
+        subject_facet_ssim, note_tesim, editorial_note_tesim, is_referenced_by_tesim,
+        date_ssim, place_same_as_facet_ssim, tna_addressees_tesim, tna_senders_tesim, tna_persons_tesim"
 
         query.solr_query(q, fl, 1)["response"]["docs"].map do |result|
           # Display all the text if not 'matched records'
@@ -320,7 +328,7 @@ module TnwCommon
           # Process :entry search results => "Register 5A f.110 (recto) entry 6", "9593tv46x"
           get_entry_and_folio_details(entry_id) 
           # Proces TNA Documents search results => "TNA C 81/365/22990A", "p55485090"
-          get_document_details(entry_id) 
+          get_document_details(entry_id) # unless @search_result_type[entry_id] != :document
           @element_array << get_element(result["entry_type_facet_ssim"])
           @element_array << get_element(result["section_type_facet_ssim"])
           @element_array << get_element(result["summary_tesim"])
@@ -329,11 +337,33 @@ module TnwCommon
           @element_array << get_element(result["subject_facet_ssim"])
           @element_array << get_element(result["note_tesim"])
           @element_array << get_element(result["editorial_note_tesim"])
+          # Add [places]
           @element_array << get_element(result["is_referenced_by_tesim"])
-          get_places(entry_id, search_term2)
-          get_people(entry_id, search_term2)
-          get_dates(entry_id, search_term2)
-          @element_array << @search_result_type[entry_id] unless @search_result_type[entry_id] != :document
+          case @search_result_type[entry_id]
+          when :entry
+            get_places(entry_id, search_term2)
+          when :document
+            @element_array << [get_element(result["place_same_as_facet_ssim"])]
+          end
+          case @search_result_type[entry_id]
+          # Add [people]
+          when :entry
+            get_people(entry_id, search_term2)
+          when :document
+            str = ""
+            str += "Addressees: #{get_element(result["tna_addressees_tesim"])}; " unless result["tna_addressees_tesim"].blank? 
+            str +=  "Senders: #{get_element(result["tna_senders_tesim"])}; " unless result["tna_senders_tesim"].blank? 
+            str +=  "Persons: #{get_element(result["tna_persons_tesim"])}; " unless result["tna_persons_tesim"].blank? 
+            @element_array << [str]
+          end
+          # Add [dates]
+          case @search_result_type[entry_id]
+          when :entry
+            get_dates(entry_id, search_term2) 
+          when :document
+            @element_array << [get_element(result["date_ssim"])] 
+            @element_array << @search_result_type[entry_id] 
+          end
           @partial_list_array << @element_array
         end
       end
@@ -994,6 +1024,9 @@ module TnwCommon
         entry_person_same_as_facet_ssim
         entry_place_same_as_facet_ssim
         entry_date_facet_ssim
+        date_facet_ssim
+        place_same_as_facet_ssim
+        person_same_as_facet_ssim
         entry_register_facet_ssim
       ]
     end
@@ -1026,16 +1059,29 @@ module TnwCommon
       unless solr_result["facet_counts"]["facet_fields"]["entry_person_same_as_facet_ssim"].nil?
         @person_same_as_facet_hash = Hash[*solr_result["facet_counts"]["facet_fields"]["entry_person_same_as_facet_ssim"].flatten(1)]
       end
+      # TNA Person facet - currently not present in Solr 
+      unless solr_result["facet_counts"]["facet_fields"]["person_same_as_facet_ssim"].nil?
+        @person_same_as_facet_hash = Hash[*solr_result["facet_counts"]["facet_fields"]["person_same_as_facet_ssim"].flatten(1)]
+      end
       unless solr_result["facet_counts"]["facet_fields"]["entry_place_same_as_facet_ssim"].nil?
         @place_same_as_facet_hash = Hash[*solr_result["facet_counts"]["facet_fields"]["entry_place_same_as_facet_ssim"].flatten(1)]
+      end
+      # TNA Place facet
+      unless solr_result["facet_counts"]["facet_fields"]["place_same_as_facet_ssim"].nil?
+        @place_same_as_facet_hash = Hash[*solr_result["facet_counts"]["facet_fields"]["place_same_as_facet_ssim"].flatten(1)]
       end
       unless solr_result["facet_counts"]["facet_fields"]["entry_date_facet_ssim"].nil?
         @date_facet_hash = Hash[*solr_result["facet_counts"]["facet_fields"]["entry_date_facet_ssim"].flatten(1)]
       end
+      # TNA Documents date facet
+      unless solr_result["facet_counts"]["facet_fields"]["date_facet_ssim"].nil?
+        @date_facet_hash = Hash[*solr_result["facet_counts"]["facet_fields"]["date_facet_ssim"].flatten(1)]
+      end
       unless solr_result["facet_counts"]["facet_fields"]["entry_register_facet_ssim"].nil?
         @register_facet_hash = Hash[*solr_result["facet_counts"]["facet_fields"]["entry_register_facet_ssim"].flatten(1)]
       end
-      unless solr_result["facet_counts"]["facet_fields"]["entry_register_facet_ssim"].nil?
+      # TNA Department facet
+      unless solr_result["facet_counts"]["facet_fields"]["register_or_department_facet_ssim"].nil?
         @department_facet_hash = Hash[*solr_result["facet_counts"]["facet_fields"]["register_or_department_facet_ssim"].flatten(1)]
       end
     end
