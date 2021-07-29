@@ -172,7 +172,7 @@ module TnwCommon
       end
 
       # PEOPLE/GROUPS: Get the matching entry ids and facets
-      if (sub != "subject") && (sub != "place")
+      if (sub != "subject") && (sub != "place") && (@archival_repository == "all" || @archival_repository != "tna")
         # if the search has come from the people or group browse, limit to searching for group or person
         q = if (sub == "group") || (sub == "person")
           # q = 'has_model_ssim:RelatedAgent AND person_same_as_search:"' + @search_term.downcase + '"'
@@ -213,7 +213,7 @@ module TnwCommon
       end
 
       # PLACE: Get the matching entry ids and facets
-      if (sub != "group") && (sub != "person") && (sub != "subject")
+      if (sub != "group") && (sub != "person") && (sub != "subject") && (@archival_repository == "all" || @archival_repository != "tna")
         # if the search has come from the places browse, limit to searching for places
         q = if sub == "place"
           # q = 'has_model_ssim:RelatedPlace AND place_same_as_search:"' + @search_term.downcase + '"'
@@ -251,7 +251,7 @@ module TnwCommon
       end
 
       # SINGLE DATES: Get the matching entry ids and facets
-      if (sub != "group") && (sub != "person") && (sub != "subject") && (sub != "place")
+      if (sub != "group") && (sub != "person") && (sub != "subject") && (sub != "place") && (@archival_repository == "all" || @archival_repository != "tna")
         # q = "has_model_ssim:SingleDate AND date_tesim:*#{search_term2}*"
         # q = "has_model_ssim:SingleDate AND date_tesim:#{search_term2}"
         q = "has_model_ssim:SingleDate AND date_new_ssi:#{search_term2}"
@@ -259,6 +259,8 @@ module TnwCommon
         num = count_query(q)
         unless num == 0
           q_result = query.solr_query(q, "dateFor_ssim", num, "date_new_ssi asc")
+          # Keep information aboout search result types
+          q_result["response"]["docs"]&.map { |e| @search_result_type[e["dateFor_ssim"][0]] = :entry unless e.empty? }
           q_result["response"]["docs"].map do |res|
             next if res.empty?
 
@@ -275,6 +277,8 @@ module TnwCommon
                     add_result_to_facet_hash(q_result2)
                   end
                   entry_id_set << q_result2["response"]["docs"][0]["id"]
+                  # Keep information aboout search result types
+                  @search_result_type[q_result2["response"]["docs"][0]["id"]] = :entry
                 end
                 next if result.empty?
               end
@@ -286,6 +290,8 @@ module TnwCommon
         num = count_query(q)
         unless num == 0
           q_result = query.solr_query(q, "entryDateFor_ssim", num, nil, 0, nil, nil, nil, nil, fq_entry)
+          # Keep information aboout search result types
+          q_result["response"]["docs"]&.map { |e| @search_result_type[e["entryDateFor_ssim"][0]] = :entry unless e.empty? }
           entry_id_set.merge(q_result["response"]["docs"]&.map { |e|
                                e["entryDateFor_ssim"][0] unless e["entryDateFor_ssim"].blank?
                              })
@@ -339,6 +345,7 @@ module TnwCommon
           @element_array << get_element(result["editorial_note_tesim"])
           # Add [places]
           @element_array << get_element(result["is_referenced_by_tesim"])
+          # Use different solr fields depending on search result type
           case @search_result_type[entry_id]
           when :entry
             get_places(entry_id, search_term2)
@@ -351,9 +358,9 @@ module TnwCommon
             get_people(entry_id, search_term2)
           when :document
             str = ""
-            str += "Addressees: #{get_element(result["tna_addressees_tesim"])}; " unless result["tna_addressees_tesim"].blank? 
-            str +=  "Senders: #{get_element(result["tna_senders_tesim"])}; " unless result["tna_senders_tesim"].blank? 
-            str +=  "Persons: #{get_element(result["tna_persons_tesim"])}; " unless result["tna_persons_tesim"].blank? 
+            str += "Addressee/s: #{get_element(result["tna_addressees_tesim"])}; " unless result["tna_addressees_tesim"].blank? 
+            str +=  "Sender/s: #{get_element(result["tna_senders_tesim"])}; " unless result["tna_senders_tesim"].blank? 
+            str +=  "Person/s: #{get_element(result["tna_persons_tesim"])}; " unless result["tna_persons_tesim"].blank? 
             @element_array << [str]
           end
           # Add [dates]
