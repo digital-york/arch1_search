@@ -17,7 +17,7 @@
                    is_referenced_by = t[11]
                    place = t[12]
                    person = t[13]
-                   dates = t[14].sort_by { |s| s.scan(/\d+/).join } # Sort by dates digit only
+                   dates = t[14]&.sort_by { |s| s.scan(/\d+/).join } # Sort by dates digit only
                    search_type = (t[15] == :document ? :document : :entry) # Decide search type Document or Entry
                 %>
 
