@@ -156,11 +156,11 @@
       <!-- dates -->
       <!-- Person -->
       <%unless @dates.nil? or @dates.length()==0%>
-        <tr>
-          <th style="width: 30%; padding-top: 15px">Dates:</th>
-          <td></td>
-        </tr>
         <% @dates.each do |d| %>
+          <tr>
+            <th style="width: 30%; padding-top: 15px">Date:</th>
+            <td></td>
+          </tr>
           <%= render :partial => 'document_date', :locals => {:d => d} %>
         <% end %>
       <%end %>
