@@ -68,7 +68,7 @@
           <th style="width: 30%; padding-top: 15px">Note:</th>
           <td style="padding-top: 15px">
             <% @current_document['note_tesim'].each do |n| %>
-              <%= n %>
+              <%= raw n %>
             <% end %>
           </td>
         </tr>
