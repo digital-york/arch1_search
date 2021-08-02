@@ -131,21 +131,25 @@
       <!-- Places -->
       <%unless @place_of_datings.nil? and @tna_places.nil?%>
         <% @place_of_datings.each do |p| %>
-          <tr>
-            <th style="width: 30%; padding-top: 15px">Place:</th>
-            <td></td>
-          </tr>
+          <%unless p[:place_as_written].blank? and p[:place_same_as].blank? and p[:place_note].join.blank? %>
+            <tr>
+              <th style="width: 30%; padding-top: 15px">Place:</th>
+              <td></td>
+            </tr>
 
-          <%= render :partial => 'document_place_details', :locals => {:p => p, :role=>'Place of dating'} %>
+            <%= render :partial => 'document_place_details', :locals => {:p => p, :role=>'Place of dating'} %>
+          <% end %>
         <% end %>
 
         <% @tna_places.each do |p| %>
-          <tr>
-            <th style="width: 30%; padding-top: 15px">Place:</th>
-            <td></td>
-          </tr>
+          <%unless p[:place_as_written].blank? and p[:place_same_as].blank? and p[:place_note].join.blank? %>
+            <tr>
+              <th style="width: 30%; padding-top: 15px">Place:</th>
+              <td></td>
+            </tr>
 
-          <%= render :partial => 'document_place_details', :locals => {:p => p, :role=>'Place mentioned'} %>
+            <%= render :partial => 'document_place_details', :locals => {:p => p, :role=>'Place mentioned'} %>
+          <% end %>
         <% end %>
       <% end %>
 
