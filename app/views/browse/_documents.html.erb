@@ -32,6 +32,18 @@
         </td>
       </tr>
 
+      <!-- Document type -->
+      <%unless @current_document['entry_type_facet_ssim'].nil? or @current_document['entry_type_facet_ssim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Document type:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['entry_type_facet_ssim'].each do |e| %>
+              <%= e %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
       <!-- Reference -->
       <tr>
         <th style="width: 30%; padding-top: 15px">Reference:</th>
@@ -56,7 +68,7 @@
           <th style="width: 30%; padding-top: 15px">Note:</th>
           <td style="padding-top: 15px">
             <% @current_document['note_tesim'].each do |n| %>
-              <%= n %>
+              <%= raw n %>
             <% end %>
           </td>
         </tr>
@@ -105,11 +117,11 @@
       <!-- Person -->
       <%unless @tna_persons.nil? or @tna_persons.length()==0%>
         <tr>
-          <th style="width: 30%; padding-top: 15px">Person:</th>
+          <th style="width: 30%; padding-top: 15px">People mentioned:</th>
           <td style="padding-top: 15px">
             <% @tna_persons.each do |p| %>
               <% p[:person_as_written].each do |paw| %>
-                <%= paw%>
+                <%= paw%><br/>
               <% end %>
             <% end %>
           </td>
@@ -118,28 +130,37 @@
 
       <!-- Places -->
       <%unless @place_of_datings.nil? and @tna_places.nil?%>
-        <tr>
-          <th style="width: 30%; padding-top: 15px">Places:</th>
-          <td></td>
-        </tr>
-
         <% @place_of_datings.each do |p| %>
-          <%= render :partial => 'document_place_details', :locals => {:p => p} %>
+          <%unless p[:place_as_written].blank? and p[:place_same_as].blank? and p[:place_note].join.blank? %>
+            <tr>
+              <th style="width: 30%; padding-top: 15px">Place:</th>
+              <td></td>
+            </tr>
+
+            <%= render :partial => 'document_place_details', :locals => {:p => p, :role=>'Place of dating'} %>
+          <% end %>
         <% end %>
 
         <% @tna_places.each do |p| %>
-          <%= render :partial => 'document_place_details', :locals => {:p => p} %>
+          <%unless p[:place_as_written].blank? and p[:place_same_as].blank? and p[:place_note].join.blank? %>
+            <tr>
+              <th style="width: 30%; padding-top: 15px">Place:</th>
+              <td></td>
+            </tr>
+
+            <%= render :partial => 'document_place_details', :locals => {:p => p, :role=>'Place mentioned'} %>
+          <% end %>
         <% end %>
       <% end %>
 
       <!-- dates -->
       <!-- Person -->
       <%unless @dates.nil? or @dates.length()==0%>
-        <tr>
-          <th style="width: 30%; padding-top: 15px">Dates:</th>
-          <td></td>
-        </tr>
         <% @dates.each do |d| %>
+          <tr>
+            <th style="width: 30%; padding-top: 15px">Date:</th>
+            <td></td>
+          </tr>
           <%= render :partial => 'document_date', :locals => {:d => d} %>
         <% end %>
       <%end %>

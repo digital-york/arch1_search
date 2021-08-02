@@ -27,11 +27,11 @@
         Role:
       </th>
       <td>
-        place of dating
+        <%= role %>
       </td>
     </tr>
   <% end %>
-  <% unless p[:place_note].blank? or p[:place_note]==''%>
+  <% unless p[:place_note].blank? or p[:place_note].join ==''%>
     <tr>
       <th class="pad_th_person_place">
         Note:

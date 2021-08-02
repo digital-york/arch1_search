@@ -1,10 +1,10 @@
-<% unless @document_json["document_type_tesim"].blank? %>
+<% unless @document_json["entry_type_facet_ssim"].blank? %>
   <div class="row">
     <div class="col-md-3 document_field_title">
       Document Type:
     </div>
     <div class="col-md-9">
-      <% @document_json["document_type_tesim"].each do |document_type| %>
+      <% @document_json["entry_type_facet_ssim"].each do |document_type| %>
         <div class="pad_multi_element">
           <%== document_type %>
         </div>
