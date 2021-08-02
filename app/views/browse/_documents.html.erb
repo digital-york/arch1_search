@@ -136,7 +136,7 @@
             <td></td>
           </tr>
 
-          <%= render :partial => 'document_place_details', :locals => {:p => p} %>
+          <%= render :partial => 'document_place_details', :locals => {:p => p, :role=>'Place of dating'} %>
         <% end %>
 
         <% @tna_places.each do |p| %>
@@ -145,7 +145,7 @@
             <td></td>
           </tr>
 
-          <%= render :partial => 'document_place_details', :locals => {:p => p} %>
+          <%= render :partial => 'document_place_details', :locals => {:p => p, :role=>'Place mentioned'} %>
         <% end %>
       <% end %>
 
