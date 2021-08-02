@@ -32,6 +32,18 @@
         </td>
       </tr>
 
+      <!-- Document type -->
+      <%unless @current_document['entry_type_facet_ssim'].nil? or @current_document['entry_type_facet_ssim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Document type:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['entry_type_facet_ssim'].each do |e| %>
+              <%= e %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
       <!-- Reference -->
       <tr>
         <th style="width: 30%; padding-top: 15px">Reference:</th>
