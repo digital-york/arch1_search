@@ -160,6 +160,14 @@ class BrowseController < ApplicationController
           @tna_persons = tna_search.get_tna_persons(@current_document['id'])
           @dates = tna_search.get_dates(@current_document['id'])
         end
+
+        # sorting
+        if @document_list.length() > 1 and @document_list[0][:reference].match?(/[A-Z][ ]([0-9]*\/[0-9]*\/[0-9A-Za-z]*)/)
+          @document_list.sort_by! {|document| (
+          document[:reference].split[1].split('/')[1] + '.' +
+              (document[:reference].split[1].split('/')[2].to_i<10? '0':'') +
+              document[:reference].split[1].split('/')[2]).to_f}
+        end
       end
     rescue => error
       log_error(__method__, __FILE__, error)
