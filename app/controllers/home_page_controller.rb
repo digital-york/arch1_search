@@ -1,5 +1,5 @@
 class HomePageController < ApplicationController
-  layout 'default_layout'
+  layout 'simple_layout'
 
   before_action :set_layout_flag
 

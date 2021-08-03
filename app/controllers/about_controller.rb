@@ -1,7 +1,7 @@
 # added (ja)
 class AboutController < ApplicationController
 
-  layout 'default_layout'
+  layout 'simple_layout'
 
   def index
   end

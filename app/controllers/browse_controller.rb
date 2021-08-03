@@ -3,7 +3,7 @@ require 'tnw_common/tna/tna_search'
 
 class BrowseController < ApplicationController
 
-  layout 'default_layout'
+  layout 'simple_layout'
 
   def index
     reset_session_variables
