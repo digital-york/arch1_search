@@ -122,9 +122,12 @@ module TnwCommon
         search_term2 = parse_search_term(search_term: @search_term) unless @search_term.blank?
       end
       # Filter query for the entry (section types and subject facets), used when looping through the entries
-      fq_entry = filter_query
+      # TNA Documents facet fields are different tha Borthwick Entries
+      fq_entry = filter_entries
+      fq_document = filter_documents
       fq_date = date_filter(start_date: @start_date, end_date: @end_date)
       fq_entry = Array(fq_entry) | Array(fq_date) unless fq_date.nil?
+      fq_document = Array(fq_document) | Array(fq_date) unless fq_date.nil?
 
       # TNA Documents: Get matching document ids and facets
       # has_model_ssim:Document AND repository_tesim:(TNA)
@@ -140,9 +143,7 @@ module TnwCommon
         num = count_query(q)
         unless num == 0
           # @query.solr_query(query, 'id', 0)['response']['numFound'].to_i
-          # TNA Document hack to allow filtering with facets and data reange. Issue with field names in Entry and Document records
-          fq_entry&.each { |f| f.slice!("entry_") }
-          q_result = query.solr_query(q, "id", num, "date_full_ssim asc", 0, true, -1, "index", facets, fq_entry)
+          q_result = query.solr_query(q, "id", num, "date_full_ssim asc", 0, true, -1, "index", facets, fq_document)
           result_to_facet_hash(q_result)
           entry_id_set.merge(q_result["response"]["docs"].map { |e| e["id"] })
           # Keep information aboout search result types
@@ -1038,20 +1039,30 @@ module TnwCommon
       ]
     end
 
-    # build the filter query for solr - part of facet brows search 
-    def filter_query(model = nil)
+    # Build the filter query for solr - part of facet brows search
+    # Borthwick Entries facet fields
+    def filter_entries()
       fq = []
-      if model.nil?
-        fq << "section_type_facet_ssim:\"#{@section_type_facet}\"" unless @section_type_facet.nil?
-        fq << "subject_facet_ssim:\"#{@subject_facet}\"" unless @subject_facet.nil?
-        fq << "entry_register_facet_ssim:\"#{@register_facet}\"" unless @register_facet.nil?
-        fq << "register_or_department_facet_ssim:\"#{@department_facet}\"" unless @department_facet.nil?
-        fq << "entry_person_same_as_facet_ssim:\"#{@person_same_as_facet}\"" unless @person_same_as_facet.nil?
-        fq << "entry_place_same_as_facet_ssim:\"#{@place_same_as_facet}\"" unless @place_same_as_facet.nil?
-        fq << "entry_date_facet_ssim:#{@date_facet}*" unless @date_facet.nil?
-      else
-        fq << "date_facet_ssim:#{@date_facet}*" unless @date_facet.nil?
-      end
+      fq << "section_type_facet_ssim:\"#{@section_type_facet}\"" unless @section_type_facet.nil?
+      fq << "subject_facet_ssim:\"#{@subject_facet}\"" unless @subject_facet.nil?
+      fq << "entry_register_facet_ssim:\"#{@register_facet}\"" unless @register_facet.nil?
+      fq << "register_or_department_facet_ssim:\"#{@department_facet}\"" unless @department_facet.nil?
+      fq << "entry_person_same_as_facet_ssim:\"#{@person_same_as_facet}\"" unless @person_same_as_facet.nil?
+      fq << "entry_place_same_as_facet_ssim:\"#{@place_same_as_facet}\"" unless @place_same_as_facet.nil?
+      fq << "entry_date_facet_ssim:#{@date_facet}*" unless @date_facet.nil?
+      fq = nil if fq.empty?
+      fq
+    end
+    # TNA Documents facet fields
+    def filter_documents()
+      fq = []
+      fq << "section_type_facet_ssim:\"#{@section_type_facet}\"" unless @section_type_facet.nil?
+      fq << "subject_facet_ssim:\"#{@subject_facet}\"" unless @subject_facet.nil?
+      fq << "entry_register_facet_ssim:\"#{@register_facet}\"" unless @register_facet.nil?
+      fq << "register_or_department_facet_ssim:\"#{@department_facet}\"" unless @department_facet.nil?
+      fq << "person_same_as_facet_ssim:\"#{@person_same_as_facet}\"" unless @person_same_as_facet.nil?
+      fq << "place_same_as_facet_ssim:\"#{@place_same_as_facet}\"" unless @place_same_as_facet.nil?
+      fq << "date_facet_ssim:#{@date_facet}*" unless @date_facet.nil?
       fq = nil if fq.empty?
       fq
     end
