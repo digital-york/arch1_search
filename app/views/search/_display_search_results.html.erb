@@ -1,4 +1,5 @@
             <% total_page_rows = local_assigns[:locals][:total_page_rows] %>
+            <% search_mode = local_assigns[:locals][:search_mode] %>
             
             <% @partial_list_array.each_with_index do |t, index| %>
 
@@ -31,11 +32,16 @@
                                 folio_id: folio_id, 
                                 folio_title: title, 
                                 search_term: @search_term,
-                                all_sterms: @search_term, 
+                                all_sterms: @all_sterms,
+                                exact_sterms: @exact_sterms,
+                                any_sterms: @any_sterms,
+                                none_sterms: @none_sterms, 
                                 start_date: @start_date, 
                                 end_date: @end_date, 
                                 archival_repository: @archival_repository, 
-                                page: @page) %>
+                                page: @page,
+                                rows_per_page: @rows_per_page,
+                                search_mode: search_mode) %>
                     <% elsif search_type == :document then %>
                         <%= link_to title, 
                             searches_show_path(
@@ -43,11 +49,16 @@
                                 series_id: folio_id, 
                                 folio_title: title, 
                                 search_term: @search_term,
-                                all_sterms: @search_term, 
+                                all_sterms: @all_sterms,
+                                exact_sterms: @exact_sterms,
+                                any_sterms: @any_sterms,
+                                none_sterms: @none_sterms, 
                                 start_date: @start_date, 
                                 end_date: @end_date, 
                                 archival_repository: @archival_repository, 
-                                page: @page) %>
+                                page: @page,
+                                rows_per_page: @rows_per_page,
+                                search_mode: search_mode) %>
                     <% end %></span>
 
                     <div class="results_table">

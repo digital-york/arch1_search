@@ -1,0 +1,26 @@
+    <% if @search_mode == "simple" %>
+      <a href="<%= search_simple_path(
+                search_term: @search_term, 
+                start_date: @start_date, 
+                end_date: @end_date,
+                archival_repository: @archival_repository,
+                page: @page,
+                rows_per_page: @rows_per_page) 
+              %>" title="Return to search results">
+        <span class="fa fa-chevron-circle-left fa-1x"></span>
+      </a>
+    <% elsif @search_mode == "advanced" %>
+      <a href="<%= search_advanced_path(
+                all_sterms: @all_sterms,
+                exact_sterms: @exact_sterms,
+                any_sterms: @any_sterms,
+                none_sterms: @none_sterms,
+                start_date: @start_date, 
+                end_date: @end_date,
+                archival_repository: @archival_repository,
+                page: @page,
+                rows_per_page: @rows_per_page) 
+              %>" title="Return to search results">
+        <span class="fa fa-chevron-circle-left fa-1x"></span>
+      </a>
+    <% end %>
