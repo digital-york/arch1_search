@@ -25,9 +25,29 @@
 
               <span class="results_title"><%= total_page_rows + index + 1 %>
                   .&nbsp;&nbsp;<% if search_type == :entry then %>
-                        <%= link_to title, searches_show_path(:entry_id => entry_id, :folio_id => folio_id, :folio_title => title, :search_term => @search_term, :page => @page) %>
+                        <%= link_to title, 
+                            searches_show_path(
+                                entry_id: entry_id, 
+                                folio_id: folio_id, 
+                                folio_title: title, 
+                                search_term: @search_term,
+                                all_sterms: @search_term, 
+                                start_date: @start_date, 
+                                end_date: @end_date, 
+                                archival_repository: @archival_repository, 
+                                page: @page) %>
                     <% elsif search_type == :document then %>
-                        <%= link_to title, searches_show_path(:document_id => entry_id, :series_id => folio_id, :folio_title => title, :search_term => @search_term, :page => @page) %>
+                        <%= link_to title, 
+                            searches_show_path(
+                                document_id: entry_id, 
+                                series_id: folio_id, 
+                                folio_title: title, 
+                                search_term: @search_term,
+                                all_sterms: @search_term, 
+                                start_date: @start_date, 
+                                end_date: @end_date, 
+                                archival_repository: @archival_repository, 
+                                page: @page) %>
                     <% end %></span>
 
                     <div class="results_table">

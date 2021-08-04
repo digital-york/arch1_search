@@ -77,7 +77,11 @@
               <div class="form-group col-md-4 inline-group">
                 <%= label_tag(:archival_repository, "Held by", id: "archival_repository_label") %>
                 <%= select_tag(:archival_repository, 
-                  options_for_select([["All Archives", "all"], ["Borthwick Institute for Archives", "borthwick"], ["The National Archives", "tna"]]), 
+                  options_for_select(
+                    [["All Archives", "all"], 
+                    ["Borthwick Institute for Archives", "borthwick"], 
+                    ["The National Archives", "tna"]], 
+                    @archival_repository), 
                   class: "form-control") %>
               </div>
             </div>
@@ -87,7 +91,13 @@
             </div>
             <div class="form-group col-sm-12">
               <small id="search_links" class="text-muted">
-                <%= link_to 'Simple', search_simple_path(search_term: @all_sterms) %> search
+                <%= link_to 'Simple', 
+                  search_simple_path(
+                    search_term: @all_sterms,
+                    start_date: @start_date, 
+                    end_date: @end_date, 
+                    archival_repository: @archival_repository) 
+                %> search
               </small>
             </div>
           <% end %> <%# form_tag %>

@@ -1,3 +1,6 @@
+<%= hidden_field_tag(:start_date, @start_date) unless @start_date.blank? %>
+<%= hidden_field_tag(:end_date, @end_date) unless @end_date.blank? %>
+<%= hidden_field_tag(:archival_repository, @archival_repository) unless @archival_repository.blank? %>
 <%= hidden_field_tag(:search_term, @search_term) unless @search_term.blank? %>
 <%= hidden_field_tag(:all_sterms, @all_sterms) unless @all_sterms.blank? %>
 <%= hidden_field_tag(:exact_sterms, @exact_sterms) unless @exact_sterms.blank? %>
