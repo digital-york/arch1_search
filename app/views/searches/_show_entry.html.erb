@@ -10,7 +10,13 @@
         <%= @folio_title %>&nbsp;
         <%= link_to '', {controller: 'iiif', action: 'download', folio_id: get_id(session[:folio_id])}, class: 'fa fa-download fa-1x', :title => 'Download this image' %>
         &nbsp;
-        <a href="<%= searches_path(:search_term => @search_term, :page => @page) %>" title="Return to search results">
+        <a href="<%= searches_path(
+                    search_term: @search_term, 
+                    start_date: @start_date, 
+                    end_date: @end_date,
+                    archival_repository: @archival_repository,
+                    page: @page)
+                %>" title="Return to search results">
             <span class="fa fa-chevron-circle-left fa-1x"></span>
         </a>
     </div>
