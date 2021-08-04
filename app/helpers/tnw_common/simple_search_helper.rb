@@ -1,9 +1,11 @@
 module TnwCommon
   module SimpleSearchHelper
-    def date_filter(start_date:, end_date:)
+    def date_filter(start_date:, end_date:, type:)
+      str = "entry_" if type == :entry
+      str = "" if type == :document
       start_date = start_date.blank? ? "*" : start_date
       end_date = end_date.blank? ? "*" : end_date
-      "entry_date_facet_ssim:[#{start_date} TO #{end_date}]" if (start_date != "*") || (end_date != "*")
+      "#{str}date_facet_ssim:[#{start_date} TO #{end_date}]" if (start_date != "*") || (end_date != "*")
     end
 
     def parse_search_term(search_term:)
@@ -125,8 +127,9 @@ module TnwCommon
       # TNA Documents facet fields are different tha Borthwick Entries
       fq_entry = filter_entries
       fq_document = filter_documents
-      fq_date = date_filter(start_date: @start_date, end_date: @end_date)
+      fq_date = date_filter(start_date: @start_date, end_date: @end_date, type: :entry)
       fq_entry = Array(fq_entry) | Array(fq_date) unless fq_date.nil?
+      fq_date = date_filter(start_date: @start_date, end_date: @end_date, type: :document)
       fq_document = Array(fq_document) | Array(fq_date) unless fq_date.nil?
 
       # TNA Documents: Get matching document ids and facets
