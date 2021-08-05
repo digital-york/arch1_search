@@ -99,6 +99,21 @@ class SearchesController < ApplicationController
     tna_search = TnwCommon::Tna::TnaSearch.new(solr_server)
 
     begin
+      # sahared params
+      @page = params[:page]
+      @rows_per_page = params[:rows_per_page]
+      @start_date = params[:start_date]
+      @end_date = params[:end_date]
+      @archival_repository = params[:archival_repository]
+      @search_mode = params[:search_mode]
+      # simple search
+      @search_term = params[:search_term]
+      # advanced search terms
+      @all_sterms = params[:all_sterms]
+      @exact_sterms = params[:exact_sterms]
+      @any_sterms = params[:any_sterms]
+      @none_sterms = params[:none_sterms]
+      
       if not params[:entry_id].blank?
         # Create a new DbEntry model from the database tables
         @db_entry = DbEntry.new
@@ -114,13 +129,9 @@ class SearchesController < ApplicationController
         else
           @folio_title = params[:folio_title]
         end
-
-
         # @entry_list is used to get the tabs for the view page
         @entry_list = get_entry_list(@folio_id)
 
-        @search_term = params[:search_term]
-        @page = params[:page]
       elsif not params[:document_id].blank?
         @document_id = params[:document_id]
         @document_json = tna_search.get_document_json(@document_id)
