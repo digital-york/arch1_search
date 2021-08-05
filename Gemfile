@@ -26,7 +26,7 @@ gem 'sqlite3'
 gem 'therubyracer', platforms: :ruby
 gem 'turbolinks'
 gem 'uglifier', '>= 1.3.0'
-gem 'tnw_common', git: 'https://github.com/digital-york/tnw_common', branch: 'development'
+gem 'tnw_common', git: 'https://github.com/digital-york/tnw_common', branch: 'main'
 
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
