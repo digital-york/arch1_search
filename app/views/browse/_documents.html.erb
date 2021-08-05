@@ -38,7 +38,7 @@
           <th style="width: 30%; padding-top: 15px">Document type:</th>
           <td style="padding-top: 15px">
             <% @current_document['entry_type_facet_ssim'].each do |e| %>
-              <%= e %>
+              <%= e %><br/>
             <% end %>
           </td>
         </tr>
@@ -56,7 +56,7 @@
           <th style="width: 30%; padding-top: 15px">Summary:</th>
           <td style="padding-top: 15px">
             <% @current_document['summary_tesim'].each do |s| %>
-              <%= s %>
+              <%= s %><br/>
             <% end %>
           </td>
         </tr>
@@ -68,7 +68,7 @@
           <th style="width: 30%; padding-top: 15px">Note:</th>
           <td style="padding-top: 15px">
             <% @current_document['note_tesim'].each do |n| %>
-              <%= raw n %>
+              <%= raw n %><br/>
             <% end %>
           </td>
         </tr>
@@ -80,7 +80,7 @@
           <th style="width: 30%; padding-top: 15px">Language:</th>
           <td style="padding-top: 15px">
             <% @current_document['language_facet_ssim'].each do |l| %>
-              <%= l %>
+              <%= l %><br/>
             <% end %>
           </td>
         </tr>
@@ -93,7 +93,7 @@
           <td style="padding-top: 15px">
             <% @tna_addressees.each do |a| %>
               <% a[:person_as_written].each do |p| %>
-                <%= p%>
+                <%= p%><br/>
               <% end %>
             <% end %>
           </td>
@@ -107,7 +107,7 @@
           <td style="padding-top: 15px">
             <% @tna_senders.each do |s| %>
               <% s[:person_as_written].each do |p| %>
-                <%= p%>
+                <%= p%><br/>
               <% end %>
             <% end %>
           </td>
