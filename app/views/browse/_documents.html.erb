@@ -131,7 +131,7 @@
       <!-- Places -->
       <%unless @place_of_datings.nil? and @tna_places.nil?%>
         <% @place_of_datings.each do |p| %>
-          <%unless p[:place_as_written].blank? and p[:place_same_as].blank? and p[:place_note].join.blank? %>
+          <%unless p[:place_as_written].blank? and p[:place_same_as].blank? and (p[:place_note].nil? or p[:place_note].join.blank?) %>
             <tr>
               <th style="width: 30%; padding-top: 15px">Place:</th>
               <td></td>
