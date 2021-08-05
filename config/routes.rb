@@ -7,12 +7,17 @@ Rails.application.routes.draw do
 
   resources :searches
 
+  
+  get 'search' => 'search#simple'
+  get 'search/simple'
+  get 'search/advanced'
+  get 'search/show'
+  resources :search
+  
   root 'home_page#index'
 
   get 'image_zoom_large' => 'image_zoom_large#index'
   get 'image_zoom_large/alt' => 'image_zoom_large#alt'
-
-  get 'index2' => 'searches#index2'
 
   # added (ja)
 
@@ -35,6 +40,7 @@ Rails.application.routes.draw do
 
   get 'browse/index'
   get 'browse/registers'
+  get 'browse/departments'
   get 'browse/people'
   get 'browse/places'
   get 'browse/groups'

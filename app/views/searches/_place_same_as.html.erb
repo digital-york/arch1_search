@@ -1,0 +1,12 @@
+<% unless @document_json["place_same_as_facet_ssim"].blank? %>
+  <tr>
+    <th>Place:</th>
+    <td>
+      <% @document_json["place_same_as_facet_ssim"].each do |place| %>
+        <div class="pad_multi_element">
+          <%== place %>
+        </div>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

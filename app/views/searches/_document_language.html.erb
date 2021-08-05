@@ -1,0 +1,14 @@
+<% unless @document_json["language_facet_ssim"].blank? %>
+  <div class="row">
+    <div class="col-md-3 document_field_title">
+      Language:
+    </div>
+    <div class="col-md-9">
+      <% @document_json["language_facet_ssim"].each do |language| %>
+        <div class="pad_multi_element">
+          <%== language %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

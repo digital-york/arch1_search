@@ -24,6 +24,16 @@ $(document).ready(function () {
         $("#choose_folio").submit();
     });
 
+    // Called when the user chooses a series from the menu drop-down list
+    $('body').on('change', '#series', function(e) {
+        $("#year").val("");  // when series changed, clear year field
+        $("#choose_series").submit();
+    });
+
+    $('body').on('change', '#year', function(e) {
+        $("#choose_series").submit();
+    });
+
     $('body').on('click', '.show_hide', function(e) {
         $(this).next(".tog").toggle();
         if ($(this).hasClass('fa-plus')) {

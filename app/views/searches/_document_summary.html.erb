@@ -1,0 +1,15 @@
+<% unless @document_json["summary_tesim"].blank? %>
+  <div class="row">
+    <div class="col-md-3 document_field_title">
+      Summary:
+    </div>
+    <div class="col-md-9">
+      <% @document_json["summary_tesim"].each do |summary| %>
+        <div class="pad_multi_element">
+          <%== summary %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+

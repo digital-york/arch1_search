@@ -1,0 +1,14 @@
+<% unless @document_json["note_tesim"].blank? %>
+  <div class="row">
+    <div class="col-md-3 document_field_title">
+      Note:
+    </div>
+    <div class="col-md-9">
+      <% @document_json["note_tesim"].each do |note| %>
+        <div class="pad_multi_element">
+          <%== note %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>

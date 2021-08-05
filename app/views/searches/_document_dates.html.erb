@@ -1,0 +1,38 @@
+<%unless @dates.nil? or @dates.length()==0%>
+  <div class="row">
+    <div class="col-md-3 document_field_title">
+      Dates:
+    </div>
+    <div class="col-md-9">
+      <% @dates.each do |d| %>
+        <% unless d.nil? %>
+          <% unless d[:date].blank? %>
+            <p>
+                <% d[:date].each do |current_date| %>
+                  <%= current_date%>
+                <% end %>
+            </p>
+          <% end %>
+          <% unless d[:certainty].blank? %>
+            <div>
+                Certainty:
+                <% d[:certainty].each do |c| %>
+                  <%= c%>
+                <% end %>
+            </div>
+          <% end %>
+          <% unless d[:type].blank? or d[:type]==''%>
+            <div>
+                Type:
+                <% d[:type].each do |dt| %>
+                  <% unless dt.blank? %>
+                    <%= dt%><br/>
+                  <% end %>
+                <% end %>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+<%end %>

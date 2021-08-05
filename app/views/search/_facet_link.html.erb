@@ -1,0 +1,26 @@
+<% search_mode = local_assigns[:locals][:search_mode] %>
+
+<%
+  search_string = '?'
+  search_string += "&amp;search_term=#{@search_term}" unless @search_term.blank?
+  search_string += "&amp;all_sterms=#{@all_sterms}" unless @all_sterms.blank?
+  search_string += "&amp;exact_sterms=#{@exact_sterms}" unless @exact_sterms.blank?
+  search_string += "&amp;any_sterms=#{@any_sterms}" unless @any_sterms.blank?
+  search_string += "&amp;none_sterms=#{@none_sterms}" unless @none_sterms.blank?
+  search_string += "&amp;search_type=#{@search_type}" unless @search_type.blank?
+  search_string += "&amp;rows_per_page=#{@rows_per_page}" unless @rows_per_page.blank?
+  search_string += "&amp;page=#{@page}" unless @page.blank?
+  search_string += "&amp;display_type=#{@display_type}" unless @dispaly_type.blank?
+  search_string += "&amp;register_facet=#{@register_facet}" unless @register_facet.blank?
+  search_string += "&amp;department_facet=#{@department_facet}" unless @department_facet.blank?
+  search_string += "&amp;section_type_facet=#{@section_type_facet}" unless @section_type_facet.blank?
+  search_string += "&amp;subject_facet=#{@subject_facet}" unless @subject_facet.blank?
+  search_string += "&amp;person_same_as_facet=#{@person_same_as_facet}" unless @person_same_as_facet.blank?
+  search_string += "&amp;place_same_as_facet=#{@place_same_as_facet}" unless @place_same_as_facet.blank?
+  search_string += "&amp;date_facet=#{@date_facet}" unless @date_facet.blank?
+%>
+<% if search_mode == :simple %>
+  <a href="<%= search_simple_path%><%= search_string %>"><span class="fa fa-times fa-1x"></span></a>
+<% elsif search_mode == :advanced %>
+  <a href="<%= search_advanced_path%><%= search_string %>"><span class="fa fa-times fa-1x"></span></a>
+<% end%>

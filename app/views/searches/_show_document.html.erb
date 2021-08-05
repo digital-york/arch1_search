@@ -1,0 +1,77 @@
+<div class="row">
+  <div class="col-md-12">
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-1"></div>
+  <%# Display the document title and the 'go back' arrow %>
+  <div class="col-md-10" id="folio_title">
+    <%== @document_json["reference_tesim"][0] unless @document_json["reference_tesim"].blank? %>
+    &nbsp;
+    <%= render 'return_search_link' %>
+  </div>
+
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row" style="margin-top: 0px">
+
+  <div class="col-md-1"></div>
+
+  <div class="col-md-10" id='form_frame'>
+
+    <div class='document_details'>
+        <%# Document reference %>
+        <%= render 'document_reference' %>
+
+        <%# Document type %>
+        <%= render 'document_type' %>
+
+        <%# Document summary %>
+        <%= render 'document_summary' %>
+
+        <%# Document note %>
+        <%= render 'document_note' %>
+
+        <%# Document publication %>
+        <%= render 'document_publication' %>
+
+        <%# Document date %>
+        <%= render 'document_dates' %>
+
+        <%# Document place of dating %>
+        <%= render 'document_place_of_dating' %>
+        <%# Document place  %>
+        <%= render 'document_place' %>
+
+        <%# Place same as %>
+        <%#= render 'place_same_as' %>
+        <%# Place as written %>
+        <%#= render 'place_as_written' %>
+
+        <%# Document subject %>
+        <%= render 'document_subject' %>
+
+        <%# Document language %>
+        <%= render 'document_language' %>
+
+        <%# Document addressee %>
+        <%= render 'document_addressee' %>
+
+        <%# Document sender %>
+        <%= render 'document_sender' %>
+
+        <%# Document person %>
+        <%= render 'document_person' %>
+    </div>
+
+
+  </div>
+
+  <div class="col-md-1"></div>
+</div>
+
+<div class="row" style="height: 100px">
+  <div class="cold-md-12">
+  </div>
+</div>

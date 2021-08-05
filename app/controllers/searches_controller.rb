@@ -1,6 +1,9 @@
+require 'tnw_common/solr/solr_query'
+require 'tnw_common/tna/tna_search'
+
 class SearchesController < ApplicationController
 
-  layout 'default_layout'
+  layout 'simple_layout'
 
   def index
 
@@ -73,6 +76,7 @@ class SearchesController < ApplicationController
         end
 
         # Set arrays which display data on the page
+        # @search_type only set for browse searches
         if @search_type == 'subject' or @search_type == 'group' or @search_type == 'person' or @search_type == 'place'
           set_search_result_arrays(@search_type)
         else
@@ -91,30 +95,50 @@ class SearchesController < ApplicationController
   end
 
   def show
+    solr_server = TnwCommon::Solr::SolrQuery.new(SOLR[Rails.env]['url'])
+    tna_search = TnwCommon::Tna::TnaSearch.new(solr_server)
 
     begin
-
-      # Create a new DbEntry model from the database tables
-      @db_entry = DbEntry.new
-      @db_entry.entry_id = params[:entry_id]
-
-      # Populate db_entry with data from Solr
-      get_solr_data(@db_entry)
-
-      session[:folio_id] = params[:folio_id]  
-      @folio_id = params[:folio_id]
-      if params[:folio_title].nil?
-        @folio_title = get_folio_title(params[:entry_id])
-      else
-        @folio_title = params[:folio_title]
-      end
-
-
-      # @entry_list is used to get the tabs for the view page
-      @entry_list = get_entry_list(@folio_id)
-
-      @search_term = params[:search_term]
+      # sahared params
       @page = params[:page]
+      @rows_per_page = params[:rows_per_page]
+      @start_date = params[:start_date]
+      @end_date = params[:end_date]
+      @archival_repository = params[:archival_repository]
+      @search_mode = params[:search_mode]
+      # simple search
+      @search_term = params[:search_term]
+      # advanced search terms
+      @all_sterms = params[:all_sterms]
+      @exact_sterms = params[:exact_sterms]
+      @any_sterms = params[:any_sterms]
+      @none_sterms = params[:none_sterms]
+      
+      if not params[:entry_id].blank?
+        # Create a new DbEntry model from the database tables
+        @db_entry = DbEntry.new
+        @db_entry.entry_id = params[:entry_id]
+
+        # Populate db_entry with data from Solr
+        get_solr_data(@db_entry)
+
+        session[:folio_id] = params[:folio_id]
+        @folio_id = params[:folio_id]
+        if params[:folio_title].nil?
+          @folio_title = get_folio_title(params[:entry_id])
+        else
+          @folio_title = params[:folio_title]
+        end
+        # @entry_list is used to get the tabs for the view page
+        @entry_list = get_entry_list(@folio_id)
+
+      elsif not params[:document_id].blank?
+        @document_id = params[:document_id]
+        @document_json = tna_search.get_document_json(@document_id)
+        @tna_place_of_datings = tna_search.get_place_of_datings(@document_id)
+        @tna_places = tna_search.get_tna_places(@document_id)
+        @dates = tna_search.get_dates(@document_id)
+      end
 
     rescue => error
       log_error(__method__, __FILE__, error)

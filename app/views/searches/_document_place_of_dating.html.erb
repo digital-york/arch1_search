@@ -1,0 +1,74 @@
+<% unless @tna_place_of_datings.blank? %>
+  <% @tna_place_of_datings.each do |place_of_dating| %>
+    <%if (not place_of_dating[:place_same_as].nil?) or (not place_of_dating[:place_as_written].nil?) %>
+      <% unless place_of_dating[:place_as_written].blank? %>
+        <div class="row">
+          <div class="col-md-3 document_field_title">
+            Place:
+          </div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-2">
+                As written
+              </div>
+              <div class="col-md-10">
+                <%== place_of_dating[:place_as_written][0] %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <% unless place_of_dating[:place_same_as].blank? %>
+        <div class="row">
+          <div class="col-md-3 document_field_title">
+            Place:
+          </div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-2">
+                Place Authority
+              </div>
+              <div class="col-md-10">
+                <%== place_of_dating[:place_same_as][0] %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <% unless place_of_dating[:place_role].blank? %>
+        <div class="row">
+          <div class="col-md-3 document_field_title">
+            Place:
+          </div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-2">
+                Role
+              </div>
+              <div class="col-md-10">
+                <%== place_of_dating[:place_role][0] %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <% unless place_of_dating[:place_note].blank? or place_of_dating[:place_note][0].blank?%>
+        <div class="row">
+          <div class="col-md-3 document_field_title">
+            Place:
+          </div>
+          <div class="col-md-9">
+            <div class="row">
+              <div class="col-md-2">
+                Note
+              </div>
+              <div class="col-md-10">
+                <%== place_of_dating[:place_note][0] %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

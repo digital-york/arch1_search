@@ -253,7 +253,8 @@ ul {
 
 .highlight_text {
   color: black;
-  background-color: #fff866;
+  background-color: #FFCC00;
+  font: message-box
 }
 
 .pager {
@@ -261,7 +262,7 @@ ul {
 }
 
 .highlight_red a {
-  color: red;
+  color: #ee0000;
 }
 
 .highlight_facet {
@@ -384,14 +385,14 @@ ul {
 }
 
 .nohighlight a {
-  color: #9b9b9b;
+  color: #6c6c6c;
   text-decoration: none;
   font-weight: bold;
 }
 
 .nohighlight a:hover {
   color: #403152;
-  text-decoration: none;
+  text-decoration: underline;
 }
 
 /***** End of entry menu *****/
@@ -466,4 +467,13 @@ ul {
     float: none;
     display: inline-block;
   }
+}
+
+.document_details {
+  font-size: 16px;
+  line-height: 2em;
+}
+
+.document_field_title {
+  font-weight: bold;
 }
