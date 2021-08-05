@@ -84,7 +84,11 @@ module TnwCommon
       language_new_tesim:#{sterm} ||
       repository_tesim:#{sterm} ||
       reference_tesim:#{sterm} ||
-      subject_new_tesim:#{sterm} "
+      subject_new_tesim:#{sterm} ||
+      publication_tesim:#{sterm} ||
+      tna_addressees_tesim:#{sterm} ||
+      tna_persons_tesim:#{sterm} ||
+      tna_senders_tesim:#{sterm}"
       #
       # All fields
       entry + document + "|| suggest:#{sterm}"
