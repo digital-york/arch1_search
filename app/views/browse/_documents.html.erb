@@ -142,7 +142,7 @@
         <% end %>
 
         <% @tna_places.each do |p| %>
-          <%unless p[:place_as_written].blank? and p[:place_same_as].blank? and p[:place_note].join.blank? %>
+          <%unless p[:place_as_written].blank? and p[:place_same_as].blank? and (p[:place_note].blank? or p[:place_note].join.blank?) %>
             <tr>
               <th style="width: 30%; padding-top: 15px">Place:</th>
               <td></td>
