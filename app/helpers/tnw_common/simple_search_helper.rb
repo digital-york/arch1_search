@@ -187,14 +187,16 @@ module TnwCommon
           "has_model_ssim:RelatedAgent AND person_same_as_search:" + search_term2
         else
           # q = "has_model_ssim:RelatedAgent AND (person_same_as_search:*#{search_term2}* or person_role_search:*#{search_term2}* or person_descriptor_search:*#{search_term2}* or person_descriptor_same_as_search:*#{search_term2}* or person_note_search:*#{search_term2}* or person_same_as_search:*#{search_term2}* or person_related_place_search:*#{search_term2}* or person_related_person_search:*#{search_term2}*)"
-          "has_model_ssim:RelatedAgent AND (person_same_as_search:#{search_term2} or
-                                                      person_role_search:#{search_term2} or
-                                                      person_descriptor_search:#{search_term2} or
-                                                      person_descriptor_same_as_search:#{search_term2} or
-                                                      person_note_search:#{search_term2} or
-                                                      person_same_as_search:#{search_term2} or
-                                                      person_related_place_search:#{search_term2} or
-                                                      person_related_person_search:#{search_term2})"
+          # Use *_tesim to match against a term serarches. _search works only with complate search phrase or *term*
+          "has_model_ssim:RelatedAgent AND (
+              person_same_as_search:#{search_term2} or person_same_as_new_tesim:#{search_term2} or
+              person_role_search:#{search_term2} or person_role_new_tesim:#{search_term2} or
+              person_descriptor_search:#{search_term2} or person_descriptor_new_tesim:#{search_term2} or
+              person_descriptor_same_as_search:#{search_term2} or
+              person_note_search:#{search_term2} or person_note_tesim:#{search_term2} or
+              person_related_place_search:#{search_term2} or person_related_place_tesim:#{search_term2} or
+              person_related_person_search:#{search_term2}
+            )"
         end
         num = count_query(q)
         unless num == 0
@@ -229,11 +231,13 @@ module TnwCommon
           "has_model_ssim:RelatedPlace AND place_same_as_search:#{search_term2}"
         else
           # q = "has_model_ssim:RelatedPlace AND (place_same_as_search:*#{search_term2}* or place_role_search:*#{search_term2}* or place_type_search:*#{search_term2}* or place_note_search:*#{search_term2}* or place_as_written_search:*#{search_term2}*)"
-          "has_model_ssim:RelatedPlace AND (place_same_as_new_tesim:#{search_term2} or
-                                                      place_role_search:#{search_term2} or
-                                                      place_type_search:#{search_term2} or
-                                                      place_note_search:#{search_term2} or
-                                                      place_as_written_search:#{search_term2})"
+          # Use *_tesim to match against a term serarches. _search works only with complate search phrase or *term*
+          "has_model_ssim:RelatedPlace AND (place_same_as_new_tesim:#{search_term2} or 
+              place_role_search:#{search_term2} or place_role_new_tesim:#{search_term2} or
+              place_type_search:#{search_term2} or place_type_new_tesim:#{search_term2} or
+              place_note_search:#{search_term2} or place_note_tesim:#{search_term2} or
+              place_as_written_search:#{search_term2} or place_as_written_tesim:#{search_term2}
+            )"
         end
         facets = facet_fields
         num = count_query(q)
