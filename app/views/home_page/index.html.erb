@@ -1,19 +1,30 @@
 <div class="row" style="margin-top: 30px;">
-<div class="col-md-3"></div>
-
-<div class="col-md-6 intro">
-
-    <p><span class="intro-text">York's Archbishops Registers Revealed</span>
-          provides free access to over 20,000 images of Registers produced by the Archbishops of York, 1225-1650, in addition to a growing searchable index of names, subjects, places and organisations. The registers are a valuable, and in many cases, unexploited source for ecclesiastical, political, social, local and family history - covering periods of war, famine, political strife and religious reformation in the Archdiocese of York and the wider Northern Province.
+  <div class="col-md-3"></div>
+  <div class="col-md-4 intro">
+    <p><span class="intro-text">Welcome to the York's Archbishops Registers database.</span>
+      This website provides free access to over 21,500 images of registers produced by the Archbishops of York between 1225 and 1650. Since 2015, we have been working on a series of projects to index the entries in the registers, to make them more accessible to a wider audience. This work is still ongoing – you can find out more about our projects, funders and how we’re doing on our <%= link_to 'About Us', about_path %> page. 
     </p>
     <p>
-        You can browse images using the options below, or search the <span class="intro-text"><%= get_entry_count.to_s %></span> indexed entries via the search interface. Further information, guidance and supporting material relating to the registers will be added to the site as time goes on.
+      In 2019, as part of The Northern Way project, we partnered with The National Archives (UK) to index items from their collections relating to the York Archbishops between 1304 and 1405. You can now find those indexes on this site, too. 
     </p>
     <p>
-        Pilot imaging and development, as well as the indexing of the register of Archbishop Neville (1374-1388) was funded by the Andrew W. Mellon foundation. The conservation, imaging and technical development phases of the wider York project were also generously funded in 2014-2015 by the Andrew W Mellon Foundation, along with the indexing of the Sede Vacante register, 1304-1306. Indexing of the registers 1570-1650 has been funded by the Marc Fitch Fund, and will be complete by October 2016.
+      You can <%= link_to 'browse digital images', browse_path %>  of our original Archbishops Registers, or browse the index terms, using the options below. Alternatively, you can search the <span class="intro-text"><%= get_entry_count.to_s %></span> indexed entries we’ve completed to date, using the search box above or our <%= link_to 'advanced search', search_advanced_path(:search_term => 'NO_SEARCH') %> page (where you can also find more detailed information to help you get the best out of the site). We will continue to add additional information and index entries over the coming years, so please do check back to see what’s new. 
     </p>
+  </div>
+  <div class="col-md-2 intro" style="margin-top: 15px;">
+    <%= image_tag("Summer_Inst_071517.jpg", alt: 'Summer Inst 071517', class: 'img-fluid') %>
+  </div>
+  <div class="col-md-3"></div>
 </div>
-<div class="col-md-3"></div>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6 intro">
+    <p>
+      On this site you can also find background information <%= link_to 'about the registers',registers_path %> and the context in which they were created. Additionally, you’ll find a range of <%= link_to 'Further Resources', resources_path %>, including presentations and a reading list, which highlight some of the many topics you can find in the records. To keep up to date with what’s happening, follow our <%= link_to 'social media', "#{about_path}#keeping_up_to_date" %> accounts. 
+    </p>
+    <p>
+      We value your feedback about the site, so if you have any comments or issues, please do let us know by contacting <%= mail_to 'borthwick-institute@york.ac.uk' %>  for queries about the site content or the archives themselves, or <%= mail_to 'dti-group@york.ac.uk' %> for technical queries.
+    </p>
+  </div>
+  <div class="col-md-3"></div>
 </div>
-
-<%= render 'browse_menu' %>
