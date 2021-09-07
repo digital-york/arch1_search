@@ -52,6 +52,8 @@ Rails.application.routes.draw do
   get 'about' => 'about#index'
   get 'northernway' => 'northernway#index'
   get 'northernway/about' => 'northernway_about#index'
+  get 'registers' => 'about#registers'
+  get 'resources' => 'about#further_resources'
 
 
 

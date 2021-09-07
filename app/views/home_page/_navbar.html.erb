@@ -1,0 +1,23 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" id="top_menu">
+  <div class="container">
+    <div class="navbar-header" id="top_menu">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><%= link_to 'Home', home_page_index_path %></li>
+        <li><%= link_to 'About Us', about_path %></li>
+        <li><%= link_to 'The Registers', registers_path %></li>
+        <%# <li><%= link_to "The Northern Way", northernway_path %><%# </li> %>
+        <li><%= link_to 'Search', search_simple_path(:search_term => 'NO_SEARCH') %></li>
+        <li><%= link_to 'Browse', browse_path %></li>
+        <li><%= link_to 'Further Resources', resources_path %></li>
+      </ul>
+    </div>
+  </div>
+</nav
