@@ -12,4 +12,8 @@ class AboutController < ApplicationController
   def further_resources
     render template: "about/further_resources"
   end
+
+  def search_help
+    render template: "about/search_help"
+  end
 end
