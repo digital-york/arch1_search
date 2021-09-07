@@ -88,32 +88,7 @@
       <div class="row"><%= yield %></div>
       <hr style="margin: 20px 0px"/>
       <%# Display footer logos %>
-      <div id="footer" class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-8">
-          <div class="col-md-3">
-            <a href="#"><%= image_tag 'arch_logo.jpg', :class => 'footer_logo', :style => 'max-width: 160px; margin-top: 10px' %></a>
-          </div>
-          <div class="col-md-3">
-            <a href="https://mellon.org/" target="_blank"><%= image_tag 'mellon_logo.svg', :class => 'footer_logo', :style => 'max-width: 180px; margin-top: 20px' %></a>
-          </div>
-          <div class="col-md-3">
-            <a href="http://www.marcfitchfund.org.uk/" target="_blank"><%= image_tag 'marc_fitch_-_logo_0.jpg', :class => 'footer_logo', :style => 'max-width: 140px'  %></a>
-          </div>
-          <div class="col-md-3">
-            <a href="http://www.york.ac.uk/" target="_blank">
-              <%= image_tag 'UOY-Logo-Stacked-shield-Black.png', :class => 'footer_logo', :style => 'max-width: 270px; margin-top: 10px' %></a>
-          </div>
-        </div>
-        <div class="col-md-2"></div>
-        <div style="clear:both"></div>
-      </div>
-      <div style="text-align: center" class="row">
-        <hr style="margin: 20px 0px"/>
-        <div class="col-md-2"></div>
-        <div class="col-md-8"><span style="text-align: center; font-size: 0.8em; margin-top: 30px">University of York, 2016. <a href="http://www.york.ac.uk/about/legal-statements/">Disclaimer</a></span></div>
-        <div class="col-md-2"></div>
-      </div>
+      <%= render 'home_page/footer' %>
     </div>
     <%= render 'home_page/analytics' %>
   </body>
