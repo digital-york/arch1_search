@@ -1,7 +1,7 @@
 GIT
   remote: https://github.com/digital-york/tnw_common
   revision: 4acd7d9b54b8484a310c13de8518efa3799b9244
-  branch: development
+  branch: main
   specs:
     tnw_common (0.1.0)
       rsolr
@@ -196,7 +196,7 @@ GEM
     minitest (5.14.4)
     multi_json (1.15.0)
     multipart-post (2.1.1)
-    nio4r (2.5.7)
+    nio4r (2.5.8)
     noid (0.9.0)
     noid-rails (3.0.3)
       actionpack (>= 5.0.0, < 7)
@@ -220,7 +220,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.6)
-    puma (5.3.2)
+    puma (5.5.1)
       nio4r (~> 2.0)
     qa (5.4.0)
       activerecord-import
