@@ -170,8 +170,12 @@ class BrowseController < ApplicationController
         if @document_list.length() > 1 and @document_list[0][:reference].match?(/[A-Z][ ]([0-9]*\/[0-9]*\/[0-9A-Za-z]*)/)
           @document_list.sort_by! {|document| (
           document[:reference].split[1].split('/')[1] + '.' +
+              (document[:reference].split[1].split('/').length>1?
+              '':
               (document[:reference].split[1].split('/')[2].to_i<10? '0':'') +
-              document[:reference].split[1].split('/')[2]).to_f}
+              document[:reference].split[1].split('/')[2]).to_s
+              )
+          }
         end
       end
     rescue => error
