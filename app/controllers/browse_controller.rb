@@ -130,7 +130,7 @@ class BrowseController < ApplicationController
 
         if params['year'].nil? or ('all'!=params['year'] and @document_hash[params['year']].blank?)
           # @current_year, @document_list = @document_hash.first
-          if @years.length() < 50
+          if @all_documents.length() < 50
             @current_year = 'all'
             @document_list = @all_documents
           else
