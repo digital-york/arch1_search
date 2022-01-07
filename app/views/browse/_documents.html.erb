@@ -56,7 +56,7 @@
           <th style="width: 30%; padding-top: 15px">Summary:</th>
           <td style="padding-top: 15px">
             <% @current_document['summary_tesim'].each do |s| %>
-              <%= s %>
+              <%= raw(s) %>
             <% end %>
           </td>
         </tr>
