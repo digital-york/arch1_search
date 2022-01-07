@@ -62,6 +62,18 @@
         </tr>
       <%end %>
 
+      <!-- Publication -->
+      <%unless @current_document['publication_tesim'].nil? or @current_document['publication_tesim'].length()==0%>
+        <tr>
+          <th style="width: 30%; padding-top: 15px">Publication:</th>
+          <td style="padding-top: 15px">
+            <% @current_document['publication_tesim'].each do |p| %>
+              <%= raw p %>
+            <% end %>
+          </td>
+        </tr>
+      <%end %>
+
       <!-- Note -->
       <%unless @current_document['note_tesim'].nil? or @current_document['note_tesim'].length()==0%>
         <tr>
