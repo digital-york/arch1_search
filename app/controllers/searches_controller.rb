@@ -138,6 +138,10 @@ class SearchesController < ApplicationController
         @tna_place_of_datings = tna_search.get_place_of_datings(@document_id)
         @tna_places = tna_search.get_tna_places(@document_id)
         @dates = tna_search.get_dates(@document_id)
+
+        @tna_addressees = tna_search.get_tna_addressees(@document_id)
+        @tna_senders = tna_search.get_tna_senders(@document_id)
+        @tna_persons = tna_search.get_tna_persons(@document_id)
       end
 
     rescue => error
