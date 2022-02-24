@@ -1,247 +1,107 @@
-<!-- # added (ja) -->
 <div class="row">
-    <div class="col-md-2"></div>
-
-    <div class="col-md-8" style="padding-top: 20px">
-
-        <ul>
-            <li><%= link_to 'The project', '#project' %></li>
-            <li><%= link_to 'This web site', '#site' %></li>
-            <li><%= link_to 'Indexing the Registers', '#indexing' %></li>
-            <li><%= link_to 'Access to the data', '#access' %>
-                <ul>
-                    <li><%= link_to "Term lists, subject headings and authority files", '#terms' %></li>
-                    <li><%= link_to 'Available vocabularies', '#vocabs' %></li>
-                    <li><%= link_to 'IIIF Support', '#iiif' %></li>
-                </ul>
-            </li>
-            <li><%= link_to 'Technology', '#tech' %></li>
-            <li><%= link_to 'Licence', '#licence' %></li>
-            <li><%= link_to 'Contact', '#contact' %></li>
-        </ul>
-
-        <a id="project"></a>
-
-        <h2>The project</h2>
-
-        <p>Read more:</p>
-
-        <ul>
-            <li>
-                <%= link_to 'Archbishops’ Registers Revealed', 'https://www.york.ac.uk/borthwick/projects/archbishops-registers/' %>
-            </li>
-        </ul>
-
-        <a id="site"></a>
-
-        <h2>This web site</h2>
-
-        <p>This web site provides:</p>
-
-        <ul>
-            <li>A search interface to a growing number of indexed Registers:
-                <ul>
-                    <li>Right now, much of Register 12, and parts of Registers 31 and 5A are available.</li>
-                    <li>By the end of 2016, the whole of Registers 31 and 32 will be indexed.</li>
-                    <li>We’re also seeking funding to index other Registers. If you would like to talk to us about
-                        indexing work, please <%= link_to 'contact us', '#contact' %>.
-                    </li>
-                </ul>
-            </li>
-            <li>Browsing of <strong>all</strong> 45 Registers, including zoom-able images for each folio</li>.
-            <li>Browsing of people, place and organisation authority files, and subject headings for those Registers
-                that have been indexed.
-            </li>
-        </ul>
-
-        <a id="indexing"></a>
-
-        <h2>Indexing the Registers</h2>
-
-        <p>Approved editors are given access to our editing tool to add rich indexing to the Registers. Currently we
-            have a project ongoing, funded by the Marc Fitch Fund, to index Registers 31 and 32 (1570-1650). Much of
-            Register 12 (Alexander Neville, 1374-1388) was indexed during the original pilot phase of the Mellon-funded Archbishops' Registers project, in
-            2012. We are seeking further funding to index more Registers. In addition, index data also exists for the
-            Vacancy Register 1304-1306.</p>
-
-        <p>The editing tool allows editors to index the people, places, groups, subjects and dates associated with the
-            Registers. Indexing is carried out according to a data model developed for the project:</p>
-
-        <ul>
-            <li>
-                <%= link_to 'Archbishops’ Registers Data Model', 'https://docs.google.com/document/d/1U3sLgaJr07d7LfvyDPT2rUnVAI1ccWp-Zeon_rlBd6o/edit?usp=sharing' %>
-            </li>
-        </ul>
-
-        <a id="access"></a>
-
-        <h2>Access to the data</h2>
-
-        <p>The project has created some 21,647 high quality images of 45 Archbishops’ Registers. An archival master
-            image is stored in our Digital Archive and is not available for download, but dissemination copies are
-            available. We use an image viewer called ‘openseadragon’ to provide ‘deep zoom’ access
-            online.</p>
-
-        <p>The index data itself is available for searching in this web site. Apart from the term lists, subject headings
-            and authority files, the data cannot currently be accessed in a machine-readable form. If you would like
-            access to the underlying data, please get in touch.</p>
-
-        <a id="terms"></a>
-
-        <h2>Term lists, subject headings and authority files</h2>
-
-        <p>The project is developing a set of term lists, subject headings and authority files, as detailed below.
-            Subject headings and authority files can be browsed in the site itself.</p>
-
-        <ul>
-            <li><%= link_to 'Browse Subject Headings', 'browse/subjects' %> </li>
-            <li><%= link_to 'Browse People', 'browse/people' %> </li>
-            <li><%= link_to 'Browse Groups', 'browse/groups' %> </li>
-            <li><%= link_to 'Browse Places', 'browse/places' %> </li>
-        </ul>
-        <br/>
-
-        <p>In addition, there is a REST API for querying accessing these lists. This feature makes use of the
-            <%= link_to 'questioning_authority', 'https://github.com/projecthydra-labs/questioning_authority' %>
-            gem from the
-            <%= link_to 'Hydra project', 'http://projecthydra.org/' %>
-            . The service will return results structured (JSON) data. Results will, as a
-            minimum, return an id and label. Some terms, for example ‘people’, return additional information.</p>
-
-        <p>Return a complete list of terms for the given vocab:
-        <pre>/qa/terms/local/:vocab</pre>
-        </p>
-
-        <p>Return a set of terms matching a given query:
-        <pre>/qa/search/local/:vocab?q=search_term</pre>
-        </p>
-
-
-        <p>Return the complete information for a specific term given its identifier:
-        <pre>/qa/show/local/:vocab/:id</pre>
-        </p>
-
-        <a id="vocabs"></a>
-
-        <h2>Available vocabularies</h2>
-
-        <table class="vocabs-table">
-            <tr>
-                <th>Vocab</th>
-                <th>Description</th>
-                <th>Endpoints</th>
-            </tr>
-            <tr>
-                <td>people</td>
-                <td>person authority file</td>
-                <td>/search<br/>
-                    /show
-                </td>
-            </tr>
-            <tr>
-                <td>groups</td>
-                <td>groups and organisations authority file</td>
-                <td>/search<br/>
-                    /show
-                </td>
-            </tr>
-            <tr>
-                <td>places</td>
-                <td>places authority file</td>
-                <td>/search<br/>
-                    /show
-                </td>
-            </tr>
-            <tr>
-                <td>subjects</td>
-                <td>subject headings scheme
-                </td>
-                <td>/search<br/>
-                    /show<br/>
-                    <!-- /terms -->
-                </td>
-            </tr>
-            <tr>
-                <td>person_roles<br/>
-                    descriptors<br/>
-                    place_types<br/>
-                    place_roles<br/>
-                    date_types<br/>
-                    date_roles<br/>
-                    entry_types<br/>
-                    section_types
-                </td>
-                <td style="vertical-align: top">various terms lists</td>
-                <td style="vertical-align: top">/search<br/>
-                    /show<br/>
-                    /terms
-                </td>
-            </tr>
-        </table>
-
-        <a id="iiif"></a>
-
-        <h2>IIIF Support</h2>
-
-        <%= render 'iiif/iiif' %>
-
-        <p></p>
-        <p>See a list of available manifests:</p>
-
-        <ul><li><%= link_to 'Manifests', iiif_index_path %></li></ul>
-
-        <a id="tech"></a>
-
-        <h2>Technology</h2>
-
-        <p>The search interface and editing tool have been built using the
-            <%= link_to 'Ruby on Rails Framework', 'http://rubyonrails.org/' %>
-            with components from the
-            <%= link_to 'Hydra Project', 'https://github.com/projecthydra' %>.</p>
-
-        <p>
-            The back-end repository and data store is
-            <%= link_to 'Fedora Commons', 'http://www.fedora-commons.org/' %>
-            (version 4 for the
-            index data, version 3 for the images).</p>
-
-        <p>
-            The search index is powered by
-            <%= link_to 'Solr', 'http://lucene.apache.org/solr/' %>.</p>
-
-        <p>
-            Image viewing is delivered with <%= link_to 'Openseadragon', 'https://openseadragon.github.io/' %>.
-        </p>
-
-        <p>Code for the search interface and editing tool is available on GitHub. The code is not yet fully documented
-            so
-            please contact us if you want to know more.</p>
-
-        <ul>
-            <li><%= link_to 'Search and Browse Interface', 'https://github.com/digital-york/arch1_search' %></li>
-            <li><%= link_to 'Editing Tool', 'https://github.com/digital-york/arch1' %></li>
-        </ul>
-
-        <a id="licence"></a>
-
-        <h2>Licence</h2>
-
-        <p>All of the images and data are made available under a
-            <%= link_to 'Creative Commons Attribution ShareAlike 4.0 Licence', 'http://creativecommons.org/licenses/by-sa/4.0/' %>
-        </p>
-
-        <a id="contact"></a>
-
-        <h2>Contact</h2>
-
-        <p>If you have comment, questions or are experiencing any problems in using the site, please contact us:</p>
-
-        <ul>
-            <li><%= mail_to 'borthwick-institute@york.ac.uk' %> (for queries about the Registers)</li>
-            <li><%= mail_to 'dlib-info@york.ac.uk' %> (for technical queries)</li>
-        </ul>
-
+  <div class="col-md-3"></div>
+  <div class="col-md-6" style="padding: 20px">
+    <ul>
+      <li><%= link_to 'Our project and funders', '#project' %></li>
+      <li><%= link_to 'Our supporters', '#suporters' %></li>
+      <li><%= link_to 'About the site', '#site' %></li>
+      <li><%= link_to 'Keeping up to date', '#media' %>
+      </ul>
     </div>
-
-    <div class="col-md-2"></div>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-4 project">
+    <a id="project"></a>
+    <h2>Our projects and funders</h2>
+    <p>This database is the product of a number of different digitisation and cataloguing projects, 
+      and we are hugely grateful to all our funders for their ongoing support of our work.</p>
+    <p>Pilot imaging and development, as well as the indexing of the register of Archbishop Neville 
+      (1374-1388) was funded by the Andrew W. Mellon Foundation. The conservation, imaging and technical 
+      development phases of the wider York project were also generously funded in 2014 and 2015 by 
+      the Andrew W. Mellon Foundation as part of the 
+      <a href="https://www.york.ac.uk/borthwick/resources/archbishops-registers/">
+        York’s Archbishops’ Registers Revealed</a>
+      project, along with the indexing of the Sede Vacante register, 1304-1306.</p>
+    <p>Indexing of the registers 1570-1650 was generously funded by the Marc Fitch Fund between 
+      2015 and 2016.</p>
+    <p>The indexing of the registers 1304 to 1405, and the indexing of the material from The National 
+      Archives (UK), was generously funded by the Arts and Humanities Research Council (AHRC) as part of 
+      <a href="https://www.york.ac.uk/history/research/northern-way/">The Northern Way</a> project between 2019 and 2021. This funding, totalling almost £1 million, has allowed 
+      us to build on our earlier project work and undertake our most in-depth study of the registers to date. 
+      The work was carried out with the support of the Dean and Chapter of York Minster, and we are immensely 
+      grateful to both them and The National Archives (UK) for their involvement in the project.</p>
+  </div>
+  <div class="col-md-2 project" style="margin-top: 5em;">
+    <%= image_tag("Mellon_16.jpg", alt: 'A women takes photo of open manuscript', class: 'img-fluid') %>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6" style="padding: 20px">
+    <a id="suporters"></a>
+    <h2>Our supporters </h2>
+    <p>So many people have helped us with the creation and development of this database. We are hugely indebted 
+      to the late Emeritus Professor Mark Ormrod, without whose vision this site would never have existed. 
+      We also have to thank all the team members who have worked so hard on the project management, 
+      indexing and development work to bring these registers to life:</p>
+    <div style="margin-left: 3em">
+      <h3>Archbishops' Registers Revealed:</h3>
+      <ul>
+        <li>Dr Paul Dryburgh, Access Archivist, Borthwick Institute for Archives</li>
+        <li>Gary Brannan, Access Archivist, Borthwick Institute for Archives (International Summer Institute)</li>
+        <li>Helen Watt, Research Assistant, Borthwick Institute for Archives (Pilot)</li>
+        <li>Paul Shields, University Photographer, University of York (Pilot)</li>
+        <li>Alison Fairburn, Senior Archive Conservator, Borthwick Institute for Archives</li>
+        <li>Catherine Firth, Archive Conservator, Borthwick Institute for Archives</li>
+        <li>Frances Cooper, Project Imager, Borthwick Institute for Archives</li>
+        <li>Julie Allinson, Digital Library Manager, University of York</li>
+        <li>Paul Young, IT Developer, University of York</li>
+      </ul>
+      <h3>Marc Fitch Project:</h3>
+      <ul>
+        <li>Gary Brannan, Access Archivist, Borthwick Institute for Archives (International Summer Institute)</li>
+        <li>Helen Watt, Research Assistant, Borthwick Institute for Archives (Pilot)</li>
+      </ul>
+      <h3>The Northern Way Project:</h3>
+      <ul>
+        <li>Professor Sarah Rees Jones, Principal Investigator, University of York</li>
+        <li>Dr Paul Dryburgh, Access Archivist, Borthwick Institute for Archives</li>
+        <li>Helen Watt, Research Assistant, Borthwick Institute for Archives (Pilot)</li>
+        <li>Dr Jonathan Mackman, Research Assistant</li>
+        <li>Dr Marianne Wilson, Research Assistant</li>
+        <li>Dr Stefania Merlo Perring, Research Assistant</li>
+        <li>Dr Shelagh Sneddon, Research Assistant</li>
+        <li>Gary Brannan, Keeper of Archives, Special Collections and Art, Borthwick Institute for Archives (Project Officer to 2021)</li>
+        <li>Laura Yeoman, Access and Digital Engagement Archivist, Borthwick Institute for Archives (Project Officer 2021)</li>
+        <li>Sebastian Palucha, Strategy Technology Leader, University of York</li>
+        <li>Frank Feng, Software Engineer, University of York</li>
+      </ul>
+    </div>
+    <br/>
+    <p>There are also numerous individuals who have generously donated their time and resources to support us 
+      in our work. We are very grateful to Dr David Robinson for sharing his provisional edition of sections of 
+      Archbishop Melton's register in advance of their publication, and for permitting their use in indexing work. 
+      We would also like to express our sincere thanks to Professor David Smith for his generous donation of 
+      ordination lists and other material for the fourteenth- and fifteenth-century archbishops of York, and to 
+      Dr Rosemary C. E. Hayes for all her help on The Northern Way project, especially with entries relating to 
+      taxation.</p>
+    <a id="site"></a>
+    <h2>About the site </h2>
+    <p>You can find out more here about the <a href="/technology">technical details of this website</a> and the projects. </p>
+    <p>There is still a lot more work we need to do to complete the indexing work on the registers, so please check 
+      back at regular intervals to find out what we will be doing next. </p>
+    <a id="media"></a>
+    <h2>Keeping up to date</h2>
+    <p>To keep up to date with what’s happening, why not follow us on social media?</p>
+    <ul>
+      <li>Blog: <a href="https://thenorthernway151149306.wordpress.com/">TNW Wordpress</a></li>
+      <li>Twitter: <a href="https://twitter.com/tnorthernway?lang=en">@tnorthernway</a></li>
+      <li>Youtube: <a href="https://www.youtube.com/channel/UCtEfiiwcrr-D_hfQkxKtUnA">TNW Video Channel</a></li>
+    </ul>
+  </div>
+  <div class="col-md-3"></div>
 </div>
