@@ -1,0 +1,497 @@
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6" style="padding: 20px">
+    <ul>
+      <li><%= link_to 'What are the registers?', '#registers' %></li>
+      <li><%= link_to 'What types of information can you find?', '#information' %></li>
+      <li><%= link_to 'The administrative responsibilities of the medieval Archbishops of York', '#responsibilities' %></li>
+      <li><%= link_to 'The archbishop’s registers and the wider archival context', '#context' %>
+      </ul>
+    </div>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-4 project">
+    <a id="registers"></a>
+    <h2>What are the registers?</h2>
+    <h3>Introduction</h3>
+    <p>The surviving registers of the Archbishops of York available on this site date from between 1225 and around 
+      1650. They form part of a larger series of volumes held in the University of York’s Borthwick Institute for 
+      Archives. </p>
+    <p>Some registers exist in roll format, such as that of Walter de Gray, Archbishop from 1215 to 1255. 
+      The majority of registers exist in book format, like the register of William Melton, Archbishop from 1317 
+      to 1340 (see right), now divided between two volumes (Reg 9A and Reg 9B). They are handwritten in ink, 
+      mostly on parchment.</p>
+    <h3>How are they structured?</h3>
+  </div>
+  <div class="col-md-2 project" style="margin-top: 5em;">
+    <%= image_tag("registers_300.jpg", alt: 'A women takes photo of open manuscript', class: 'img-fluid') %>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6" style="padding: 20px">
+    <p>Many of the archbishops’ registers are divided into sections, so that entries relating to similar 
+      business are found grouped together (see: David M. Smith, Guide to Bishops’ Registers of England and Wales 
+      (London, 1981) and supplement, C & Y Centenary Supplement (2004)). In many cases, a contemporary heading is 
+      found at the beginning of each section to identify the contents, but in others, a new section type has been 
+      created in our database, using David Smith’s Guide or, if none appears, by adding the term ‘None recorded’. 
+      The following is a list of section types applied to the various divisions of registers in the database, with 
+      an explanation of the type of business to which they relate.</p>
+    <table class="registers-table">
+      <tr>
+        <th>Section Type</th>
+        <th>Contents</th>
+      </tr>
+      <tr>
+        <td>Admissions, friars</td>
+        <td>Used for sections in the registers of Archbishop William Zouche (Reg 10, ff. 278-280) and Archbishop 
+          John Thoresby (Reg 11, f. 396r) for admissions of friars as penitentiaries or to hear confessions; in 
+          Reg 11, particularly for admissions of friars in place of others, many of whom had died.</td>
+      </tr>
+      <tr>
+        <td>Archbishop Harsnett</td>
+        <td>Used for a section of Reg 32 for business conducted under Archbishop Samuel Harsnett (1629-1631), 
+          as some of the 16th and 17th century registers are divided into sections for entries relating to each 
+          archbishop and not to entry type.</td>
+      </tr>
+      <tr>
+        <td>Archbishop Hutton</td>
+        <td>Used for a section of Reg 31 for business conducted under Archbishop Matthew Hutton (1595-1606), 
+          as some of the 16th and 17th century registers are divided by entries relating to each archbishop and 
+          not to entry type.</td>
+      </tr>
+      <tr>
+        <td>Archbishop Matthew</td>
+        <td>Used for a section of Reg 31 for business conducted under Archbishop Tobias Matthew (1606-1628), 
+          as some of the 16th and 17th century registers are divided into sections for entries relating to each archbishop and 
+          not to entry type.</td>
+      </tr>
+      <tr>
+        <td>Archbishop Monteigne</td>
+        <td>Used for a section of Reg 31 (ff. 266-272) for business conducted under Archbishop George Monteigne 
+          (or Mountain) (1628), as some of the 16th and 17th century registers are divided into sections for 
+          entries relating to each archbishop and not to entry type.</td>
+      </tr>
+      <tr>
+        <td>Archbishop Neale</td>
+        <td>Used for a section of Reg 32 for business conducted under Archbishop Richard Neale (or Neile) (1632-1640),
+          as some of the 16th and 17th century registers are divided into sections for entries relating to each archbishop 
+          and not to entry type.</td>
+      </tr>
+      <tr>
+        <td>Archbishop Piers</td>
+        <td>Used for a section of Reg 31 for business conducted under Archbishop John Piers (1589-1594), 
+          as some of the 16th and 17th century registers are divided into sections for entries relating to each 
+          archbishop and not to entry type.</td>
+      </tr>
+      <tr>
+        <td>Archbishop Sandys</td>
+        <td>Used for a section of Reg 31 for business conducted under Archbishop Edwin Sandys (1577-1588), 
+          as some of the 16th and 17th century registers are divided into sections for entries relating to each 
+          archbishop and not to entry type.</td>
+      </tr>
+      <tr>
+        <td>Archbishop Williams</td>
+        <td>Used for a section of Reg 32 for business conducted under Archbishop John Williams (1641-1650), 
+          as some of the 16th and 17th century registers are divided into sections for entries relating to each 
+          archbishop and not to entry type.</td>
+      </tr>
+      <tr>
+        <td>Archbishops' visitations and associated material</td>
+        <td>Used for business relating to the archbishop’s oversight or inspections, known as visitations, 
+          of the clergy and people of the province of York, and some religious houses, including proceedings; 
+          detection of faults, and their correction, often in the form of decrees or injunctions issued afterwards.</td>
+      </tr>
+      <tr>
+        <td>Archdeaconry of Cleveland</td>
+        <td>Used for business relating to this part of the diocese of York, covering part of North Yorkshire.</td>
+      </tr>
+      <tr>
+        <td>Archdeaconry of Nottingham</td>
+        <td>Used for business relating to this part of the diocese of York, covering the county of Nottinghamshire.</td>
+      </tr>
+      <tr>
+        <td>Archdeaconry of Richmond</td>
+        <td>Used for business relating to this part of the diocese of York, covering part of North Yorkshire; Lancashire; 
+          Westmorland and Cumberland.</td>
+      </tr>
+      <tr>
+        <td>Archdeaconry of York</td>
+        <td>Used for business relating to this part of the diocese of York, covering the city of York and part of West Yorkshire.</td>
+      </tr>
+      <tr>
+        <td>Archdeaconry of the East Riding</td>
+        <td>Used for business relating to this part of the diocese of York, covering East Yorkshire.</td>
+      </tr>
+      <tr>
+        <td>Back cover</td>
+        <td>Used for the back cover of a register.</td>
+      </tr>
+      <tr>
+        <td>Ballive</td>
+        <td>Used for business relating to the ballive or bailiwicks or manors of the archbishop and their officers, 
+          the steward; bailiff; reeve; parker; forester; warenner and others.</td>
+      </tr>
+      <tr>
+        <td>Chapters</td>
+        <td>Used for business relating to the chapter of York, and the chapters of the collegiate churches or minsters of Beverley; 
+          Ripon and Southwell.</td>
+      </tr>
+      <tr>
+        <td>Condemnations (De Contempnationibus)</td>
+        <td>Used for a section in the register of Archbishop William Zouche (Reg 10, ff. 347-356), containing records of amounts 
+          of payments ordered to be made for debts, the payees being ‘condemned’ to do so.   
+        </td>
+      </tr>
+      <tr>
+        <td>Diverse jurisdictions
+        </td>
+        <td>Used for business relating to various (‘diverse’) other areas over which the archbishop had personal jurisdiction: 
+          Allerton and Allertonshire (Northallerton); Howden and Howdenshire (Howden); Hexham in Northumberland in the diocese of Durham, and 
+          Churchdown in Gloucestershire in the medieval diocese of Worcester.</td>
+      </tr>
+      <tr>
+        <td>Diverse letters
+        </td>
+        <td>Used for sections containing various (‘diverse’) entries which were not otherwise classified by contemporary clerks.
+        </td>
+      </tr>
+      <tr>
+        <td>Fees</td>
+        <td>Used for one folio of Archbishop William Melton’s register (Reg 9B, f. 736), containing 15th century 
+          notes of fees for producing various documents.</td>
+      </tr>
+      <tr>
+        <td>Front cover</td>
+        <td>Used for the front cover of a register.
+        </td>
+      </tr>
+      <tr>
+        <td>General acts</td>
+        <td>Used for sections of the register (Reg 5A) containing business conducted during a vacancy of the see, particularly ff. 221-229 
+          (general acts, 1397) and ff. 231-252 and ff. 257-258 (general acts, 1398).</td>
+      </tr>
+      <tr>
+        <td>Heads of Religious Houses, Whitby</td>
+        <td>Used for two folio sides of Archbishop John Thoresby’s register (Reg 11, ff. 393v-394r), containing details of the acts for the election 
+          of a new abbot of Whitby, with his oath of obedience to the archbishop and benediction (or blessing) by him; orders for his installation 
+          and for the prior and convent of Whitby to obey the abbot. </td>
+      </tr>
+      <tr>
+        <td>Homages and fealties
+        </td>
+        <td>Used for sections of registers containing homages and fealties made to the archbishop by his tenants for lands held of him, acknowledging the archbishop 
+          to be their feudal superior and pledging fealty (fidelity) to him as such.</td>
+      </tr>
+      <tr>
+        <td>Index, 16th-17th cent</td>
+        <td>Used for sections found in several of the 14th century registers.</td>
+      </tr>
+      <tr>
+        <td>Index, Wills</td>
+        <td>Used for sections found in most of the 16th and 17th century registers.
+        </td>
+      </tr>
+      <tr>
+        <td>Intrinseca camere</td>
+        <td>Used for sections of registers containing business relating to the administration of the archbishop’s 
+          household (Intrinseca camere or inner chamber), estates and money matters.</td>
+      </tr>
+      <tr>
+        <td>Lay folks' catechism</td>
+        <td>Used for a section of the register of Archbishop John Thoresby (Reg 11, ff. 295-298) containing the ‘Lay folks’ catechism’, 
+          a manual of religious instruction written in Latin and English.</td>
+      </tr>
+      <tr>
+        <td>Letters dimissory</td>
+        <td>letters dimissory, or authorisations for clergy to proceed to various orders, such as the
+          holy orders of acolyte; subdeacon; deacon or priest.</td>
+      </tr>
+      <tr>
+        <td>Miscellaneous entries</td>
+        <td>Used for sections of registers containing entries which have not been classified, either by contemporary clerks or at other times, 
+          particularly in the register of Archbishop William Melton (Reg 9B, ff. 730-734).</td>
+      </tr>
+      <tr>
+        <td>None recorded</td>
+        <td>Used for folios of registers in which no section has been identified.</td>
+      </tr>
+      <tr>
+        <td>Officiality</td>
+        <td>Used for sections of registers containing records of business relating to the official, 
+          one of the chief officers of the archbishop.</td>
+      </tr>
+      <tr>
+        <td>Ordinations</td>
+        <td>Used for sections of registers containing records of ordinations of the clergy to the four 
+          holy or major orders, as acolytes, subdeacons, deacons and priests.</td>
+      </tr>
+      <tr>
+        <td>Register, Extra diocesim</td>
+        <td>Used for sections of the registers recording business carried out while the archbishop was outside the diocese.</td>
+      </tr>
+      <tr>
+        <td>Register, Vacancy</td>
+        <td>Used for sections of the registers recording business carried out during a vacancy of the see, mostly between the 
+          death of one archbishop and the appointment or consecration of another.</td>
+      </tr>
+      <tr>
+        <td>Register, Vicar-general</td>
+        <td>Used for sections of the registers recording business carried out by the vicar-general 
+          acting as deputy for the archbishop.</td>
+      </tr>
+      <tr>
+        <td>Suffragans</td>
+        <td>Used for sections of the registers recording business relating to suffragan bishops, those assisting the 
+          archbishop in various specific capacities, such as celebrating ordinations.</td>
+      </tr>
+      <tr>
+        <td>Synodal statutes, Archbishop Greenfield</td>
+        <td>Used for a section of the register of Archbishop William Zouche (Reg 10, ff. 253-254) containing a copy of 
+          statutes of Archbishop William Greenfield made in a synod or meeting of the clergy held at Ripon on 30 September 1306, 
+          for regulation of the clergy.</td>
+      </tr>
+      <tr>
+        <td>Testamentary business</td>
+        <td>Used for sections of the registers recording business relating to testaments (wills), including register 
+          copies of testaments; probates; grants of administration, and matters to do with executors, including their accounts.
+        </td>
+      </tr>
+      <tr>
+        <td>Title page</td>
+        <td>Used for the title page of a register.</td>
+      </tr>
+      <tr>
+        <td>Vacancy/Sede vacante administration, Carlisle</td>
+        <td>Used for a section of the register of Archbishop Thomas Arundel (Reg 14, ff. 77-81) containing business carried 
+          out by vicars-general during a vacancy of the see of Carlisle.
+        </td>
+      </tr>
+    </table>
+    <br/>
+    <p>In addition, Registers 8A and 8B contain details of the visitation to Durham. It is important to point out, 
+      though, that whilst many registers are organised into sections, some are not and are therefore more difficult 
+      to work through. 
+    </p>
+    <p>You can find more information about these sections and what has currently been indexed on the site in 
+      our At a glance guide (forthcoming).</p>
+    <a id="information"></a>
+    <h2>What types of information can you find?</h2>
+    <p>Whatever the format, all the registers record the various types of business performed by the Archbishop or his officials in 
+      the province and diocese of York. This jurisdiction included the five archdeaconries of Cleveland, the East Riding, Nottingham, 
+      Richmond and York, as well as peculiars, including Hexham in Northumberland and diocese of Durham, 
+      and Churchdown in Gloucester in the medieval diocese of Worcester. Peculiars are so called because of the Archbishop’s personal 
+      jurisdiction over them even though they were located in other dioceses. You can find more detailed information about the 
+      <a href="#responsibilities">responsibilities of the Archbishops of York</a> below.</p>
+    <p>Many entries consist of copies of documents issued in the name of the Archbishop or received by him, including those, for instance, 
+      which highlight relations with the monarchy. Among these documents are significations of excommunication – requests for assistance 
+      from the king, in some cases where individuals had fallen foul of ecclesiastical law. The originals, consisting of the 
+      Archbishop’s ‘out letters’, may often be found among documents held in The National Archives (TNA), Kew. 
+      Other types of document concerning the monarchy might simply comprise prayers for the success of the king’s actions, particularly in wartime. 
+      One such entry is found in the register of Alexander Neville, Archbishop, 1374 to 1388, containing prayers for Edward III in 1377 during 
+      the Hundred Years War with France 
+      (<a href="https://archbishopsregisters.york.ac.uk/browse/registers?entry_no=3&folio=73&register_id=j67314178#entries">Reg 12, f. 24r</a>).</p>
+    <p>Depending on the date, the registers also reflect interaction with the papacy, for instance in records of the various types of papal 
+      dispensation, such as those permitting couples to marry or remain married even though related in certain prohibited degrees. 
+      One such example from 1404 is a dispensation for John Plompton and his wife Alice Gyllyng, for having married when they had a 
+      great-grandfather in common 
+      (<a href="https://archbishopsregisters.york.ac.uk/browse/registers?entry_no=2&folio=264&register_id=0p096813c#entries">Reg 16, f. 127</a>).</p>
+    <p>A very large proportion of entries in the registers relate to the clergy, and include records of their ordinations, for instance, 
+      into the priesthood; their institutions to benefices and inductions, that is, being given responsibility for both the care of the 
+      spiritual lives of their parishioners and of their church lands and possessions; also, commissions to perform offices 
+      on behalf of the Archbishop. In addition, the registers record many wills, their probate and details relating to the 
+      administration of estates of those dying without having made a will, both of clergy and lay people.</p>
+    <a id="responsibilities"></a>
+    <h2>The administrative responsibilities of the medieval Archbishops of York</h2>
+    <p>The administration of the medieval church in England and Wales existed alongside royal government administration. 
+      There are two Archbishops in England – the Archbishop of Canterbury, and the Archbishop of York – each presiding over a province,
+      the highest ecclesiastical administrative unit, with Canterbury taking precedence over York 
+      (although in the middle ages this was often disputed). Since they are also bishops of their dioceses, Canterbury and York respectively, 
+      they each have many responsibilities as bishop, with added powers as Archbishop or chief bishop of their province. 
+      The medieval Archbishops received authority directly from the Pope, in the form of the pallium, a Y-shaped ecclesiastical 
+      vestment worn over the shoulders. The Archbishop’s authority was not confirmed until he had received this from the 
+      Pope and professed obedience to him.</p>
+    <h3>Provinces</h3>
+    <p>The medieval province of Canterbury included the south of England and Wales, comprising 14 dioceses. The province of York 
+      included three dioceses: York, in which the Archbishop acted as bishop; and Durham and Carlisle, each with their own bishop, 
+      subordinate to the Archbishop of York. The province of York covered all northern England, including parts of Lancashire 
+      and the old counties of Westmorland and Cumberland, as well as Nottinghamshire in the Midlands. The Archbishop also 
+      had personal jurisdiction over other areas, such as Hexham in Northumberland in the diocese of Durham, and Churchdown in 
+      Gloucestershire in the medieval diocese of Worcester.</p>
+    <h3>Places of worship</h3>
+    <p>Within the provinces, there might be various places of worship, staffed by different bodies or individuals. 
+      In the northern province, the three main churches were: York Minster, a secular cathedral, served by clergymen, 
+      the dean and chapter under the bishop; and Durham and Carlisle, regular or monastic cathedrals, home to a community 
+      of monks and served by the prior and chapter, under the bishop acting as abbot, both with various other officials. 
+      Other major churches in the province were the collegiate churches, a college being a body of priests living together. 
+      These included Ripon in Yorkshire, and Southwell in Nottinghamshire, both staffed by secular canons, and Beverley in Yorkshire, 
+      with a provost in charge of the church lands.</p>
+    <h3>Religious houses</h3>
+    <p>The northern province was home to many religious houses such as Rievaulx Abbey. These houses often had very large 
+      abbey or priory churches in which monks worshipped, under the head of the religious house, the abbot or prior, together 
+      with other male officers. Similar female roles existed in houses of nuns. Unless exempt from the Archbishop's jurisdiction, 
+      these houses were subject to him, particularly regarding: his visitations or periodical inspections; elections of heads of 
+      the houses; control of who entered the houses, and discipline of errant monks and nuns. For more information on the various exemptions 
+      from the jurisdiction of the Archbishop, we recommend consulting Church and Society in Late Medieval England by R. N. Swanson.</p>
+    <h3>The Diocese and its officers</h3>
+    <p>Each diocese was and still is divided into smaller units known as archdeaconries, each presided over by an archdeacon under 
+      the bishop. In the diocese of York, there are five archdeaconries: York; Cleveland and the East Riding, covering most of Yorkshire; 
+      Richmond, covering parts of Yorkshire; Lancashire, Westmorland and Cumberland; and Nottingham, covering the county of Nottinghamshire. 
+      Each archdeaconry is divided into several smaller units, (rural) deaneries, staffed by a (rural) dean, under the archdeacon, and each deanery
+      is made up of a group of parishes. The parish is generally the smallest ecclesiastical administrative unit, presided over by a rector or 
+      vicar under the dean, but many also contain chapelries, which cover even smaller areas within them. Other smaller units might comprise chantries 
+      in a cathedral or church, in which chaplains would say prayers for the dead, and chapels and oratories in private houses or churches.</p>
+    <h3>Responsibilities of the bishop</h3>
+    <p>The bishop. as spiritual head of the diocese, had responsibility for the religious life of everyone there. He was also solely 
+      responsible for confirmation of children, ordination of priests and dedication of churches. If he could not perform such duties, 
+      then another bishop, a suffragan, could be commissioned to do so. The bishop would also preside over diocesan synods - meetings of the 
+      clergy of the whole diocese at which they would be consulted and instructed - and carry out the bishop’s visitation, making periodical 
+      inspections of all affairs within the diocese, and determining reforms. These visitations were classed as one of his most important duties.</p>
+    <p>The bishop also had judicial responsibilities focussed on the administration within the diocese of Canon Law, a legal system based 
+      on the canons, or rules, of the church. This law was administered in several different types of court, of which the bishop’s courts were 
+      the highest within the diocese, and the Archbishop’s, the highest in the province. In York, this was the Chancery Court, and in Canterbury, 
+      the Court of Arches. These courts dealt mainly with offences concerning morals, as well as probate. For records of causes (cases) in the Northern 
+      Province, please see the <a href="https://www.dhi.ac.uk/causepapers/">York Cause Papers Project</a> website. The archbishop was assisted in legal matters by the official of the court of York, 
+      an administrative and judicial officer, with special responsibility for presiding over the archbishop's court.</p>
+    <p>As an administrator, the (arch)bishop was ultimately responsible for the management of the bishopric’s lands, known as the temporalities, 
+      as opposed to the spiritualities or spiritual responsibilities of the see. In the province of York, the Archbishop was lord of several 
+      manors and lordships and had more than twenty places of residence, such as his palace at Bishopthorpe near York, and Cawood castle. 
+      All these would be managed for their income, but would incur expenses of the household, maintenance and payment of officers, such as the 
+      steward of the lands of the bishopric, and others.</p>
+    <h3>Responsibilities of the archbishop</h3>
+    <p>There were many areas where the duties of the Archbishops were added to those of their role as bishop; these included taking charge in 
+      dioceses where there was no bishop for whatever reason, described as a vacancy of the see. The Archbishop would also oversee all stages in 
+      the appointment of bishops, receiving their oath of obedience, and would carry out visitations, as mentioned above. He would also preside 
+      over his provincial council, which became known as convocation, a meeting of all the higher clergy and heads of religious houses in the 
+      province to discuss ecclesiastical matters and especially taxation of the clergy. His extra legal responsibilities would be to exercise 
+      superior jurisdiction over bishops’ ecclesiastical courts, particularly in appeals, but also to hear cases in his own court. Lastly, he would 
+      prove testaments (wills) of those of his province with ‘notable goods’ (goods over a certain value) in more than one diocese of the province.</p>
+    <p>Besides the officers already mentioned, the bishop or Archbishop was assisted by others, such as the sequestrator, who had responsibilities 
+      for taking property into his custody in the name of the bishop if a church were vacant or in dispute, and household clerks, university educated 
+      advisors, agents and administrators. In spiritual matters, he might be assisted by chaplains, who staffed his chapel, 
+      often performing secretarial duties.</p>
+    <p>You can find out more about medieval ecclesiastical administration in the presentation on our <a href="/resources">Further Resources</a> page.</p>
+    <a id="context"></a>
+    <h2>The archbishop’s registers and the wider archival context</h2>
+    <p>The registers of the archbishops of York form a treasure trove of information about the activities of the medieval archbishops and the 
+      administration of their church, from the institution of parish clergy to pronouncements of faith, and from day-to-day licences to letters 
+      sent to monarchs and popes. But archbishops and bishops did not act in isolation, and a major part of 
+      <a href="https://www.york.ac.uk/history/research/northern-way/">The Northern Way</a> project was the examination of the administrative 
+      and archival interaction between the archbishops of York, their staff, the other institutions of the northern church, and the 
+      royal government, to highlight some of the main areas where these overlap, and to identify other collections of documents, particularly 
+      those held at The National Archives, which can be used to enhance and build upon the contents of the registers. </p>
+    <p>The Church was not just a spiritual body, concerned with the lives and souls of its followers, but was also an administrative 
+      institution, an employer, a major land-holder and a judicial body, all of which led to a huge amount of contact with the wider 
+      population and with the royal and local administrative, legislative and legal machineries. Each of these facets produced masses of 
+      written records, and the registers themselves generally contain just one part of this relationship. Some documents received from other 
+      bodies can be found recorded in their pages, such as letters from the papacy or instructions from the king or his ministers, but on the 
+      whole the registers record only the archbishops’ side of this correspondence. Other entries only touch upon subjects, giving the final 
+      word or just one stage of a much longer story. As a result, we often have to look elsewhere for other details, and it is therefore vital 
+      to find and use these other sources of information in order to place the archbishops’ registers into their broader context.</p>
+    <p>The archive of the medieval English royal government contains countless thousands of documents relating to the church and the clergy 
+      in some way, directly or indirectly. Many are tangential, and on matters which rarely, if ever, make their way into the archbishops’ registers. 
+      Many northern clerics had prominent roles in the royal and national administration, details of which can only be discovered through the royal 
+      archives, while legal records contain literally thousands of references to clerics or religious bodies. Clerks themselves may have been largely 
+      exempt from the full force of criminal law, and could claim ‘benefit of clergy’ to be tried and punished for any such crimes in the church’s own 
+      courts, but they were still regularly indicted in the royal courts, could appear as plaintiffs or incidental witnesses, and used the civil law in 
+      much the same way as the rest of the general population, to recover debts or property, or bringing trespass cases against rivals and neighbours. 
+      The royal archive also contains many copies of documents issued by the archbishops, in a variety of contexts, some of which were recorded in the 
+      registers but many of which were not. For instance, requests from bishops and archbishops for assistance in areas such as arresting unrepentant 
+      excommunicates, in removing trespassers on church property, or in enforcing decisions made in the church courts, survive in large numbers in 
+      The National Archives, but only a small number were ever included in the registers. Letters from the archbishops to the crown often survive, 
+      scattered across various modern series depending on their content or context or simply on archival whim, again, many of which were not recorded 
+      in the archbishop’s own register. A variety of other documents also found their way into crown hands, often by historical accidents such as the 
+      minority of the heir of a later owner or the upheavals of the Reformation and the Dissolution of the Monasteries. For instance, when Archbishop 
+      John Thoresby confirmed the establishment of a new chantry in the collegiate church at Lowthorpe in 1364, his confirmation was copied into his 
+      register, but one of the original documents issued to the parties can also now be found within The National Archives’ collection. It may have been 
+      sent to the royal chancery at the time for safe keeping, but it is perhaps more likely that it arrived by a much more circuitous route many years later.</p>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-2">
+    <figure>
+      <%= image_tag("Pic-1_BIA-Register-11,-fols-212-3_-TNA-E-328387.jpg", alt: 'Image caption: (c) Kew, The National Archives E 328/387.', class: 'img-fluid') %>
+      <figcaption>(c) Kew, The National Archives E 328/387</figcaption>
+    </figure>
+  </div>
+  <div class="col-md-4" style="margin-left: 2em">
+    <p>Other documents were compiled and retained as a result of standard practices of the time, and their appearance within the royal archives 
+      can be explained much more easily. Very few records relating to the medieval archiepiscopal estates survive within the archbishops’ own archive, 
+      but during vacancies those estates were taken into royal hands, and a number of detailed accounts and other related documents compiled during 
+      those periods survive, giving insights into archiepiscopal revenue and administration not available from the archdiocese’s own records.</p>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-2" style="margin-top: 2em">
+    <figure>
+      <%= image_tag("Pic-2_TNA-SC-611445.jpg", alt: 'Image caption: (c) Kew, The National Archives SC 6/1144/5.', class: 'img-fluid') %>
+      <figcaption>(c) Kew, The National Archives SC 6/1144/5.</figcaption>
+    </figure>
+  </div>
+  <div class="col-md-4" style="margin-left: 2em">
+    <p>But the royal archive really comes into its own when its records can be used in close conjunction with the registers, offering an alternative 
+      point of view to an event or providing further details. For instance, large sections of each register relate to the institution of clergy or 
+      the confirmation of elections and appointments of abbots, priors and other higher clergy. Many of these involved the crown, as the patron of 
+      benefices or in assenting to elections, and the numerous pieces of parchment which made their way backwards and forwards between Westminster, 
+      York and other relevant bodies for each appointment can often be traced across the various archives. Licences to elect were sought and issued, 
+      details were sent to both king and archbishop, assent was requested and given (or not), and orders directed to officials to enact decisions, 
+      and to safeguard, administer and return lands and income. The process was complex, but did produce plenty of paperwork for modern historians to use.</p>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row" style="margin-top: 2em">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <p>Of course, archbishops also regularly sent their own personal correspondence to the Crown, giving information or requesting assistance or 
+      favours. These could also set in motion a whole chain of administrative processes, many of which were documented in writs or warrants and 
+      ften culminated in orders enrolled in the chancery rolls, which essentially recorded, usually in abbreviated form, letters which were issued 
+      from the king’s main writing office, the chancery. These are some of the most useful documents for historians of all kinds, and some of the 
+      most accessible, since many are available through printed calendars. Taxation of the clergy produced huge amounts of paperwork, from the 
+      negotiations for their agreement through to their collection and accounting. Some parts of this process can be found in the registers, 
+      such as correspondence with the other northern bishops and the appointment of local collectors, but the royal records contain far more, 
+      from the initial correspondence between the crown and the clergy through to the financial and administrative records of each tax, and even 
+      the receipt of the cash in the Exchequer.</p>
+    <p>The royal archive contains many other gems which have survived often by complete chance. To cite just one relatively well-known example, 
+      in 1388 a petition from ‘friends’ of Archbishop Alexander Neville complained how ‘libellous bills’ had been pinned up around the capital 
+      during a session of parliament. They included copies of these bills with their complaint, and one of these is probably a document which 
+      survives elsewhere in The National Archives, written in English in a northern dialect and forming a devastating attack on Neville’s character, 
+      describing him as a tyrant, a thief and a traitor who had brought extortion and destruction to the land.</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-3" style="margin-top: 1em">
+    <figure>
+      <%= image_tag("Pic-3-TNA-C-49922.jpg", alt: 'Image caption: Kew, The National Archives C 49/9/22.', class: 'img-fluid') %>
+      <figcaption>Kew, The National Archives C 49/9/22.</figcaption>
+    </figure>
+  </div>
+  <div class="col-md-3" style="margin-left: 5em">
+    <p>These strong connections between the royal and archiepiscopal administrations, and the records they produced, provide a hugely 
+      important source for historians looking to trace the business of the northern church and its interactions with the royal government. 
+      But this interaction, and the benefits of the records, was something of which contemporaries were also only too aware. In 1355, 
+      when the king needed details of the precise date of Archbishop Melton’s death, he asked both the royal and archiepiscopal authorities 
+      for information. On that occasion the king had to rely on his own Exchequer, as, rather surprisingly, Archbishop Thoresby’s clerks replied that that 
+      information could not be found in their own records. </p>
+  </div>
+  <div class="col-md-3"></div>
+</div>
+<div class="row">
+  <div class="col-md-3"></div>
+  <div class="col-md-6">
+    <p>However, in 1370, 
+      when Thoresby was again asked to check his registers, this time for institutions to the vicarage of Ecclesfield near Sheffield, he was able 
+      to reply with full details going back almost 60 years!</p>
+    <p>You can find out more about The National Archives’ Chancery and Exchequer collections in our 
+      <a href="https://www.youtube.com/channel/UCtEfiiwcrr-D_hfQkxKtUnA">YouTube presentations</a>
+      and on our <a href="/resources">Further Resources</a> page.</p>
+  </div>
+</div>

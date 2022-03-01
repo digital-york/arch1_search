@@ -7,13 +7,12 @@ Rails.application.routes.draw do
 
   resources :searches
 
-  
   get 'search' => 'search#simple'
   get 'search/simple'
   get 'search/advanced'
   get 'search/show'
   resources :search
-  
+
   root 'home_page#index'
 
   get 'image_zoom_large' => 'image_zoom_large#index'
@@ -22,19 +21,19 @@ Rails.application.routes.draw do
   # added (ja)
 
   get 'iiif/index'
-  #get 'iiif/show'
-  get 'iiif/:id/:region/:size/:rotation/:quality' , controller: :iiif, action: :show
-  get 'iiif/:id/info.json' , controller: :iiif, action: :show
-  get 'iiif/manifest/:register_id' , controller: :iiif, action: :manifest
+  # get 'iiif/show'
+  get 'iiif/:id/:region/:size/:rotation/:quality', controller: :iiif, action: :show
+  get 'iiif/:id/info.json', controller: :iiif, action: :show
+  get 'iiif/manifest/:register_id', controller: :iiif, action: :manifest
   get 'iiif/manifest' => 'iiif#manifest'
-  get 'iiif/canvas/:folio_id' , controller: :iiif, action: :canvas
+  get 'iiif/canvas/:folio_id', controller: :iiif, action: :canvas
   get 'iiif/canvas' => 'iiif#canvas'
-  get 'iiif/download/:folio_id' , controller: :iiif, action: :download
+  get 'iiif/download/:folio_id', controller: :iiif, action: :download
   get 'iiif/download' => 'iiif#download'
 
   resources :iiif
 
-  get 'entry/:id' , controller: :entry, action: :show
+  get 'entry/:id', controller: :entry, action: :show
 
   resources :entry
 
@@ -52,8 +51,10 @@ Rails.application.routes.draw do
   get 'about' => 'about#index'
   get 'northernway' => 'northernway#index'
   get 'northernway/about' => 'northernway_about#index'
-
-
+  get 'registers' => 'about#registers'
+  get 'resources' => 'about#further_resources'
+  get 'search_help' => 'about#search_help'
+  get 'technology' => 'about#technology'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
