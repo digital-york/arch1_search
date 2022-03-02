@@ -44,5 +44,5 @@ group :development, :test do
   gem "rspec-rails", "~> 4.1.0"
   gem "solr_wrapper"
   gem "spring"
-  gem "standardrb"
+  gem "htmlbeautifier"
 end

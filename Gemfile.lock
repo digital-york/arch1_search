@@ -129,6 +129,7 @@ GEM
       activesupport (>= 5.0)
     hamster (3.0.0)
       concurrent-ruby (~> 1.0)
+    htmlbeautifier (1.4.1)
     htmlentities (4.3.4)
     http (5.0.1)
       addressable (~> 2.3)
@@ -417,6 +418,7 @@ DEPENDENCIES
   dotenv-rails
   fcrepo_wrapper
   font-awesome-sass
+  htmlbeautifier
   iiif-presentation (~> 1.0.0)
   jbuilder (~> 2.0)
   jquery-rails
