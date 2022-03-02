@@ -15,6 +15,9 @@
 # Ignore jetty directory (from hydra-jetty)
 /jetty
 
+# Solr configuration for local dev
+/solr
+
 # Ignore .env
 .env
 
