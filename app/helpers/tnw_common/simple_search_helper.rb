@@ -11,6 +11,8 @@ module TnwCommon
     def parse_search_term(search_term:)
       # Match searching for dates 1340/11/30
       date = %r{\d{4}/\d{2}/\d{2}}
+      boolean =%r{\band\b|\bor\b|\bnot\b}
+      binding.pry
       if search_term.match? date
         "\"#{search_term}\""
       else
