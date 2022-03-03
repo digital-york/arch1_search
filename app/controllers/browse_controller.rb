@@ -130,7 +130,7 @@ class BrowseController < ApplicationController
 
         if params['year'].nil? or ('all'!=params['year'] and @document_hash[params['year']].blank?)
           # @current_year, @document_list = @document_hash.first
-          if @years.length() < 50
+          if @all_documents.length() < 50
             @current_year = 'all'
             @document_list = @all_documents
           else
@@ -170,8 +170,12 @@ class BrowseController < ApplicationController
         if @document_list.length() > 1 and @document_list[0][:reference].match?(/[A-Z][ ]([0-9]*\/[0-9]*\/[0-9A-Za-z]*)/)
           @document_list.sort_by! {|document| (
           document[:reference].split[1].split('/')[1] + '.' +
+              (document[:reference].split[1].split('/').length>1?
+              '':
               (document[:reference].split[1].split('/')[2].to_i<10? '0':'') +
-              document[:reference].split[1].split('/')[2]).to_f}
+              document[:reference].split[1].split('/')[2]).to_s
+              )
+          }
         end
       end
     rescue => error

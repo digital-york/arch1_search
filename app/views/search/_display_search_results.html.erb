@@ -17,8 +17,12 @@
                    editorial_note = t[10]
                    is_referenced_by = t[11]
                    place = t[12]
+                   place.delete_if(&:empty?)
                    person = t[13]
+                   person.delete_if(&:empty?)
                    dates = t[14]&.sort_by { |s| s.scan(/\d+/).join } # Sort by dates digit only
+                   dates.delete_if(&:empty?)
+
                    search_type = (t[15] == :document ? :document : :entry) # Decide search type Document or Entry
                 %>
 
