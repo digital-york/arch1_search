@@ -7,10 +7,10 @@
     <%= javascript_include_tag "application" %>
   </head>
   <body>
+    <%# Note Display the top menu including the links %>
     <%= render 'home_page/navbar' %>
+    <%# Display search interface %>
     <div class="container-fluid">
-      <%# Note Display the top menu including the links %>
-      <div id="top_menu" class="row"></div>
       <%= form_tag searches_index_path, :method => 'get', :id => 'search_form', :onsubmit => 'return validate_search_field()' do |f| %>
         <%# Note: @is_home_page is defined in 'home_page_controller.rb' - it determines the size of the background image here %>
         <div class="row"
