@@ -32,7 +32,8 @@ group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem "brakeman"
   gem "solargraph"
-  gem "standardrb"
+  gem "standard", require: false
+  gem "rubocop-rails", require: false
   gem "web-console"
   gem "xray-rails"
 end
