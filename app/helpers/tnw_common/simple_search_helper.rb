@@ -36,15 +36,14 @@ module TnwCommon
     def shared_search_fields(sterm:)
       # AR Entries
       entry = "entry_type_search:#{sterm} ||
-      section_type_search:#{sterm} ||
-      summary_search:#{sterm} ||
+      section_type_search:#{sterm} || section_type_new_tesim:#{sterm} ||
+      summary_search:#{sterm} || summary_tesim:#{sterm} ||
       marginalia_search:#{sterm} ||
       subject_search:#{sterm} ||
       language_search:#{sterm} ||
       note_search:#{sterm} ||
       editorial_note_search:#{sterm} ||
       is_referenced_by_search:#{sterm} ||
-      summary_tesim:#{sterm} ||
       entry_person_same_as_facet_ssim:#{sterm} ||
       entry_place_same_as_facet_ssim:#{sterm} || "
 
