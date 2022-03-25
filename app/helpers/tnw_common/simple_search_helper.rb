@@ -87,7 +87,8 @@ module TnwCommon
       publication_tesim:#{sterm} ||
       tna_addressees_tesim:#{sterm} ||
       tna_persons_tesim:#{sterm} ||
-      tna_senders_tesim:#{sterm}"
+      tna_senders_tesim:#{sterm} ||
+      place_same_as_new_tesim:#{sterm} || place_as_written_tesim:#{sterm}"
       #
       # All fields
       entry + document + "|| suggest:#{sterm}"
