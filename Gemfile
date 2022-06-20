@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "rails", "~> 5.2.6.2"
+gem "rails", "~> 5.2.7.1"
 
 gem "active-fedora", "~> 13.2.0"
 gem "iiif-presentation", "~> 1.0.0"
