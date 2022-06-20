@@ -1,3 +1,18 @@
+require:
+  - standard
+  - rubocop-rails
+
+inherit_gem:
+  standard: config/base.yml
+
 AllCops:
   TargetRubyVersion: 2.7
   EnforcedStyle: double_quotes
+  NewCops: enable
+  Exclude:
+    - node_modules/**/*
+    - public/**/*
+    - vendor/**/*
+
+Rails:
+  Enabled: true # enable rubocop-rails cops
