@@ -1,0 +1,1 @@
+IIIF=YAML.load(ERB.new(IO.read("#{Rails.root.to_s}/config/iiif.yml")).result)
