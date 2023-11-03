@@ -1,0 +1,30 @@
+<% tile_sources = local_assigns[:tile_sources] %>
+<%# Display OpenSeadragon image here %>
+<div>
+  <div id="iif_image_location" style="background-color: black; width: 1270px; height: 500px;"></div>
+  <div style="float: right; margin-right: 7px; margin-top: 10px"><a href="#" id="dialog_link"></a></div>
+</div>
+<%# Display OpenSeadragon image at 'location' above  %>
+<script type="text/javascript">
+  var viewer = OpenSeadragon({
+      id: "iif_image_location",
+  		prefixUrl: "/assets/seadragonImages/",
+  		preserveViewport: true,
+    	isibilityRatio:	1,
+   	 	minZoomLevel: 1,
+    	defaultZoomLevel: 1,
+    	sequenceMode: true,
+      autoResize: true,
+      tileSources: [{
+          "@context": "http://iiif.io/api/image/3/context.json",
+          "@id": "<%= tile_sources %>",
+          "height": 940,
+          "width": 640,
+          "profile": [ "http://iiif.io/api/image/3/level3.json" ],
+          "protocol": "http://iiif.io/api/image",
+          "tiles": [{
+            "scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
+            "width": 1024 }]
+    }]
+  });
+</script>
