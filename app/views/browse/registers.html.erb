@@ -16,7 +16,7 @@
                 <div class="col-md-3 collections-grid">
                     <%= link_to browse_registers_path(collection: p[0]) do %>
                         <%# FixMe it is not working  %>
-                        <%= image_tag "#{IIIF[Rails.env]['image_api_url']}#{get_thumb(p[0])}" %>
+                        <%= image_tag get_thumb(p[0]) %>
                     <% end %>
                     <br/>
                     <p width="100%"><strong><%= p[1][0] %></strong></p>
