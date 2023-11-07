@@ -64,10 +64,10 @@ module RegisterFolioHelper
       response = @query_obj.solr_query('hasTarget_ssim:' + id, 'file_path_tesim', 2, 'preflabel_si asc')['response']['docs']
 
       # get the file paths from the register
-      tile_sources << "#{image_uri}.jp2"
+      tile_sources << "#{image_uri}.jp2/info.json"
       unless response[1].nil?
         session[:alt] = 'yes'
-        tile_sources << "#{image_uri}.uv.jp2"
+        tile_sources << "#{image_uri}.uv.jp2/info.json"
       end
       tile_sources
     rescue => error

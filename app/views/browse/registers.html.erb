@@ -92,7 +92,6 @@
             <% end %>
 
             <%# FixMe images from /browse/registers?register_id=6d56zz38x %>
-            <% tile_sources = get_tile_sources_for_folio(session['folio_id']) %>
             <% if session['alt_image'].blank? %>
               <div style="margin-top: 40px; text-align: center">
               </div>
@@ -104,12 +103,8 @@
             <% end %>
 
             <div id="picture_tag" style="padding-top: 25px">
-                <% info_json = "#{tile_sources.reverse[0]}/info.json" %>
-                <%= openseadragon_picture_tag tile_sources.reverse, info_json %>
-            </div>
-
-            <div id="image_frame">
-                <%= render partial: "image_zoom_large", locals: { tile_sources: tile_sources.reverse[0] } %>
+                <% tile_sources = get_tile_sources_for_folio(session['folio_id']) %>
+                <%= openseadragon_picture_tag tile_sources.first %>
             </div>
 
             <%= render 'entries' %>

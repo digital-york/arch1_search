@@ -1,14 +1,4 @@
-<%# Display OpenSeadragon image here %>
-<div>
-    <div id="location" style="background-color: black"></div>
+<div id="picture_tag" style="padding-top: 25px; background-color: black">
+  <% tile_sources = get_tile_sources_for_folio(session['folio_id']) %>
+  <%= openseadragon_picture_tag tile_sources.last %>
 </div>
-
-<%# Display OpenSeadragon image at 'location' above  %>
-<script type="text/javascript">
-    var viewer = OpenSeadragon({
-        id: "location",
-        prefixUrl: "../assets/seadragonImages/",
-        autoResize: true,
-        tileSources: "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=<%= session[:alt_image] %>.dzi"
-    });
-</script>
