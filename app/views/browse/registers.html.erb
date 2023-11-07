@@ -15,6 +15,7 @@
                @coll_list.each do |p| %>
                 <div class="col-md-3 collections-grid">
                     <%= link_to browse_registers_path(collection: p[0]) do %>
+                        <%# FixMe it is not working  %>
                         <%= image_tag get_thumb(p[0]) %>
                     <% end %>
                     <br/>
@@ -34,7 +35,8 @@
                     <% get_registers_in_order(p[0]).each_with_index do |pair, index| %>
                         <div class="col-md-2 registers-grid">
                             <%= link_to browse_registers_path(register_id: pair[0]) do %>
-                                <%= image_tag get_thumb(pair[0]) %>
+                                <%# Alternativly we can for each register_id we reindex value for thumbnail_iiif_url_tesim %>
+                                <%= image_tag "#{IIIF[Rails.env]['image_api_url']}#{get_thumb(pair[0])}" %>
                             <% end %>
                             <br/>
 
@@ -89,7 +91,7 @@
 
             <% end %>
 
-            <% tile_sources = get_tile_sources_for_folio(session['folio_id']) %>
+            <%# FixMe images from /browse/registers?register_id=6d56zz38x %>
             <% if session['alt_image'].blank? %>
               <div style="margin-top: 40px; text-align: center">
               </div>
@@ -100,8 +102,9 @@
               </div>
             <% end %>
 
-            <div style="padding-top: 25px">
-                <%= openseadragon_picture_tag tile_sources.reverse %>
+            <div id="picture_tag" style="padding-top: 25px">
+                <% tile_sources = get_tile_sources_for_folio(session['folio_id']) %>
+                <%= openseadragon_picture_tag tile_sources.first %>
             </div>
 
             <%= render 'entries' %>

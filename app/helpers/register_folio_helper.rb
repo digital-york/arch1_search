@@ -5,6 +5,10 @@ module RegisterFolioHelper
     SolrQuery.new.solr_query('has_model_ssim:Entry')['response']['numFound']
   end
 
+  def get_folio_id_by_image_file_path(file_path)
+    folio_id = SolrQuery.new.solr_query("file_path_tesim:\"#{file_path}\"",'hasTarget_ssim',1)['response']['docs'][0]['hasTarget_ssim'][0]
+  end
+
   # get the thumbnail image for the register
   def get_thumb(register)
     begin
@@ -13,7 +17,9 @@ module RegisterFolioHelper
         #return a generic thumbnail
         'register_default.jpg'
       else
-        thumb[0]
+        image_region = thumb[0].match(/jp2(.*)/)[1]
+        folio_id = get_folio_id_by_image_file_path(thumb[0].match(/=(.*).jp2/)[1])
+        "#{register}/objects/#{folio_id}.jp2#{image_region}"
       end
     rescue => error
       log_error(__method__, __FILE__, error)
@@ -48,18 +54,20 @@ module RegisterFolioHelper
     end
   end
 
+  # FixMe - images from /browse/registers?register_id=6d56zz38x
   def get_tile_sources_for_folio(fol)
     begin
       id = get_id(fol)
+      image_uri = "#{IIIF[Rails.env]['image_api_url']}#{get_folio_image_iiif(id)}"
       tile_sources = []
       @query_obj = SolrQuery.new
       response = @query_obj.solr_query('hasTarget_ssim:' + id, 'file_path_tesim', 2, 'preflabel_si asc')['response']['docs']
 
       # get the file paths from the register
-      tile_sources << "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{response[0]['file_path_tesim'][0]}.dzi"
+      tile_sources << "#{image_uri}.jp2/info.json"
       unless response[1].nil?
         session[:alt] = 'yes'
-        tile_sources << "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=#{response[1]['file_path_tesim'][0]}.dzi"
+        tile_sources << "#{image_uri}.uv.jp2/info.json"
       end
       tile_sources
     rescue => error

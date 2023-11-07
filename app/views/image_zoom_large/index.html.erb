@@ -3,13 +3,22 @@
   <div id="location" style="background-color: black"></div>
   <div style="float: right; margin-right: 7px; margin-top: 10px"><a href="#" id="dialog_link"></a></div>
 </div>
-
 <%# Display OpenSeadragon image at 'location' above  %>
 <script type="text/javascript">
-    var viewer = OpenSeadragon({
-        id: "location",
-        prefixUrl: "assets/seadragonImages/",
-        autoResize: true,
-        tileSources: "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=<%= get_folio_image(session[:folio_id]) %>.dzi"
-    });
+  var viewer = OpenSeadragon({
+      id: "location",
+      prefixUrl: "assets/seadragonImages/",
+      autoResize: true,
+      tileSources: [{
+          "@context": "http://iiif.io/api/image/3/context.json",
+          "@id": "<%= IIIF[Rails.env]['image_api_url']%><%= get_folio_image_iiif(@folio_id) %>.jp2",
+          "height": 9400,
+          "width": 6400,
+          "profile": [ "http://iiif.io/api/image/3/level3.json" ],
+          "protocol": "http://iiif.io/api/image",
+          "tiles": [{
+            "scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
+            "width": 1024 }]
+    }]
+  });
 </script>
