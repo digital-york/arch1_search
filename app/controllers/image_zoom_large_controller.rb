@@ -5,10 +5,7 @@ class ImageZoomLargeController < ApplicationController
   layout 'image_zoom_large'
 
   def index
-    @folio_id = params[:folio_id]
+    @folio_uri = params[:folio_uri]
   end
 
-  def alt
-
-  end
 end

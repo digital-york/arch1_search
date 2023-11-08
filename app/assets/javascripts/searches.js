@@ -1,7 +1,7 @@
 // Pop-up for the image zoom
 function popup(page, folio_image) {
 
-    page = page + "?folio_id=" + folio_image
+    page = page + "?folio_uri=" + folio_image
 
     var popup_id = Math.floor(Math.random() * 100000) + 1;
 
