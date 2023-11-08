@@ -91,19 +91,18 @@
 
             <% end %>
 
-            <%# FixMe images from /browse/registers?register_id=6d56zz38x %>
+            <% tile_sources = get_tile_sources_for_folio(session['folio_id']) %>
             <% if session['alt_image'].blank? %>
               <div style="margin-top: 40px; text-align: center">
               </div>
             <% else %>
               <div style="margin-top: 20px; text-align: center">
-                <em><%= link_to "View UV image", "#", :onclick => "popup('/image_zoom_large/alt', '#{session['folio_id']}'); return false" %></em>
-                <%= link_to image_tag('magnifying_glass.png', :alt => 'magnifying glass icon', :class => 'icon', :style => 'position: relative; top: 7px', :title => 'Image zoom'), '#', :onclick => "popup('/image_zoom_large/alt', '#{session['folio_id']}'); return false", :title => "" %>
+                <em><%= link_to "View UV image", "#", :onclick => "popup('/image_zoom_large', '#{tile_sources.last}'); return false" %></em>
+                <%= link_to image_tag('magnifying_glass.png', :alt => 'magnifying glass icon', :class => 'icon', :style => 'position: relative; top: 7px', :title => 'Image zoom'), '#', :onclick => "popup('/image_zoom_large', '#{tile_sources.last}'); return false", :title => "" %>
               </div>
             <% end %>
 
             <div id="picture_tag" style="padding-top: 25px">
-                <% tile_sources = get_tile_sources_for_folio(session['folio_id']) %>
                 <%= openseadragon_picture_tag tile_sources.first %>
             </div>
 

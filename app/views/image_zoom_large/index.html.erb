@@ -1,24 +1,3 @@
-<%# Display OpenSeadragon image here %>
-<div>
-  <div id="location" style="background-color: black"></div>
-  <div style="float: right; margin-right: 7px; margin-top: 10px"><a href="#" id="dialog_link"></a></div>
+<div id="picture_tag" style="padding-top: 25px; background-color: black">
+  <%= openseadragon_picture_tag @folio_uri %>
 </div>
-<%# Display OpenSeadragon image at 'location' above  %>
-<script type="text/javascript">
-  var viewer = OpenSeadragon({
-      id: "location",
-      prefixUrl: "assets/seadragonImages/",
-      autoResize: true,
-      tileSources: [{
-          "@context": "http://iiif.io/api/image/3/context.json",
-          "@id": "<%= IIIF[Rails.env]['image_api_url']%><%= get_folio_image_iiif(@folio_id) %>",
-          "height": 9400,
-          "width": 6400,
-          "profile": [ "http://iiif.io/api/image/3/level3.json" ],
-          "protocol": "http://iiif.io/api/image",
-          "tiles": [{
-            "scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
-            "width": 1024 }]
-    }]
-  });
-</script>
