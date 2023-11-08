@@ -19,7 +19,7 @@ module RegisterFolioHelper
       else
         image_region = thumb[0].match(/jp2(.*)/)[1]
         folio_id = get_folio_id_by_image_file_path(thumb[0].match(/=(.*).jp2/)[1])
-        "#{register}/objects/#{folio_id}.jp2#{image_region}"
+        "#{register}/objects/#{folio_id}#{image_region}"
       end
     rescue => error
       log_error(__method__, __FILE__, error)
@@ -64,10 +64,10 @@ module RegisterFolioHelper
       response = @query_obj.solr_query('hasTarget_ssim:' + id, 'file_path_tesim', 2, 'preflabel_si asc')['response']['docs']
 
       # get the file paths from the register
-      tile_sources << "#{image_uri}.jp2/info.json"
+      tile_sources << "#{image_uri}/info.json"
       unless response[1].nil?
         session[:alt] = 'yes'
-        tile_sources << "#{image_uri}.uv.jp2/info.json"
+        tile_sources << "#{image_uri}.uv/info.json"
       end
       tile_sources
     rescue => error

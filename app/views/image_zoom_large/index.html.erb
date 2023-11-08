@@ -11,7 +11,7 @@
       autoResize: true,
       tileSources: [{
           "@context": "http://iiif.io/api/image/3/context.json",
-          "@id": "<%= IIIF[Rails.env]['image_api_url']%><%= get_folio_image_iiif(@folio_id) %>.jp2",
+          "@id": "<%= IIIF[Rails.env]['image_api_url']%><%= get_folio_image_iiif(@folio_id) %>",
           "height": 9400,
           "width": 6400,
           "profile": [ "http://iiif.io/api/image/3/level3.json" ],
