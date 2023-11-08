@@ -87,7 +87,7 @@ class IiifController < ApplicationController
     else
       folio_id = get_id(params[:folio_id])
       # restrict download size to 1000px
-      image_path = "#{IIIF[Rails.env]['image_api_url']}#{get_folio_image_iiif(folio_id)}.jp2/full/1000,/0/default.jpg" 
+      image_path = "#{IIIF[Rails.env]['image_api_url']}#{get_folio_image_iiif(folio_id)}/full/1000,/0/default.jpg" 
       data = URI.open(image_path)
       send_data data.read, filename: "#{folio_id}.jpg", type: 'image/jpeg', disposition: 'attachment', stream: 'true', buffer_size: '4096'
 
