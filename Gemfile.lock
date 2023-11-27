@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/digital-york/tnw_common
-  revision: 4acd7d9b54b8484a310c13de8518efa3799b9244
+  revision: afe544766ea6e985cfe3aca1f60fbe3b710ef023
   branch: main
   specs:
     tnw_common (0.1.0)
@@ -112,7 +112,7 @@ GEM
       unicode-types (~> 1.6)
     erubi (1.10.0)
     execjs (2.8.1)
-    faraday (0.17.4)
+    faraday (0.17.6)
       multipart-post (>= 1.2, < 3)
     faraday-encoding (0.0.5)
       faraday
@@ -196,15 +196,15 @@ GEM
     mini_mime (1.1.2)
     minitest (5.17.0)
     multi_json (1.15.0)
-    multipart-post (2.1.1)
+    multipart-post (2.3.0)
     nio4r (2.5.9)
     noid (0.9.0)
     noid-rails (3.0.3)
       actionpack (>= 5.0.0, < 7)
       noid (~> 0.9)
-    nokogiri (1.13.6-x86_64-darwin)
+    nokogiri (1.15.4-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.13.6-x86_64-linux)
+    nokogiri (1.15.4-x86_64-linux)
       racc (~> 1.4)
     openseadragon (0.6.0)
       rails (> 3.2.0)
@@ -425,7 +425,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   noid-rails
-  nokogiri (>= 1.11.0)
+  nokogiri (= 1.15.4)
   openseadragon
   pry-byebug
   pry-rails
