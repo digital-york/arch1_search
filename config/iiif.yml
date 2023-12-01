@@ -1,0 +1,7 @@
+# This is a sample config file that points to a solr server for each environment
+development:
+  image_api_url: <%= ENV['DEVELOPMENT_IIIF_IMAGE_API'] %>
+test:
+  image_api_url: <%= ENV['TEST_IIIF_IMAGE_API'] %>
+production:
+  image_api_url: <%= ENV['PRODUCTION_IIIF_IMAGE_API'] %>

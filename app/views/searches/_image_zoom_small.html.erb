@@ -1,23 +1,18 @@
+<% tile_sources = get_tile_sources_for_folio(@folio_id) %>
 <%# Display OpenSeadragon image here %>
-<div id="location1" style="background-color: black"></div>
-
-<div style="clear: both"></div>
-
-<%# Display links to large image zom %>
-<div id="image_footer" style="text-align: center">
-  <em><%= link_to 'Click here to enlarge', '#', :onclick => "popup('/image_zoom_large', '" + @folio_id + "'); return false" %></em>:
-  <a href='#' onclick="popup('/image_zoom_large', '<%= @folio_id %>'); return false" title="Click here to enlarge"><span class='fa fa-search-plus fa-2x mag_icon'></span></a>
+<div id="location1" style="background-color: black">
+  <%= openseadragon_picture_tag tile_sources.first %>
 </div>
-
 <div style="clear: both"></div>
-
-<%# Display OpenSeadragon image at 'location1' above  %>
-<script type="text/javascript">
-    var viewer = OpenSeadragon({
-        id: "location1",
-        prefixUrl: "assets/seadragonImages/",
-        autoResize: true,
-        tileSources: "//dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?DeepZoom=<%= get_folio_image(@folio_id) %>.dzi",
-        showNavigationControl: false
-    });
-</script>
+<%# Display links to large image zoom %>
+<div id="image_footer" style="text-align: center">
+  <em><%= link_to 'Click here to enlarge', '#', :onclick => "popup('/image_zoom_large', '" + tile_sources.first + "'); return false" %></em>:
+  <a href='#' onclick="popup('/image_zoom_large', '<%= tile_sources.first %>'); return false" title="Click here to enlarge"><span class='fa fa-search-plus fa-2x mag_icon'></span></a>
+</div>
+<div style="clear: both"></div>
+<% if tile_sources.length == 2 %>
+  <div id="image_footer" style="text-align: center">
+    <em><%= link_to "View UV image", "#", :onclick => "popup('/image_zoom_large', '#{tile_sources.last}'); return false" %></em>
+    <a href='#' onclick="popup('/image_zoom_large', '<%= tile_sources.last %>'); return false" title="Click here to enlarge"><span class='fa fa-search-plus fa-2x mag_icon'></span></a>
+  </div>
+<% end %>

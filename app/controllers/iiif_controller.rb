@@ -1,5 +1,6 @@
 class IiifController < ApplicationController
   include IiifHelper
+  include SearchesHelper
   layout 'default_layout'
 
   def index
@@ -85,9 +86,9 @@ class IiifController < ApplicationController
       end
     else
       folio_id = get_id(params[:folio_id])
-      image = get_image(folio_id)
       # restrict download size to 1000px
-      data = open("http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?IIIF=#{image}/full/1000,/0/default.jpg")
+      image_path = "#{IIIF[Rails.env]['image_api_url']}#{get_folio_image_iiif(folio_id)}/full/1000,/0/default.jpg" 
+      data = URI.open(image_path)
       send_data data.read, filename: "#{folio_id}.jpg", type: 'image/jpeg', disposition: 'attachment', stream: 'true', buffer_size: '4096'
 
     end

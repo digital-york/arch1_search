@@ -106,12 +106,22 @@ module RegisterFolio
                             'preflabel_si asc')['response']
     if response['numFound'] > 0
       response['docs'].map do |result|
-        if result['preflabel_tesim'][0] == "Image (UV)"
-          images[:alt_image] = result['file_path_tesim'][0]
-        else
-          images[:folio_image] = result['file_path_tesim'][0]
+        if result['preflabel_tesim'].present?
+          if result['preflabel_tesim'][0] == "Image (UV)"
+            if result['file_path_tesim'].present?
+              images[:alt_image] = result['file_path_tesim'][0]
+            else
+              images[:alt_image] = "Missing-alt-image-id-#{folio_id}"
+            end
+          else
+            if result['file_path_tesim'].present?
+              images[:folio_image] = result['file_path_tesim'][0]
+            else
+              images[:alt_image] = "Missing-folio-image-id-#{folio_id}"
+            end
+          end
         end
-      end
+      end  
     end
     images
   end

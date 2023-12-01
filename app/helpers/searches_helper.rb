@@ -23,6 +23,12 @@ module SearchesHelper
     return str
   end
 
+  # Return the IIIF image location for the particular folio_id
+  def get_folio_image_iiif(folio_id)
+    register_id = SolrQuery.new.solr_query("id:\"#{folio_id}\"",'isPartOf_ssim',1)['response']['docs'][0]['isPartOf_ssim'][0]
+    return "#{register_id}/objects/#{folio_id}"
+  end
+
   # Return the folio_image location for the particular folio_id
   def get_folio_image(folio_id)
 
