@@ -1,6 +1,7 @@
 class IiifController < ApplicationController
   include IiifHelper
   include SearchesHelper
+  include RegisterFolioHelper
   layout 'default_layout'
 
   def index
@@ -21,15 +22,17 @@ class IiifController < ApplicationController
       # pass to the download method
       download
     else
-      image = get_image(params[:id])
-      if image != ''
+      image_source = get_tile_sources_for_folio(params[:id])
+      # Convert it to IIIF API v2
+      image_url = image_source.first.gsub(/\/info\.json/,"").gsub(/iiif\/3\/ark/,"iiif/2/ark")
+      if image_url != ''
         if params[:region].nil? || params[:size].nil? || params[:rotation].nil? || params[:quality].nil? ||
            (params[:region] == '') || (params[:size] == '') || (params[:rotation] == '') || (params[:quality] == '')
-          redirect_to "http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?IIIF=#{image}/info.json"
+           redirect_to image_url
         # Let IIP on dlib handle incorrect params
         # IIP will crash on requests for regions bigger than the width/height of the image; could deal with that here
         else
-          redirect_to "http://dlib.york.ac.uk/cgi-bin/iipsrv.fcgi?IIIF=#{image}/#{params[:region]}/#{params[:size]}/#{params[:rotation]}/#{params[:quality]}.jpg"
+          redirect_to "#{image_url}/#{params[:region]}/#{params[:size]}/#{params[:rotation]}/#{params[:quality]}.jpg"
         end
       # If an incorrect id is requested, redirect to the 404 page
       else
