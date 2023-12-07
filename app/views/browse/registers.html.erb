@@ -36,7 +36,7 @@
                         <div class="col-md-2 registers-grid">
                             <%= link_to browse_registers_path(register_id: pair[0]) do %>
                                 <%# Alternativly we can for each register_id we reindex value for thumbnail_iiif_url_tesim %>
-                                <%= image_tag "#{IIIF[Rails.env]['image_api_url']}#{get_thumb(pair[0])}" %>
+                                <%= image_tag "#{IIIF_ENV[Rails.env]['image_api_url']}#{get_thumb(pair[0])}" %>
                             <% end %>
                             <br/>
 
