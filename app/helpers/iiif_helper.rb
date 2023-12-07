@@ -3,6 +3,7 @@ require 'net/http'
 require 'json'
 
 module IiifHelper
+include RegisterFolioHelper
   def get_manifest(pid, replace = false)
     register = Register.find(pid)
     if replace == true
@@ -88,7 +89,7 @@ module IiifHelper
       'description' => resp[0]['preflabel_tesim'][0],
       'attribution' => 'Made available by the University of York',
       'license' => 'http://creativecommons.org/licenses/by-sa/4.0/',
-      'thumbnail' => 'http:' + resp[0]['thumbnail_url_tesim'][0]
+      'thumbnail' => "#{IIIF_ENV[Rails.env]['image_api_url']}#{get_thumb(pid)}"
     }
 
     manifest = IIIF::Presentation::Manifest.new(seed)
@@ -130,6 +131,7 @@ module IiifHelper
     canvas.height = height
     canvas.label = resp[0]['preflabel_tesim'].join
 
+    register_id =  resp[0]['isPartOf_ssim'][0]
     begin
       img = IIIF::Presentation::Annotation.new(
         'resource' => IIIF::Presentation::ImageResource.new(
@@ -143,7 +145,7 @@ module IiifHelper
           'height' => height,
           'format' => 'image/jpeg'
         ),
-        'on' => "#{ENV['SERVER']}/browse/registers?register_id=#{pid}#{fol_num}&folio_id=#{pid}"
+        'on' => "#{ENV['SERVER']}/browse/registers?register_id=#{register_id}/#{fol_num}&folio_id=#{pid}"
       )
       canvas.images << img
       canvas
