@@ -1,1 +1,1 @@
-IIIF=YAML.load(ERB.new(IO.read("#{Rails.root.to_s}/config/iiif.yml")).result)
+IIIF_ENV=YAML.load(ERB.new(IO.read("#{Rails.root.to_s}/config/iiif.yml")).result).with_indifferent_access

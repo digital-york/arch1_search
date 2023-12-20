@@ -3,6 +3,7 @@ require 'net/http'
 require 'json'
 
 module IiifHelper
+include RegisterFolioHelper
   def get_manifest(pid, replace = false)
     register = Register.find(pid)
     if replace == true
@@ -88,7 +89,7 @@ module IiifHelper
       'description' => resp[0]['preflabel_tesim'][0],
       'attribution' => 'Made available by the University of York',
       'license' => 'http://creativecommons.org/licenses/by-sa/4.0/',
-      'thumbnail' => 'http:' + resp[0]['thumbnail_url_tesim'][0]
+      'thumbnail' => "#{IIIF_ENV[Rails.env]['image_api_url']}#{get_thumb(pid)}"
     }
 
     manifest = IIIF::Presentation::Manifest.new(seed)
@@ -125,11 +126,12 @@ module IiifHelper
       fol_num = "&folio=#{i + 1}"
     end
     canvas['@id'] = "#{ENV['SERVER']}/iiif/canvas/#{pid}"
-    width, height = get_info_json(get_image(pid))
+    width, height = get_info_json(pid)
     canvas.width = width
     canvas.height = height
     canvas.label = resp[0]['preflabel_tesim'].join
 
+    register_id =  resp[0]['isPartOf_ssim'][0]
     begin
       img = IIIF::Presentation::Annotation.new(
         'resource' => IIIF::Presentation::ImageResource.new(
@@ -143,7 +145,7 @@ module IiifHelper
           'height' => height,
           'format' => 'image/jpeg'
         ),
-        'on' => "#{ENV['SERVER']}/browse/registers?register_id=#{pid}#{fol_num}&folio_id=#{pid}"
+        'on' => "#{ENV['SERVER']}/browse/registers?register_id=#{register_id}/#{fol_num}&folio_id=#{pid}"
       )
       canvas.images << img
       canvas
@@ -152,10 +154,11 @@ module IiifHelper
     end
   end
 
-  def get_info_json(image)
-    net = Net::HTTP.new('dlib.york.ac.uk', 443)
+  def get_info_json(pid)
+    # To be refactored - use #{IIIF_ENV[Rails.env]['image_api_server']
+    net = Net::HTTP.new('discover.york.ac.uk',443)
     net.use_ssl = true
-    res = net.get('/cgi-bin/iipsrv.fcgi?IIIF=' + image + '/info.json')
+    res = net.get("/iiif/3/ark:/36941/#{get_folio_image_iiif(pid)}/info.json")
     json = JSON.parse res.body
     [json['width'], json['height']]
   rescue StandardError => e
@@ -163,6 +166,8 @@ module IiifHelper
     [100, 100]
   end
 
+  # To Be Remove - We stoped using with change to Discover IIIF
+  # We do not need path of image to extract width and height for the manifest.json canvas
   def get_image(target)
     image = ''
     SolrQuery.new.solr_query('hasTarget_ssim:"' + target + '"', fl = 'id,file_path_tesim', rows = 1, 'preflabel_si asc')['response']['docs'].each do |img|

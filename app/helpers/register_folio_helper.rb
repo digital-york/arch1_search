@@ -58,7 +58,7 @@ module RegisterFolioHelper
   def get_tile_sources_for_folio(fol)
     begin
       id = get_id(fol)
-      image_uri = "#{IIIF[Rails.env]['image_api_url']}#{get_folio_image_iiif(id)}"
+      image_uri = "#{IIIF_ENV[Rails.env]['image_api_url']}#{get_folio_image_iiif(id)}"
       tile_sources = []
       @query_obj = SolrQuery.new
       response = @query_obj.solr_query('hasTarget_ssim:' + id, 'file_path_tesim', 2, 'preflabel_si asc')['response']['docs']
