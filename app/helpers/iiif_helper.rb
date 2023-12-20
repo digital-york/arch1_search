@@ -126,7 +126,7 @@ include RegisterFolioHelper
       fol_num = "&folio=#{i + 1}"
     end
     canvas['@id'] = "#{ENV['SERVER']}/iiif/canvas/#{pid}"
-    width, height = get_info_json(get_image(pid))
+    width, height = get_info_json(pid)
     canvas.width = width
     canvas.height = height
     canvas.label = resp[0]['preflabel_tesim'].join
@@ -154,10 +154,11 @@ include RegisterFolioHelper
     end
   end
 
-  def get_info_json(image)
-    net = Net::HTTP.new('dlib.york.ac.uk', 443)
+  def get_info_json(pid)
+    # To be refactored - use #{IIIF_ENV[Rails.env]['image_api_server']
+    net = Net::HTTP.new('discover.york.ac.uk',443)
     net.use_ssl = true
-    res = net.get('/cgi-bin/iipsrv.fcgi?IIIF=' + image + '/info.json')
+    res = net.get("/iiif/3/ark:/36941/#{get_folio_image_iiif(pid)}/info.json")
     json = JSON.parse res.body
     [json['width'], json['height']]
   rescue StandardError => e
@@ -165,6 +166,8 @@ include RegisterFolioHelper
     [100, 100]
   end
 
+  # To Be Remove - We stoped using with change to Discover IIIF
+  # We do not need path of image to extract width and height for the manifest.json canvas
   def get_image(target)
     image = ''
     SolrQuery.new.solr_query('hasTarget_ssim:"' + target + '"', fl = 'id,file_path_tesim', rows = 1, 'preflabel_si asc')['response']['docs'].each do |img|
