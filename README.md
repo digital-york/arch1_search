@@ -1,4 +1,16 @@
-== ARCH1_SEARCH
+# Archibishops Registers Search Application
+
+This code has been written by many contributors. It is currently maitained by DTI Team at the UoY Libraries. 
+
+- Repo-Status: Active
+- Repo-Contents: System
+- Repo-Service-Name: Archibiships Registers Search Application
+- Repo-Ownership-Rating: 3
+- Repo-Quality-Rating: 2
+- Repo-Next-Review-Due: 2024-10-01
+- Repo-Expected-Retirement-Date: 2025-12-30
+  
+# About ARCH1_SEARCH
 
 Arch1_Search is a Hydra-based, Ruby on Rails search and browse application built for the 'York's Archbishops' Registers Revealed' project. The project was funded by the Andrew W. Mellon Foundation.
 
@@ -13,7 +25,7 @@ Please contact us if you would like to make use of the codebase: dlib-info@york.
 
 = Local development quick start ==
 
-Note: This version has been tested Ruby 2.5.3 and Rails 5.0.1.
+Note: This version has been tested Ruby 2.7.x and Rails 5.2.x
 
 0. Set up local environment in _.env_ file. Copy default values from _.env-sample_
 
