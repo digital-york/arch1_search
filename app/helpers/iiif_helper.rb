@@ -145,7 +145,7 @@ include RegisterFolioHelper
           'height' => height,
           'format' => 'image/jpeg'
         ),
-        'on' => "#{ENV['SERVER']}/browse/registers?register_id=#{register_id}/#{fol_num}&folio_id=#{pid}"
+        'on' => "#{ENV['SERVER']}/browse/registers?register_id=#{register_id}#{fol_num}&folio_id=#{pid}"
       )
       canvas.images << img
       canvas
