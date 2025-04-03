@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  fedora:
+    image: fcrepo/fcrepo:5.1.0
+    container_name: fedora-development
+    ports:
+      - "8984:8080"
+    environment:
+      FCREPO_JMS_ENABLED: "false"
+    volumes:
+      - c:/www/uoy/arch1_search/data/fedora-development-data:/data
+
+  solr:
+    image: solr:7.7.1
+    container_name: solr-development
+    ports:
+      - "8983:8983"
+    environment:
+      SOLR_HEAP: "512m"
+    volumes:
+      - c:/www/uoy/arch1_search/data/solr/archbishops:/var/solr/data/archbishops
+      - ./solr/conf-hydra:/opt/solr/server/solr/configsets/development/conf
+    command:
+      [
+        "solr-precreate", 
+        "development", 
+        "/opt/solr/server/solr/configsets/development"
+      ]
+
+  rails:
+    build:
+      context: .
+    container_name: archbishops-development
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+    depends_on:
+      - fedora
+      - solr
+    environment:
+      SOLR_URL: http://solr:8983/solr
+      FEDORA_URL: http://fedora:8984/fcrepo
+    command: bash -c "bundle exec rails db:migrate && bundle exec rails s -b 0.0.0.0"

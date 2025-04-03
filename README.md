@@ -44,3 +44,19 @@ Note: This version has been tested Ruby 2.7.x and Rails 5.2.x
 
 or Rails console
   ``` bundle exec rails c ```
+
+# Docker
+
+Build the Docker Image From the arch1_search directory, build the Docker image:
+
+```
+docker build -t rails-app .
+```
+
+Run the Container Start the container, mapping port 3000 to your host:
+
+```
+docker run -p 3000:3000 -v $(pwd):/app --name rails-app rails-app
+```
+
+Access the App Open your browser and go to http://localhost:3000

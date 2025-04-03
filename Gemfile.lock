@@ -425,7 +425,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   noid-rails
-  nokogiri (= 1.15.4)
+  nokogiri (>= 1.11.0)
   openseadragon
   pry-byebug
   pry-rails
@@ -437,6 +437,7 @@ DEPENDENCIES
   rsolr-ext
   rspec-rails (~> 4.1.0)
   rubocop-rails
+  rubyzip (~> 2.3.0)
   sass-rails (~> 5.0)
   sdoc
   solargraph
@@ -453,4 +454,4 @@ DEPENDENCIES
   xray-rails
 
 BUNDLED WITH
-   2.2.21
+   2.4.22
