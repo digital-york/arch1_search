@@ -1,4 +1,16 @@
-== ARCH1_SEARCH
+# Archibishops Registers Search Application
+
+This code has been written by many contributors. It is currently maitained by DTI Team at the UoY Libraries. 
+
+- Repo-Status: Active
+- Repo-Contents: System
+- Repo-Service-Name: Archibiships Registers Search Application
+- Repo-Ownership-Rating: 3
+- Repo-Quality-Rating: 2
+- Repo-Next-Review-Due: 2024-10-01
+- Repo-Expected-Retirement-Date: 2025-12-30
+  
+# About ARCH1_SEARCH
 
 Arch1_Search is a Hydra-based, Ruby on Rails search and browse application built for the 'York's Archbishops' Registers Revealed' project. The project was funded by the Andrew W. Mellon Foundation.
 
@@ -11,9 +23,9 @@ For further information on the underlying data model, please see this (google do
 Please contact us if you would like to make use of the codebase: dlib-info@york.ac.uk
 
 
-= Local development quick start ==
+# Local development quick start
 
-Note: This version has been tested Ruby 2.5.3 and Rails 5.0.1.
+Note: This version has been tested Ruby 2.7.x and Rails 5.2.x
 
 0. Set up local environment in _.env_ file. Copy default values from _.env-sample_
 
@@ -21,12 +33,13 @@ Note: This version has been tested Ruby 2.5.3 and Rails 5.0.1.
     ``` bundle install ```
 
 2. Start Solr and Fedora. *Note* Follow steps from [this Evernote](https://www.evernote.com/l/AWdxHSOyL7xEppQF_BkWW6Vmih8loRkzlYU) to restore Fedora backup (restricted access) data and reindex all content.
+   Note: fcrepo_wrapper works with Java version 1.8 only, solr_wrapper works with OpenJDK 12 and lower version. 
     ```
       bundle exec solr_wrapper
       bundle exec fcrepo_wrapper
     ```
 
-3. Run rails server
+4. Run rails server
     ``` bundle exec rails s ```
 
 or Rails console

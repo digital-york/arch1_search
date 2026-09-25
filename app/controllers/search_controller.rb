@@ -31,10 +31,20 @@ class SearchController < ApplicationController
     @search_term = "" if @search_term.nil?
 
     # Set rows_per_page = 10 by default
-    @rows_per_page = if params[:rows_per_page].nil?
+    # @rows_per_page = if params[:rows_per_page].nil?
+    #   10
+    # else
+    #   params[:rows_per_page].to_i
+    # end
+
+    # Set rows_per_page = 10 by default, capped at a maximum of 10
+    MAX_ROWS_PER_PAGE = 10
+
+    requested_rows = params[:rows_per_page].to_i
+    @rows_per_page = if requested_rows <= 0
       10
     else
-      params[:rows_per_page].to_i
+      [requested_rows, MAX_ROWS_PER_PAGE].min
     end
 
     # Initialise the arrays which display data on the page

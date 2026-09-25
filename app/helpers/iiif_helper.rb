@@ -121,7 +121,8 @@ include RegisterFolioHelper
     canvas = IIIF::Presentation::Canvas.new
     if i.nil?
       targets = @query_obj.solr_query('id:"' + resp[0]['isPartOf_ssim'].join + '/list_source"', fl = 'ordered_targets_ssim', rows = 1)['response']['docs'][0]['ordered_targets_ssim']
-      fol_num = "&folio=#{targets.find_index(pid) + 1}"
+      transformed_pid = "production/#{pid[0..1]}/#{pid[2..3]}/#{pid[4..5]}/#{pid[6..7]}/#{pid}"
+      fol_num = "&folio=#{targets.find_index(transformed_pid) + 1}"
     else
       fol_num = "&folio=#{i + 1}"
     end
@@ -145,7 +146,7 @@ include RegisterFolioHelper
           'height' => height,
           'format' => 'image/jpeg'
         ),
-        'on' => "#{ENV['SERVER']}/browse/registers?register_id=#{register_id}/#{fol_num}&folio_id=#{pid}"
+        'on' => "#{ENV['SERVER']}/browse/registers?register_id=#{register_id}#{fol_num}&folio_id=#{pid}"
       )
       canvas.images << img
       canvas

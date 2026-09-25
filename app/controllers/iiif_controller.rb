@@ -52,6 +52,7 @@ class IiifController < ApplicationController
         format.any { head :not_found }
       end
     else
+      # get manifest saved at Fedora 2017/08, Canvases contains wrong URL on
       render json: get_manifest(params[:register_id]), type: 'application/json'
     end
   rescue StandardError => e
@@ -70,7 +71,11 @@ class IiifController < ApplicationController
         format.any { head :not_found }
       end
     else
-      render json: get_canvas(params[:folio_id]), type: 'application/json'
+      # get canvas saved at Fedora 2017/08
+      # We have errors in URLs on saved canvas json file ine Fedora, we cannot save updated version due to broken functonality after ActieFedora upgrade 2019
+      # render json: get_canvas(params[:folio_id]), type: 'application/json'
+      # Build dynamicly canvas
+      render json: canvas_builder(params[:folio_id],nil), type: 'application/json'
     end
   rescue StandardError => e
     log_error(__method__, __FILE__, e)
