@@ -1,6 +1,9 @@
 class SearchController < ApplicationController
   layout "simple_layout"
 
+  # Cap on results per page; bots request huge values via the URL
+  MAX_ROWS_PER_PAGE = 10
+
   def simple
     # Set all the instance variables
     # These will also be passed back to the view page
@@ -37,9 +40,7 @@ class SearchController < ApplicationController
     #   params[:rows_per_page].to_i
     # end
 
-    # Set rows_per_page = 10 by default, capped at a maximum of 10
-    MAX_ROWS_PER_PAGE = 10
-
+    # Set rows_per_page = 10 by default, capped at MAX_ROWS_PER_PAGE
     requested_rows = params[:rows_per_page].to_i
     @rows_per_page = if requested_rows <= 0
       10
