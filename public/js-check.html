@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>One moment…</title></head>
+<body>
+<p id="msg">Loading search…</p>
+<script>
+  document.cookie = "js_ok=1; path=/; max-age=86400; SameSite=Lax; Secure";
+  if (document.cookie.indexOf("js_ok=1") !== -1) {
+    location.reload();
+  } else {
+    document.getElementById("msg").textContent = "Please enable cookies to use search.";
+  }
+</script>
+<noscript>Please enable JavaScript to use search.</noscript>
+</body></html>
